@@ -5,11 +5,16 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.util.Log;
 
+import com.example.berka.advokatormlite.model.IzracunatTrosakRadnje;
 import com.example.berka.advokatormlite.model.Postupak;
 import com.example.berka.advokatormlite.model.Radnja;
+import com.example.berka.advokatormlite.model.Slucaj;
+import com.example.berka.advokatormlite.model.TabelaBodova;
 import com.example.berka.advokatormlite.model.Tarifa;
 import com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper;
 import com.j256.ormlite.dao.Dao;
+import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.stmt.query.In;
 import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
 
@@ -34,9 +39,12 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper{
 
     private static final int DATABASE_VERSION = 1;
 
+    private Dao<Slucaj, Integer> mSlucajDao = null;
     private Dao<Postupak, Integer> mPostupakDao = null;
     private Dao<Tarifa, Integer> mTarifaDao = null;
     private Dao<Radnja, Integer> mRadnjaDao = null;
+    private Dao<TabelaBodova, Integer> mTabelaBodovaDao = null;
+    private Dao<IzracunatTrosakRadnje, Integer> mIzracunatTrosakRadnjeDao = null;
 
     public DatabaseHelper(Context context)
     {
@@ -121,6 +129,31 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper{
 //        }
 //    }
 
+    public Dao<TabelaBodova, Integer> getmTabelaBodovaDao() throws SQLException{
+        if(mTabelaBodovaDao == null){
+            mTabelaBodovaDao = getDao(TabelaBodova.class);
+        }
+
+        return mTabelaBodovaDao;
+    }
+
+    public Dao<IzracunatTrosakRadnje, Integer> getmIzracunatTrosakRadnjeDao() throws SQLException{
+        if(mIzracunatTrosakRadnjeDao == null){
+            mIzracunatTrosakRadnjeDao = getDao(IzracunatTrosakRadnje.class);
+        }
+
+        return mIzracunatTrosakRadnjeDao;
+    }
+
+
+    public Dao<Slucaj, Integer> getSlucajDao() throws SQLException{
+        if(mSlucajDao == null) {
+            mSlucajDao = getDao(Slucaj.class);
+        }
+
+        return mSlucajDao;
+    }
+
     public Dao<Postupak, Integer> getPostupakDao() throws SQLException {
         if (mPostupakDao == null) {
             mPostupakDao = getDao(Postupak.class);
@@ -145,6 +178,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper{
         return mRadnjaDao;
     }
 
+
     @Override
     public void onCreate(SQLiteDatabase database, ConnectionSource connectionSource) {
 
@@ -157,9 +191,11 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper{
 
     @Override
     public void close() {
+        mSlucajDao = null;
         mPostupakDao = null;
         mTarifaDao = null;
         mRadnjaDao = null;
+        mTabelaBodovaDao = null;
 
         super.close();
     }

@@ -14,6 +14,7 @@ public class Radnja {
     public static final String FIELD_RADNJA_ID = "_id";
     public static final String FIELD_RADNJA_NAZIV = "naziv_radnje";
     public static final String FIELD_RADNJA_TARIFA = "idTarifa";
+    public static final String FIELD_SIFRA = "sifra";
 
 
     @DatabaseField(columnName = FIELD_RADNJA_ID, generatedId = true)
@@ -24,6 +25,10 @@ public class Radnja {
 
     @DatabaseField(columnName = FIELD_RADNJA_TARIFA, foreign = true, foreignAutoCreate = true, foreignAutoRefresh = true)
     private Tarifa tarifa;
+
+    @DatabaseField(columnName = FIELD_SIFRA)
+    private int sifra;
+
 
     public int getId() {
         return id;
@@ -47,5 +52,13 @@ public class Radnja {
 
     public void setNaziv_radnje(String naziv_radnje) {
         this.naziv_radnje = naziv_radnje;
+    }
+
+    public int getSifra() {
+        return sifra;
+    }
+
+    public void setSifra(int sifra) {
+        this.sifra = sifra;
     }
 }

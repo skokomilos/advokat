@@ -1,16 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.berka.advokatormlite.MainActivity">
+    tools:context="com.example.berka.advokatormlite.activities.MainActivity">
 
-    <ListView
+
+    <LinearLayout
+        android:padding="20dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/myListView">
-    </ListView>
+        android:orientation="vertical"
+        android:gravity="center">
+
+        <Button
+            android:id="@+id/btn_find_case"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="Find"/>
+
+
+        <Button
+            android:id="@+id/welcome_btn_add_case"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="Add Case"/>
+
+        <Button
+            android:id="@+id/btn_edit_case"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="Edit Case"/>
+
+    </LinearLayout>
+
+
 
 </LinearLayout>

@@ -18,6 +18,7 @@ public class Postupak {
     public static final String POSTUPAK_ID = "_id";
     public static final String POSTUPAK_NAZIV = "naziv";
     public static final String POSTUPAK_TARIFE = "tarife";
+    public static final String POSTUPAK_TABELABODOVA = "bodovi";
 
     @DatabaseField(columnName = POSTUPAK_ID, generatedId = true)
     private int id;
@@ -27,6 +28,9 @@ public class Postupak {
 
     @ForeignCollectionField(columnName = Postupak.POSTUPAK_TARIFE, eager = true)
     private ForeignCollection<Tarifa> tarife;
+
+    @ForeignCollectionField(columnName = POSTUPAK_TABELABODOVA, eager = true)
+    private ForeignCollection<TabelaBodova> tabelaBodovas;
 
     public Postupak(){
 
@@ -54,6 +58,14 @@ public class Postupak {
 
     public void setTarife(ForeignCollection<Tarifa> tarife) {
         this.tarife = tarife;
+    }
+
+    public ForeignCollection<TabelaBodova> getTabelaBodovas() {
+        return tabelaBodovas;
+    }
+
+    public void setTabelaBodovas(ForeignCollection<TabelaBodova> tabelaBodovas) {
+        this.tabelaBodovas = tabelaBodovas;
     }
 
     @Override

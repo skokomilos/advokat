@@ -13,16 +13,16 @@ import com.example.berka.advokatormlite.model.Postupak;
 import java.util.ArrayList;
 
 /**
- * Created by berka on 7/21/2017.
+ * Created by berka on 20-Sep-17.
  */
 
-public class MyAdapter extends BaseAdapter {
+public class MyAdapterPostupak extends BaseAdapter {
 
     Context context;
     ArrayList<Postupak> postupci;
 
 
-    public MyAdapter(Context context, ArrayList<Postupak> postupci) {
+    public MyAdapterPostupak(Context context, ArrayList<Postupak> postupci) {
         this.context = context;
         this.postupci = postupci;
     }

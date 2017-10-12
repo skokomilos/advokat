@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/activity_priprema_list"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context="com.example.berka.advokatormlite.activities.SecondActivity">
+    android:orientation="vertical">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/appbar"
@@ -15,7 +14,7 @@
         android:theme="@style/AppTheme.AppBarOverlay">
 
         <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbarSecond"
+            android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:title="@string/activity_first_toolbar_title"
@@ -26,29 +25,10 @@
 
     </android.support.design.widget.AppBarLayout>
 
-
-    <LinearLayout
+    <ListView
+        android:id="@+id/lista_svih_uradjenih_radnji"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_marginBottom="5dp"
-        android:paddingBottom="5dp">
-
-        <ExpandableListView
-            android:id="@+id/lvExpendable"
-            android:layout_marginTop="5dp"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"></ExpandableListView>
-
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="izracunaj"
-            android:id="@+id/izracunaj_vrednost"/>
-
-
-    </LinearLayout>
-
+        android:layout_height="match_parent" />
 
 
 </LinearLayout>
