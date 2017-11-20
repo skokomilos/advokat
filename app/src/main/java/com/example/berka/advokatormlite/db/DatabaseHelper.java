@@ -4,16 +4,21 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.util.Log;
+import android.widget.CompoundButton;
 
 import com.example.berka.advokatormlite.model.IzracunatTrosakRadnje;
 import com.example.berka.advokatormlite.model.Postupak;
+import com.example.berka.advokatormlite.model.PostupakTarifaJoin;
+import com.example.berka.advokatormlite.model.PostupakVrstaParniceJoin;
 import com.example.berka.advokatormlite.model.Radnja;
 import com.example.berka.advokatormlite.model.Slucaj;
 import com.example.berka.advokatormlite.model.TabelaBodova;
 import com.example.berka.advokatormlite.model.Tarifa;
+import com.example.berka.advokatormlite.model.VrsteParnica;
 import com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper;
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.stmt.PreparedQuery;
 import com.j256.ormlite.stmt.query.In;
 import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
@@ -24,6 +29,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.sql.SQLException;
+import java.util.List;
 
 /**
  * Created by berka on 7/21/2017.
@@ -45,6 +51,12 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper{
     private Dao<Radnja, Integer> mRadnjaDao = null;
     private Dao<TabelaBodova, Integer> mTabelaBodovaDao = null;
     private Dao<IzracunatTrosakRadnje, Integer> mIzracunatTrosakRadnjeDao = null;
+    private Dao<VrsteParnica, Integer> mVrsteParnicaDao = null;
+
+    private Dao<PostupakVrstaParniceJoin, Integer> mPostupakVrsteParnicaDao = null;
+    private Dao<PostupakTarifaJoin, Integer> mPostupakTarifaDao = null;
+
+
 
     public DatabaseHelper(Context context)
     {
@@ -178,6 +190,34 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper{
         return mRadnjaDao;
     }
 
+    public Dao<VrsteParnica, Integer> getmVrsteParnicaDao() throws SQLException{
+
+        if(mVrsteParnicaDao == null){
+            mVrsteParnicaDao = getDao(VrsteParnica.class);
+        }
+
+        return mVrsteParnicaDao;
+    }
+
+
+    public Dao<PostupakVrstaParniceJoin, Integer> getPostupakVrsteParnicaDao() throws SQLException{
+
+        if(mPostupakVrsteParnicaDao == null){
+            mPostupakVrsteParnicaDao = getDao(PostupakVrstaParniceJoin.class);
+        }
+
+        return mPostupakVrsteParnicaDao;
+    }
+
+    public Dao<PostupakTarifaJoin, Integer> getmPostupakTarifaDao() throws SQLException{
+
+        if(mPostupakTarifaDao == null){
+            mPostupakTarifaDao = getDao(PostupakTarifaJoin.class);
+        }
+
+        return mPostupakTarifaDao;
+    }
+
 
     @Override
     public void onCreate(SQLiteDatabase database, ConnectionSource connectionSource) {
@@ -196,6 +236,9 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper{
         mTarifaDao = null;
         mRadnjaDao = null;
         mTabelaBodovaDao = null;
+        mVrsteParnicaDao = null;
+        mPostupakVrsteParnicaDao = null;
+        mPostupakTarifaDao = null;
 
         super.close();
     }

@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_marginTop="14dp"
+    android:padding="@dimen/activity_horizontal_margin"
+    android:layout_width="300dp"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:hint="Text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="7dp"
+        android:gravity="start"
+        android:text="Proces Odrzan?"/>
+
+    <RadioGroup
+        android:id="@+id/radioGroupFixHours"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <RadioButton
+            android:id="@+id/radioButtonYes"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Yes" />
+
+        <RadioButton
+            android:id="@+id/radioButtonNo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="No" />
+
+    </RadioGroup>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="7dp"
+        android:layout_marginRight="7dp"
+        android:layout_marginTop="7dp"
+        android:background="@color/colorSecondaryDark"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:paddingTop="7dp"
+        android:weightSum="1">
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Num of hours?"
+            android:paddingLeft="4dp" />
+
+        <com.michaelmuenzer.android.scrollablennumberpicker.ScrollableNumberPicker
+            android:id="@+id/snp_dialog_fix_plus_hours"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/number_picker_bg"
+            android:paddingBottom="4dp"
+            app:snp_buttonIconLeft="@drawable/ic_left"
+            app:snp_buttonIconRight="@drawable/ic_right"
+            app:snp_maxValue="100"
+            app:snp_minValue="1"
+            app:snp_orientation="horizontal"
+            app:snp_stepSize="1"
+            app:snp_updateInterval="10"
+            app:snp_value="1" />
+
+    </LinearLayout>
+
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/fix_hours_box_btn_yes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="yes" />
+
+        <Button
+            android:id="@+id/fix_hours_box_btn_no"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="no" />
+
+    </LinearLayout>
+
+</LinearLayout>
+

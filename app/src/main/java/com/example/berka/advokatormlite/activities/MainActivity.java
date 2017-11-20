@@ -2,9 +2,12 @@ package com.example.berka.advokatormlite.activities;
 
 import android.app.Dialog;
 import android.content.Intent;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -20,11 +23,11 @@ import com.j256.ormlite.stmt.QueryBuilder;
 import java.sql.SQLException;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends BaseActivity {
 
     private DatabaseHelper databaseHelper;
-    public static String POSTUPAK_KEY = "POSTUPAK_KEY";
-    public static String FIND_KEY = "FIND_KEY";
+    public static final String FROM = "from";
+    public static final String CASE_ID = "case_id";
     Button btn_find, btn_add, btn_edit;
 
 
@@ -37,6 +40,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         initWidgets();
+        setupToolbar();
 
         btn_find.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -54,9 +58,6 @@ public class MainActivity extends AppCompatActivity {
                 openDialogAdd();
             }
         });
-
-
-
     }
 
     //tri metoda pomocu kojih otvaram dijaloge za add, find, edit
@@ -66,16 +67,12 @@ public class MainActivity extends AppCompatActivity {
         final Dialog dialog = new Dialog(this);
         dialog.setContentView(R.layout.dialog_find_case);
 
-
-
         final EditText dialog_et_broj_slucaja = (EditText) dialog.findViewById(R.id.dialog_et_broj_slucaja);
         Button dialog_btn_find_case = (Button) dialog.findViewById(R.id.dialog_btn_nadji_slucaj);
 
         dialog_btn_find_case.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-
                 try {
 
                     //todo ovde treba verovatno lista pa da se uzme prvi iz te liste
@@ -97,45 +94,23 @@ public class MainActivity extends AppCompatActivity {
 
                     //todo tabela bodova nekako povezati
 
-                    Intent intent = new Intent(MainActivity.this, SecondActivity.class);
-                    intent.putExtra(FIND_KEY, slucajevi.get(0).getId());
-                    Log.d("ajdi", String.valueOf(slucajevi.get(0).getId()));
+                    Intent intent = new Intent(MainActivity.this, PronadjeniSlucaj.class);
+                    intent.putExtra(FROM, "find");
+                    intent.putExtra(CASE_ID, slucajevi.get(0).getId());
                     startActivity(intent);
-
-                    Log.d("Bilder", slucajevi.get(0).getIme());
-
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }
-
             }
         });
-
-
 
         dialog.show();
     }
 
     private void openDialogAdd(){
 
-        Intent i = new Intent(this, AddNewCaseActivity.class);
+        Intent i = new Intent(this, ChoosePostupakActivity.class);
         startActivity(i);
-    }
-
-    private void openDialogEdit(Radnja radnja){
-
-        final Dialog dialog = new Dialog(this);
-        dialog.setContentView(R.layout.dialog_add_points);
-
-        TextView tv_broj_bodova = dialog.findViewById(R.id.box_tv_points);
-        tv_broj_bodova.setText(radnja.getNaziv_radnje());
-
-        dialog.show();
-    }
-
-    private void initDialogVidgets(){
-
-
     }
 
     private void initWidgets(){
@@ -144,6 +119,42 @@ public class MainActivity extends AppCompatActivity {
         btn_add = (Button) findViewById(R.id.welcome_btn_add_case);
         btn_edit = (Button) findViewById(R.id.btn_edit_case);
     }
+
+    //toolbar metode
+    //5 metoda za nav/toolbar
+    private void setupToolbar() {
+        final ActionBar ab = getActionBarToolbar();
+        ab.setHomeAsUpIndicator(R.drawable.ic_menu);
+        ab.setDisplayHomeAsUpEnabled(true);
+        ab.setTitle(R.string.app_name);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.sample_actions, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                openDrawer();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected int getSelfNavDrawerItem() {
+        return R.id.nav_quotes;
+    }
+
+    @Override
+    public boolean providesActivityToolbar() {
+        return true;
+    }
+
 
     public DatabaseHelper getDatabaseHelper() {
         if (databaseHelper == null) {
@@ -161,5 +172,4 @@ public class MainActivity extends AppCompatActivity {
             databaseHelper = null;
         }
     }
-
 }

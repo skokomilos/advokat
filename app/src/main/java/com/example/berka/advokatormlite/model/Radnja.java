@@ -15,6 +15,7 @@ public class Radnja {
     public static final String FIELD_RADNJA_NAZIV = "naziv_radnje";
     public static final String FIELD_RADNJA_TARIFA = "idTarifa";
     public static final String FIELD_SIFRA = "sifra";
+    public static final String FIELD_SIFRA_POSTUPKA = "sifra_postupka";
 
 
     @DatabaseField(columnName = FIELD_RADNJA_ID, generatedId = true)
@@ -28,6 +29,9 @@ public class Radnja {
 
     @DatabaseField(columnName = FIELD_SIFRA)
     private int sifra;
+
+    @DatabaseField(columnName = FIELD_SIFRA_POSTUPKA)
+    private int sifra_postupka;
 
 
     public int getId() {
@@ -60,5 +64,13 @@ public class Radnja {
 
     public void setSifra(int sifra) {
         this.sifra = sifra;
+    }
+
+    public int getSifra_postupka() {
+        return sifra_postupka;
+    }
+
+    public void setSifra_postupka(int sifra_postupka) {
+        this.sifra_postupka = sifra_postupka;
     }
 }

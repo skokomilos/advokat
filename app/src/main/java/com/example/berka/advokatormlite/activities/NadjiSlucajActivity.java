@@ -35,7 +35,8 @@ public class NadjiSlucajActivity extends AppCompatActivity {
     DatabaseHelper databaseHelper;
     Button button_nadji;
 
-    public static String FIND_KEY = "FIND_KEY";
+    public static final String FROM = "from";
+    public static final String CASE_ID = "case_id";
 
     String broj_slucaja;
     int i;
@@ -73,11 +74,12 @@ public class NadjiSlucajActivity extends AppCompatActivity {
 
                     //todo tabela bodova nekako povezati
 
-                    Intent intent = new Intent(NadjiSlucajActivity.this, SecondActivity.class);
-                    intent.putExtra(FIND_KEY, sl.get(0).getPostupak().getId());
+                    Intent intent = new Intent(NadjiSlucajActivity.this, PronadjeniSlucaj.class);
+                    intent.putExtra(FROM, "find");
+                    intent.putExtra(CASE_ID, sl.get(0).getPostupak().getId());
                     startActivity(intent);
 
-                    Log.d("Bilder", sl.get(0).getIme());
+//                    Log.d("Bilder", sl.get(0).getIme());
 
                 } catch (SQLException e) {
                     e.printStackTrace();

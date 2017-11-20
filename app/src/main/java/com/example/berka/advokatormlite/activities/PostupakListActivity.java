@@ -48,7 +48,7 @@ public class PostupakListActivity extends AppCompatActivity {
 
                     Postupak postupak = (Postupak) listView.getItemAtPosition(position);
 
-                    Intent intent = new Intent(PostupakListActivity.this, SecondActivity.class);
+                    Intent intent = new Intent(PostupakListActivity.this, PronadjeniSlucaj.class);
                     intent.putExtra(POSTUPAK_KEY, postupak.getId());
                     startActivity(intent);
                 }

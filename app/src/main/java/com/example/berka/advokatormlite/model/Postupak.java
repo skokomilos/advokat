@@ -7,6 +7,8 @@ import com.j256.ormlite.table.DatabaseTable;
 
 import java.util.List;
 
+import static com.example.berka.advokatormlite.model.Postupak.POSTUPAK_VRSTEPARNICA;
+
 /**
  * Created by berka on 7/21/2017.
  */
@@ -19,6 +21,7 @@ public class Postupak {
     public static final String POSTUPAK_NAZIV = "naziv";
     public static final String POSTUPAK_TARIFE = "tarife";
     public static final String POSTUPAK_TABELABODOVA = "bodovi";
+    public static final String POSTUPAK_VRSTEPARNICA = "vrste_parnica";
 
     @DatabaseField(columnName = POSTUPAK_ID, generatedId = true)
     private int id;

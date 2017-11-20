@@ -20,6 +20,7 @@ public class TabelaBodova {
     public static final String BODOVI = "bodovi";
     public static final String POSTUPAK_ID = "postupak";
     public static final String SLUCAJEVI = "slucajevi";
+    public static final String VRSTE_PARNICA_ID = "vrste_parnica_id";
 
     @DatabaseField(columnName = ID, generatedId = true)
     private int id;
@@ -35,6 +36,10 @@ public class TabelaBodova {
 
     @ForeignCollectionField(columnName = SLUCAJEVI, eager = true)
     private ForeignCollection<Slucaj> slucajevi;
+
+    @DatabaseField(columnName = VRSTE_PARNICA_ID, foreign = true, foreignAutoCreate = true, foreignAutoRefresh = true)
+    private VrsteParnica vrsteParnicaId;
+
 
 
     public TabelaBodova() {
@@ -78,6 +83,14 @@ public class TabelaBodova {
 
     public void setSlucajevi(ForeignCollection<Slucaj> slucajevi) {
         this.slucajevi = slucajevi;
+    }
+
+    public VrsteParnica getVrsteParnicaId() {
+        return vrsteParnicaId;
+    }
+
+    public void setVrsteParnicaId(VrsteParnica vrsteParnicaId) {
+        this.vrsteParnicaId = vrsteParnicaId;
     }
 
     @Override

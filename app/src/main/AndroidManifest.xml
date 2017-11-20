@@ -19,11 +19,16 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".activities.SecondActivity"/>
+        <activity android:name=".activities.PronadjeniSlucaj"/>
         <activity android:name=".activities.NadjiSlucajActivity"/>
         <activity android:name=".activities.PostupakListActivity"/>
         <activity android:name=".activities.AddNewCaseActivity"/>
         <activity android:name=".activities.KonacniTrosakSvihRadnjiActivity"/>
+        <activity android:name=".activities.ChoosePostupakActivity"/>
+        <activity android:name=".activities.AddParnicaActivity"/>
+        <activity android:name=".activities.AddKrivicaActivity"/>
+        <activity android:name=".activities.AddPrekrsajniActivity"/>
+        <activity android:name=".activities.AddUstavniActivity"/>
 
     </application>
 

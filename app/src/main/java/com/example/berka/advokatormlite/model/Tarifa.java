@@ -21,6 +21,7 @@ public class Tarifa {
     public static final String FIELD_NAZIV_TARIFE = "nazivTarife";
     public static final String FIELD_TARIFA_RADNJE = "radnje";
     public static final String FIELD_TARIFA_POSTUPAK = "idPostupak";
+    public static final String FIELD_VRSTA_PARNICA_ID = "idVrstaParnica";
 
     @DatabaseField(columnName = FIELD_TARIFA_ID, generatedId = true)
     private int id;
@@ -34,7 +35,8 @@ public class Tarifa {
     @DatabaseField(columnName = FIELD_TARIFA_POSTUPAK, foreign = true, foreignAutoCreate = true, foreignAutoRefresh = true)
     private Postupak postupak;
 
-
+    @DatabaseField(columnName = FIELD_VRSTA_PARNICA_ID, foreign = true, foreignAutoCreate = true, foreignAutoRefresh = true)
+    private VrsteParnica vrsteParnica;
 
     public Tarifa(String naslov_tarife){
         this.naslov_tarife = naslov_tarife;
@@ -74,5 +76,13 @@ public class Tarifa {
 
     public void setPostupak(Postupak postupak) {
         this.postupak = postupak;
+    }
+
+    public VrsteParnica getVrsteParnica() {
+        return vrsteParnica;
+    }
+
+    public void setVrsteParnica(VrsteParnica vrsteParnica) {
+        this.vrsteParnica = vrsteParnica;
     }
 }

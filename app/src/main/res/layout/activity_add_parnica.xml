@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <EditText
+        android:id="@+id/sifraSlucajaParnica"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="sifra slucaja"
+        android:inputType="number"/>
+
+    <Spinner
+        android:id="@+id/spinnerVrsteParnice"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <Spinner
+        android:id="@+id/spinnerKazne"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/colorSecodaryLight"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="7dp"
+        android:layout_marginRight="7dp"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:weightSum="1">
+
+        <TextView
+            android:paddingLeft="4dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Broj stranaka"/>
+
+        <com.michaelmuenzer.android.scrollablennumberpicker.ScrollableNumberPicker
+            android:id="@+id/snp_horizontal_clients"
+            android:paddingBottom="4dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/number_picker_bg"
+            app:snp_buttonIconLeft="@drawable/ic_left"
+            app:snp_buttonIconRight="@drawable/ic_right"
+            app:snp_maxValue="100"
+            app:snp_minValue="1"
+            app:snp_orientation="horizontal"
+            app:snp_stepSize="1"
+            app:snp_updateInterval="10"
+            app:snp_value="1" />
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/btnAddSlucajParnica"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="add" />
+
+</LinearLayout>

@@ -30,6 +30,9 @@ dependencies {
     testCompile 'junit:junit:4.12'
     compile group: 'com.j256.ormlite', name: 'ormlite-android', version: '5.0'
 
+    //add library for scrolable number picker
+    compile 'com.michaelmuenzer.android:ScrollableNumberPicker:0.2.2'
+
     testCompile 'junit:junit:4.12'
 
 }

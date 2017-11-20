@@ -34,7 +34,7 @@ public class KonacniTrosakSvihRadnjiActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_konacni_trosak_svih_radnji);
 
-        key = getIntent().getExtras().getInt(SecondActivity.SLUCAJ_KEY);
+        key = getIntent().getExtras().getInt(PronadjeniSlucaj.SLUCAJ_KEY);
 
         try {
             slucaj = getDatabaseHelper().getSlucajDao().queryForId(key);

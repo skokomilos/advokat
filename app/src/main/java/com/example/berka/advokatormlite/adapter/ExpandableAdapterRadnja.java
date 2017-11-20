@@ -25,10 +25,10 @@ public class ExpandableAdapterRadnja extends BaseExpandableListAdapter {
 
 
     private Context context;
-    private ArrayList<Tarifa> listDataHeader;
+    private List<Tarifa> listDataHeader;
     private HashMap<Tarifa, List<Radnja>> listHashMap;
 
-    public ExpandableAdapterRadnja(Context context, ArrayList<Tarifa> listDataHeader, HashMap<Tarifa, List<Radnja>> listHashMap) {
+    public ExpandableAdapterRadnja(Context context, List<Tarifa> listDataHeader, HashMap<Tarifa, List<Radnja>> listHashMap) {
         this.context = context;
         this.listDataHeader = listDataHeader;
         this.listHashMap = listHashMap;
