@@ -243,11 +243,10 @@ public class PronadjeniSlucaj extends BaseActivity {
 
     private void openDialog(final double num){
 
-        //final double cenaRadnje = num;
-
         final Dialog dialog = new Dialog(this);
         dialog.setContentView(R.layout.dialog_add_points);
 
+        //final double cenaRadnje = num;
         TextView tv_broj_bodova = dialog.findViewById(R.id.box_tv_points);
         tv_broj_bodova.setText(String.valueOf(num));
 
@@ -268,10 +267,11 @@ public class PronadjeniSlucaj extends BaseActivity {
                     e.printStackTrace();
                     Toast.makeText(PronadjeniSlucaj.this, "Izracunata radnja nije dodata", Toast.LENGTH_SHORT).show();
                 }
+                dialog.dismiss();
             }
         });
+                dialog.show();
 
-        dialog.show();
     }
 
     private void dialogFixValuePlusHours(final double num){
@@ -282,6 +282,7 @@ public class PronadjeniSlucaj extends BaseActivity {
         final Button no = dialog.findViewById(R.id.fix_hours_box_btn_no);
 
         final RadioGroup radioGroup = dialog.findViewById(R.id.radioGroupFixHours);
+        radioGroup.check(R.id.radioButtonYes);
         final ScrollableNumberPicker scrollableNumberPicker = dialog.findViewById(R.id.snp_dialog_fix_plus_hours);
         radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
@@ -294,40 +295,55 @@ public class PronadjeniSlucaj extends BaseActivity {
                 }
             }
         });
-        Button button = dialog.findViewById(R.id.fix_hours_box_btn_yes);
+        Button btnYes = dialog.findViewById(R.id.fix_hours_box_btn_yes);
 
-        button.setOnClickListener(new View.OnClickListener() {
+        btnYes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                IzracunatTrosakRadnje izracunatTrosakRadnje = new IzracunatTrosakRadnje();
-
+                double izracunato = 0;
                 final int selecteid = radioGroup.getCheckedRadioButtonId();
-
                 radioButton = (RadioButton) findViewById(selecteid);
 
-
+                Log.d("Selektovani", String.valueOf(selecteid));
                 switch (selecteid){
+
                     case R.id.radioButtonYes:
-                        double fixPlusHours = num + (scrollableNumberPicker.getValue()*50);
-                        Toast.makeText(PronadjeniSlucaj.this, String.valueOf(fixPlusHours), Toast.LENGTH_LONG).show();
+                        izracunato = num + (scrollableNumberPicker.getValue()*50);
+                        Toast.makeText(PronadjeniSlucaj.this, String.valueOf(izracunato), Toast.LENGTH_LONG).show();
                         break;
                     case R.id.radioButtonNo:
-                        double halfPlusHours = num / 2 + (scrollableNumberPicker.getValue()*50);
-                        Toast.makeText(PronadjeniSlucaj.this, String.valueOf(halfPlusHours), Toast.LENGTH_LONG).show();
+                        izracunato = num / 2 + (scrollableNumberPicker.getValue()*50);
+                        Toast.makeText(PronadjeniSlucaj.this, String.valueOf(izracunato), Toast.LENGTH_LONG).show();
                         break;
                     default:
                         Toast.makeText(PronadjeniSlucaj.this, "Oznaci da li je radnja odrzana", Toast.LENGTH_LONG).show();
                         //todo resiti problem kad cekiram NE da ne dozvoli koriscenje scrolablenumberpickera
                 }
+
+                IzracunatTrosakRadnje izracunatTrosakRadnje = new IzracunatTrosakRadnje();
+                izracunatTrosakRadnje.setCena_izracunate_jedinstvene_radnje(izracunato);
+                izracunatTrosakRadnje.setNaziv_radnje(radnja.getNaziv_radnje());
+                izracunatTrosakRadnje.setSlucaj(slucaj);
+
+                try {
+                    getDatabaseHelper().getmIzracunatTrosakRadnjeDao().create(izracunatTrosakRadnje);
+                    Toast.makeText(PronadjeniSlucaj.this, "Izracunata radnja je dodata", Toast.LENGTH_SHORT).show();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                    Toast.makeText(PronadjeniSlucaj.this, "Izracunata radnja nije dodata", Toast.LENGTH_SHORT).show();
+                }
+                //todo resito dodavanje u bazu
+                dialog.dismiss();
+
             }
         });
 
-        dialog.show();
+                dialog.show();
     }
 
     //TODO ODAVDE METODE VISE NA VISE I DA RESIM ISPIS U INITDATA()
-
+    //metode many to many  https://github.com/j256/ormlite-jdbc/tree/master/src/test/java/com/j256/ormlite/examples/manytomany
 
 
     private PreparedQuery<Postupak> postupciForTarifaQuery = null;
@@ -356,8 +372,6 @@ public class PronadjeniSlucaj extends BaseActivity {
         postQb.where().in(Postupak.POSTUPAK_ID, userPostQb);
         return postQb.prepare();
     }
-
-
     //////////////////////////////////////////////////////////////////////////////////////////////
 
     private PreparedQuery<Tarifa> tarifeForPostupakQuery = null;
@@ -422,7 +436,7 @@ public class PronadjeniSlucaj extends BaseActivity {
 
         //checkIntent();
         listHashMap = new HashMap<>();
-        List<Radnja> listaRadnji = new ArrayList<>(); ;
+        List<Radnja> listaRadnji = new ArrayList<>();
 
         try {
             listDataHeader = getDatabaseHelper().getmTarifaDao().queryBuilder()
@@ -438,8 +452,6 @@ public class PronadjeniSlucaj extends BaseActivity {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
-
 
         for (int i = 0; i < listDataHeader.size(); i++) {
 
@@ -486,82 +498,6 @@ public class PronadjeniSlucaj extends BaseActivity {
             }
         }
     }
-
-    private void initData() throws SQLException{
-
-        List<Radnja> showShowShow = new ArrayList<>();
-        final List<Tarifa> blabla;
-        listHashMap = new HashMap<>();
-
-//        keyFromMain = getIntent().getExtras().getInt(MainActivity.FIND_KEY);
-//        keyFromAdd = getIntent().getExtras().getInt(AddParnicaActivity.SLUCAJ_KEY);
-//
-//            try {
-//                slucaj = getDatabaseHelper().getSlucajDao().queryForId(keyFromAdd);
-//            } catch (SQLException e) {
-//                e.printStackTrace();
-//        }
-
-        checkIntent();
-
-        //postupak = slucaj.getPostupak();
-
-        //listDataHeader su lista tarifa
-            listDataHeader = lookUpTarifeForPostupak(postupak);
-            Log.d("ListaTarifa", String.valueOf(listDataHeader.size()));
-
-//        try {
-//            listDataHeader = getDatabaseHelper().getmTarifaDao().queryBuilder()
-//                    .where()
-//                    .eq(Tarifa.FIELD_TARIFA_POSTUPAK, postupak.getId())
-//                    .query();
-//
-//            if(listDataHeader==null){
-//                return;
-//            }
-//
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
-
-//        for (int i = 0; i < listDataHeader.size(); i++) {
-//
-//            if(listDataHeader.get(i).getRadnje()==null){
-//
-//                return;
-//            }else{
-//
-//                //Log.d("Greska", showShowShow.get(i).getNaziv_radnje());
-//                listaRadnji = new ArrayList<>(listDataHeader.get(i).getRadnje());
-//                listHashMap.put(listDataHeader.get(i), listaRadnji);
-//            }
-//        }
-
-
-
-        for (int i = 0; i < listDataHeader.size(); i++) {
-
-            if(showShowShow==null){
-                Log.d("Knjiga", "Greska");
-                return;
-            }else{
-                //Log.d("Greska", showShowShow.get(0).getNaziv_radnje());
-                //listaRadnji = new ArrayList<>(listDataHeader.get(i).getRadnje());
-                try {
-                    showShowShow = getDatabaseHelper().getmRadnjaDao().queryBuilder()
-                            .where()
-                            .eq(Radnja.FIELD_RADNJA_TARIFA, listDataHeader.get(i).getId())
-                            .query();
-                    Log.d("ListaRadnji", String.valueOf(showShowShow.size()));
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-                listHashMap.put(listDataHeader.get(i), showShowShow);
-            }
-        }
-    }
-
-    ///////////////metode many to many  https://github.com/j256/ormlite-jdbc/tree/master/src/test/java/com/j256/ormlite/examples/manytomany
 
     public DatabaseHelper getDatabaseHelper(){
         if (databaseHelper == null) {

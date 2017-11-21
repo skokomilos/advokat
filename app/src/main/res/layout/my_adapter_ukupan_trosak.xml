@@ -12,21 +12,22 @@
 
         <TextView
             android:id="@+id/adapter_tv_izvrsena_radnja"
-            android:paddingLeft="5dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="2dp"
-            android:layout_weight="1"/>
+            android:layout_weight="1"
+            android:paddingLeft="5dp" />
 
         <TextView
             android:id="@+id/adapter_tv_izvrsena_cena"
-            android:paddingLeft="50dp"
+            android:gravity="right"
+            android:paddingRight="8dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="2dp"
-            android:layout_weight="1" />
+            android:layout_weight="1"
+            android:paddingLeft="50dp" />
 
     </LinearLayout>
-
-
+    
 </LinearLayout>

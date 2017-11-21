@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.berka.advokatormlite.R;
 import com.example.berka.advokatormlite.db.DatabaseHelper;
@@ -74,33 +75,25 @@ public class MainActivity extends BaseActivity {
             @Override
             public void onClick(View view) {
                 try {
-
-                    //todo ovde treba verovatno lista pa da se uzme prvi iz te liste
-                    //stavljam u try/catch zbog mogucnosti da se ne unese broj
-                    //pretvaram string u integer
-                    try{
-                        str_broj_slucaja = dialog_et_broj_slucaja.getText().toString();
-                        int_broj_slucaja = Integer.parseInt(str_broj_slucaja);
-                        Log.d("Provera", str_broj_slucaja);
-                    }catch(NumberFormatException ex){
-                        ex.printStackTrace();
-                    }
+                    str_broj_slucaja = dialog_et_broj_slucaja.getText().toString();
                     QueryBuilder<Slucaj, Integer> qb = getDatabaseHelper().getSlucajDao().queryBuilder();
-                    qb.where().eq(Slucaj.BROJ_SLUCAJA, int_broj_slucaja);
+                    qb.where().eq(Slucaj.BROJ_SLUCAJA, Integer.parseInt(str_broj_slucaja));
 
-                    List<Slucaj> slucajevi = qb.query();
+                    try {
+                        List<Slucaj> slucajevi = qb.query();
 
-                    //sad treba uzeti taj objekat i otvoriti vrednosti proces/tarifa/radnja, samo prvi put treba da izabere proces posalji idPostupka iz tabele slucaja
+                        Intent intent = new Intent(MainActivity.this, PronadjeniSlucaj.class);
+                        intent.putExtra(FROM, "find");
+                        intent.putExtra(CASE_ID, slucajevi.get(0).getId());
+                        startActivity(intent);
+                    }catch (IndexOutOfBoundsException e){
+                        Toast.makeText(MainActivity.this, "Ne postoji slucaj", Toast.LENGTH_SHORT).show();
+                    }
 
-                    //todo tabela bodova nekako povezati
-
-                    Intent intent = new Intent(MainActivity.this, PronadjeniSlucaj.class);
-                    intent.putExtra(FROM, "find");
-                    intent.putExtra(CASE_ID, slucajevi.get(0).getId());
-                    startActivity(intent);
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }
+                dialog.dismiss();
             }
         });
 
