@@ -196,7 +196,6 @@ public class AddParnicaActivity extends AppCompatActivity implements View.OnClic
                                     .and()
                                     .eq(TabelaBodova.POSTUPAK_ID, postupak.getId())
                                     .query();
-                            Log.d("Probljem", String.valueOf(vrsteParnicaObjekat.getId()));
                         }else {
                             list = getDatabaseHelper().getmTabelaBodovaDao().queryBuilder()
                                     .where()

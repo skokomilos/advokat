@@ -43,28 +43,9 @@ public class ChoosePostupakActivity extends AppCompatActivity implements View.On
         loadSpinner();
     }
 
-    public DatabaseHelper getDatabaseHelper() {
-        if (databaseHelper == null) {
-            databaseHelper = OpenHelperManager.getHelper(ChoosePostupakActivity.this, DatabaseHelper.class);
-        }
-        return databaseHelper;
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-
-        if (databaseHelper != null) {
-            OpenHelperManager.releaseHelper();
-            databaseHelper = null;
-        }
-    }
-
     private void loadSpinner(){
-        Log.d("testiranje", "startovanje");
         try {
             final List<Postupak> postupciList = getDatabaseHelper().getPostupakDao().queryForAll();
-            Log.d("testiranje", postupciList.get(1).getNazivpostupka());
             ArrayAdapter<Postupak> adapter = new ArrayAdapter(ChoosePostupakActivity.this, android.R.layout.simple_spinner_item, postupciList);
             adapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
             spinerPostupak.setAdapter(adapter);
@@ -85,8 +66,31 @@ public class ChoosePostupakActivity extends AppCompatActivity implements View.On
         }
     }
 
+
+    public DatabaseHelper getDatabaseHelper() {
+        if (databaseHelper == null) {
+            databaseHelper = OpenHelperManager.getHelper(ChoosePostupakActivity.this, DatabaseHelper.class);
+        }
+        return databaseHelper;
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        if (databaseHelper != null) {
+            OpenHelperManager.releaseHelper();
+            databaseHelper = null;
+        }
+    }
+
+
     @Override
     public void onClick(View v) {
+
+        //todo verovatno ovde dodati i.putextra(case_type);
+        //todo odavde idem direkt na PronadjeniSlucaj klasu (ovo ime klse moram da promenim u nesto razumnije)
+
         Intent i;
         switch (postupakObject.getId()) {
             case 2:
@@ -94,18 +98,15 @@ public class ChoosePostupakActivity extends AppCompatActivity implements View.On
                 i = new Intent(ChoosePostupakActivity.this, AddKrivicaActivity.class);
                 i.putExtra(POSTUPAK_KEY, postupakObject.getId());
                 startActivity(i);
-                Log.d("testiranje", postupakObject.getNazivpostupka());
                 break;
             case 4:
                 //add prekrsajni postupak
-                Log.d("testiranje", postupakObject.getNazivpostupka());
                         i = new Intent(ChoosePostupakActivity.this, AddPrekrsajniActivity.class);
                         i.putExtra(POSTUPAK_KEY, postupakObject.getId());
                         startActivity(i);
                 break;
             case 13:
                 //add isprave
-                Log.d("testiranje", postupakObject.getNazivpostupka());
                         i = new Intent(ChoosePostupakActivity.this, AddUstavniActivity.class);
                         i.putExtra(POSTUPAK_KEY, postupakObject.getId());
                         startActivity(i);

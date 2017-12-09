@@ -176,6 +176,35 @@ public class PronadjeniSlucaj extends BaseActivity {
 
     }
 
+
+    private void checkIntent(){
+
+        comingfrom=getIntent().getStringExtra("from");
+        caseid=getIntent().getIntExtra("case_id",0);
+
+        switch (comingfrom){
+            case "add":
+                case_add = caseid;
+                addIdToSlucaj(case_add);
+                break;
+            case "find":
+                caseid_find = caseid;
+                addIdToSlucaj(caseid_find);
+                break;
+            default:
+        }
+    }
+
+    private void addIdToSlucaj(int caseid){
+        try {
+            slucaj = getDatabaseHelper().getSlucajDao().queryForId(caseid);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        postupak = slucaj.getPostupak();
+        Log.d("tresnja", postupak.getNazivpostupka());
+    }
+
     //5 metoda za nav/toolbar
     private void setupToolbar() {
         final ActionBar ab = getActionBarToolbar();
@@ -402,33 +431,6 @@ public class PronadjeniSlucaj extends BaseActivity {
         return postQb.prepare();
     }
 
-    private void checkIntent(){
-
-        comingfrom=getIntent().getStringExtra("from");
-        caseid=getIntent().getIntExtra("case_id",0);
-
-        switch (comingfrom){
-            case "add":
-                case_add = caseid;
-                addIdToSlucaj(case_add);
-                break;
-            case "find":
-                caseid_find = caseid;
-                addIdToSlucaj(caseid_find);
-                break;
-            default:
-        }
-    }
-
-    private void addIdToSlucaj(int caseid){
-        try {
-            slucaj = getDatabaseHelper().getSlucajDao().queryForId(caseid);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        postupak = slucaj.getPostupak();
-        Log.d("tresnja", postupak.getNazivpostupka());
-    }
 
     //TODO DOVDE IDE NOVI DEO
 
