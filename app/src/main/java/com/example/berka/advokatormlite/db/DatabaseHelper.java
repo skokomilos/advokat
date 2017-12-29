@@ -12,6 +12,7 @@ import com.example.berka.advokatormlite.model.PostupakTarifaJoin;
 import com.example.berka.advokatormlite.model.PostupakVrstaParniceJoin;
 import com.example.berka.advokatormlite.model.Radnja;
 import com.example.berka.advokatormlite.model.Slucaj;
+import com.example.berka.advokatormlite.model.StrankaDetail;
 import com.example.berka.advokatormlite.model.TabelaBodova;
 import com.example.berka.advokatormlite.model.Tarifa;
 import com.example.berka.advokatormlite.model.VrsteParnica;
@@ -52,6 +53,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper{
     private Dao<TabelaBodova, Integer> mTabelaBodovaDao = null;
     private Dao<IzracunatTrosakRadnje, Integer> mIzracunatTrosakRadnjeDao = null;
     private Dao<VrsteParnica, Integer> mVrsteParnicaDao = null;
+    private Dao<StrankaDetail, Integer> mStrankaDetail = null;
 
     private Dao<PostupakVrstaParniceJoin, Integer> mPostupakVrsteParnicaDao = null;
     private Dao<PostupakTarifaJoin, Integer> mPostupakTarifaDao = null;
@@ -199,6 +201,16 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper{
         return mVrsteParnicaDao;
     }
 
+    public Dao<StrankaDetail, Integer> getmStrankaDetail() throws SQLException{
+
+        if(mStrankaDetail == null){
+            mStrankaDetail = getDao(StrankaDetail.class);
+        }
+
+        return mStrankaDetail;
+    }
+
+
 
     public Dao<PostupakVrstaParniceJoin, Integer> getPostupakVrsteParnicaDao() throws SQLException{
 
@@ -237,6 +249,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper{
         mRadnjaDao = null;
         mTabelaBodovaDao = null;
         mVrsteParnicaDao = null;
+        mStrankaDetail = null;
         mPostupakVrsteParnicaDao = null;
         mPostupakTarifaDao = null;
 

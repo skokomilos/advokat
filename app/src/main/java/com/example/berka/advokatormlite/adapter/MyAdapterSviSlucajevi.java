@@ -1,8 +1,10 @@
 package com.example.berka.advokatormlite.adapter;
 
 import android.content.Context;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.SurfaceHolder;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -49,6 +51,9 @@ public class MyAdapterSviSlucajevi extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
+        RecyclerView.ViewHolder holder;
+        SurfaceHolder surfaceHolder;
+
         if(convertView == null) {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = inflater.inflate(R.layout.my_adapter_lista_slucajeva, null);
@@ -58,9 +63,7 @@ public class MyAdapterSviSlucajevi extends BaseAdapter {
         sif_slucaja.setText(String.valueOf(slucajevi.get(position).getBroj_slucaja()));
 
         TextView trenutva_vrednost = convertView.findViewById(R.id.adr_trenutna_vrednost);
-        Log.d("Apolo",String.valueOf(izracunateTarife.get(position)));
         trenutva_vrednost.setText(String.valueOf(izracunateTarife.get(position)));
-
 
         return convertView;
     }

@@ -11,12 +11,16 @@ public class IzracunatTrosakRadnje {
 
     public static final String TABLE_NAME = "izracunat_trosak_radnje";
     public static final String ID = "id";
+    public static final String DATUM = "datum";
     public static final String NAZIV = "naziv";
     public static final String CENA = "cena_radnje";
     public static final String SLUCAJ_ID = "slucaj_id";
 
     @DatabaseField(columnName = ID, generatedId = true)
     private int id;
+
+    @DatabaseField(columnName = DATUM)
+    private String datum;
 
     @DatabaseField(columnName = NAZIV)
     private String naziv_radnje;
@@ -36,6 +40,14 @@ public class IzracunatTrosakRadnje {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public String getDatum() {
+        return datum;
+    }
+
+    public void setDatum(String datum) {
+        this.datum = datum;
     }
 
     public String getNaziv_radnje() {

@@ -322,6 +322,7 @@ public class KonacniTrosakSvihRadnjiActivity extends BaseActivity{
                     counterForListElements++;
                     paint.setTextSize(14);
                     canvas.drawText(1+i + " " + lista.get(i).getNaziv_radnje(),leftMargin,titleBaseLine+=35, paint);
+                    canvas.drawText("Od " + lista.get(i).getDatum(),leftMargin + 250,titleBaseLine, paint);
                     canvas.drawText(String.valueOf(lista.get(i).getCena_izracunate_jedinstvene_radnje()),leftMargin + 450,titleBaseLine, paint);
                 }
             }

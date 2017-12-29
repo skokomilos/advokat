@@ -21,6 +21,7 @@ public class Slucaj {
     public static final String ID_POSTUPKA = "id_postupak";
     public static final String ID_TABELE_BODOVA = "id_tabela_bodova";
     public static final String IZRACUNAT_TROSAK_RADNJE = "lista_izracunatih_radnji";
+    public static final String LISTA_STRANAKA = "lista_stranaka";
 
 
     @DatabaseField(columnName = ID_SLCJ, generatedId = true)
@@ -44,6 +45,9 @@ public class Slucaj {
     //lista radnji
     @ForeignCollectionField(columnName = Slucaj.IZRACUNAT_TROSAK_RADNJE, eager = true)
     private ForeignCollection<IzracunatTrosakRadnje> listaIzracunatihTroskovaRadnji;
+
+    @ForeignCollectionField(columnName = Slucaj.LISTA_STRANAKA, eager = true)
+    private ForeignCollection<StrankaDetail> lista_stranaka;
 
     public int getId() {
         return id;
@@ -99,5 +103,18 @@ public class Slucaj {
 
     public void setListaIzracunatihTroskovaRadnji(ForeignCollection<IzracunatTrosakRadnje> listaIzracunatihTroskovaRadnji) {
         this.listaIzracunatihTroskovaRadnji = listaIzracunatihTroskovaRadnji;
+    }
+
+    public ForeignCollection<StrankaDetail> getLista_stranaka() {
+        return lista_stranaka;
+    }
+
+    public void setLista_stranaka(ForeignCollection<StrankaDetail> lista_stranaka) {
+        this.lista_stranaka = lista_stranaka;
+    }
+
+    @Override
+    public String toString() {
+        return String.valueOf(broj_slucaja);
     }
 }

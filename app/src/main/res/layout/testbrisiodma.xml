@@ -1,46 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView  xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:id="@+id/probniid1">
 
-<LinearLayout
-    android:orientation="vertical"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:id="@+id/probniid">
 
     <EditText
-        android:id="@+id/et_sifra_add_krivica"
+        android:id="@+id/et_sifra_add_krivica1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="sifra slucaja"/>
 
-
-   <TextView android:hint="Text"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:paddingLeft="7dp"
-    android:gravity="start"
-    android:text="Okrivljen/Optuzen?"/>
-
     <RadioGroup
-        android:id="@+id/okrivljen_ostecen_radio_group"
+        android:id="@+id/okrivljen_ostecen_radio_group1"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@id/et_sifra_add_krivica1"
         android:orientation="vertical"
-        android:checkedButton="@+id/rbOkrivljen">
+        android:checkedButton="@+id/rbOkrivljen1">
 
         <RadioButton
             android:tag="1"
-            android:id="@+id/rbOkrivljen"
+            android:id="@+id/rbOkrivljen1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Okrivljen" />
 
         <RadioButton
             android:tag="0"
-            android:id="@+id/rbOptuzen"
+            android:id="@+id/rbOptuzen1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Ostecen" />
@@ -48,25 +37,27 @@
     </RadioGroup>
 
     <LinearLayout
+        android:id="@+id/ll_id1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/colorSecodaryLight"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
         android:layout_marginBottom="7dp"
         android:layout_marginRight="7dp"
         android:gravity="center"
+        android:layout_below="@id/okrivljen_ostecen_radio_group1"
         android:orientation="vertical"
         android:weightSum="1">
 
         <TextView
-            android:paddingLeft="4dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Broj stranaka"/>
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true"
+            android:hint="Broj stranaka"
+            android:paddingLeft="4dp" />
 
         <com.michaelmuenzer.android.scrollablennumberpicker.ScrollableNumberPicker
-            android:id="@+id/snp_broj_stranaka"
+            android:id="@+id/snp_broj_stranaka1"
             android:paddingBottom="4dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -85,38 +76,17 @@
     <Spinner
         android:id="@+id/spinnerKrivicaKazne"
         android:layout_width="match_parent"
+        android:layout_below="@id/ll_id1"
         android:layout_height="wrap_content" />
 
     <Button
-        android:id="@+id/btn_dodaj_krivicu"
-        android:text="dodaj slucaj"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
-
-        <GridLayout
-            xmlns:android="http://schemas.android.com/apk/res/android"
-            android:id="@+id/ll_for_users_info_text_fields"
-            android:columnCount="1"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="20dp">
+        android:id="@+id/btn_dodaj_krivicu1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/okrivljen_ostecen_radio_group1"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="103dp"
+        android:text="Button" />
 
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/unos_stranke_details_txt"
-                android:padding="8dp"
-                android:textColor="#000"/>
-            </LinearLayout>
-
-        </GridLayout>
-    </LinearLayout>
-</ScrollView>
+</RelativeLayout>

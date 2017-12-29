@@ -38,7 +38,7 @@ import java.util.List;
 public class AddParnicaActivity extends AppCompatActivity implements View.OnClickListener{
 
     private DatabaseHelper databaseHelper;
-    int postupak_id, tabela_bodova_id;
+    int postupak_id, broj_stranaka;
 
     public static final String FROM = "from";
     public static final String CASE_ID = "case_id";
@@ -61,7 +61,6 @@ public class AddParnicaActivity extends AppCompatActivity implements View.OnClic
 
         initPostupak();
         initWidgets();
-        //loadSpinners();
         try {
             loadSpinnersTest();
         } catch (SQLException e) {
@@ -91,8 +90,10 @@ public class AddParnicaActivity extends AppCompatActivity implements View.OnClic
 
     private void initPostupak(){
 
-        postupak_id = getIntent().getExtras().getInt(ChoosePostupakActivity.POSTUPAK_KEY);
-        Log.d("lista", String.valueOf(postupak_id));
+        postupak_id = getIntent().getExtras().getInt(MainActivity.POSTUPAK_KEY);
+        broj_stranaka = getIntent().getExtras().getInt(MainActivity.BROJ_STRANAKA);
+        Log.d("testiranje", String.valueOf(postupak_id));
+        Log.d("broj stranaka", String.valueOf(broj_stranaka));
         try {
             postupak = getDatabaseHelper().getPostupakDao().queryForId(postupak_id);
         } catch (SQLException e) {
@@ -138,8 +139,6 @@ public class AddParnicaActivity extends AppCompatActivity implements View.OnClic
         return postQb.prepare();
     }
 
-
-
     private PreparedQuery<VrsteParnica> vrsteparnicaForPostupakkQuery = null;
 
     private List<VrsteParnica> lookUpPostupciForVrstaParnica(Postupak postupak) throws SQLException{
@@ -158,7 +157,6 @@ public class AddParnicaActivity extends AppCompatActivity implements View.OnClic
         SelectArg userSelectArg = new SelectArg();
         // you could also just pass in user1 here
         userPostQb.where().eq(PostupakVrstaParniceJoin.POSTUPAK_ID, userSelectArg);
-
         // build our outer query for Post objects
         QueryBuilder<VrsteParnica, Integer> postQb = databaseHelper.getmVrsteParnicaDao().queryBuilder();
         // where the id matches in the post-id from the inner query
@@ -187,7 +185,6 @@ public class AddParnicaActivity extends AppCompatActivity implements View.OnClic
                 try {
                     //procenjiva vrednost je za sve ista ali neprocenjiva nije ista za svakog
                     //todo imam objekat klase postupak a njegov id imam kao foreign key u objektu tabelaBOdova
-                    //todo dodaj getname umesto getid
                     if(vrsteParnicaObjekat.getVrstaParnice()=="neprocenjiva"){
                         if(postupak.getNazivpostupka().equals("Vanparnicni postupak") || postupak.getNazivpostupka().equals("Upravni postupak") || postupak.getNazivpostupka().equals("Upravni sporovi") || postupak.getNazivpostupka().equals("Ostali postupci")) {
                             list = getDatabaseHelper().getmTabelaBodovaDao().queryBuilder()
@@ -225,50 +222,6 @@ public class AddParnicaActivity extends AppCompatActivity implements View.OnClic
 
             }
         });
-    }
-
-    private void loadSpinners(){
-
-        final List<VrsteParnica> vrsteParnicasList;
-        try {
-            vrsteParnicasList = getDatabaseHelper().getmVrsteParnicaDao().queryForAll();
-            ArrayAdapter<VrsteParnica> adapter = new ArrayAdapter(AddParnicaActivity.this, android.R.layout.simple_spinner_item, vrsteParnicasList);
-            adapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
-            //Log.d("Postupak", postupciList.get(0).getNazivpostupka());
-            spinnerVrsteParnica.setAdapter(adapter);
-            spinnerVrsteParnica.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                @Override
-                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
-                    vrsteParnicaObjekat = (VrsteParnica) spinnerVrsteParnica.getSelectedItem();
-//                    vrsteParnicaid = vrsteParnicaObjekat.getId();
-
-                    try {
-                        //pozivam listu klase tabelaBodova uz pomoc id-a objekta klase postupak koji sam gore dobio
-                        final List<TabelaBodova> list = getDatabaseHelper().getmTabelaBodovaDao().queryBuilder()
-                                .where()
-                                .eq(TabelaBodova.VRSTE_PARNICA_ID, vrsteParnicaObjekat.getId())
-                                .and()
-                                .isNull(TabelaBodova.POSTUPAK_ID)
-                                .query();
-                        ArrayAdapter<TabelaBodova> adapter1 = new ArrayAdapter(AddParnicaActivity.this, android.R.layout.simple_spinner_item, list);
-                        adapter1.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
-                        spinnerTabelaBodova.setAdapter(adapter1);
-                        tabelaBodovaObj = (TabelaBodova) spinnerTabelaBodova.getSelectedItem();
-                    } catch (SQLException e) {
-                        e.printStackTrace();
-                    }
-                }
-
-                @Override
-                public void onNothingSelected(AdapterView<?> parent) {
-
-                }
-            });
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
     }
 
     @Override

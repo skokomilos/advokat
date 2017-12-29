@@ -28,7 +28,7 @@ public class ChoosePostupakActivity extends AppCompatActivity implements View.On
     private DatabaseHelper databaseHelper;
     private Postupak postupakObject;
     private Spinner spinerPostupak;
-    private Button go_to_expandable_list_meny;
+    private Button go_to_expandable_list_meny_button;
 
     public static String POSTUPAK_KEY = "POSTUPAK_KEY";
 
@@ -38,8 +38,8 @@ public class ChoosePostupakActivity extends AppCompatActivity implements View.On
         setContentView(R.layout.activity_choose_postupak);
 
         spinerPostupak = (Spinner) findViewById(R.id.spinnerPostupak);
-        go_to_expandable_list_meny = (Button) findViewById(R.id.btnChoosePostupakActivity);
-        go_to_expandable_list_meny.setOnClickListener(ChoosePostupakActivity.this);
+        go_to_expandable_list_meny_button = (Button) findViewById(R.id.btnChoosePostupakActivity);
+        go_to_expandable_list_meny_button.setOnClickListener(ChoosePostupakActivity.this);
         loadSpinner();
     }
 

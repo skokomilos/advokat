@@ -44,7 +44,9 @@ import com.j256.ormlite.stmt.SelectArg;
 import com.michaelmuenzer.android.scrollablennumberpicker.ScrollableNumberPicker;
 
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 
@@ -285,13 +287,14 @@ public class PronadjeniSlucaj extends BaseActivity {
             public void onClick(View view) {
 
                 IzracunatTrosakRadnje izracunatTrosakRadnje = new IzracunatTrosakRadnje();
+                izracunatTrosakRadnje.setDatum(getNowDate());
                 izracunatTrosakRadnje.setCena_izracunate_jedinstvene_radnje(num);
                 izracunatTrosakRadnje.setNaziv_radnje(radnja.getNaziv_radnje());
                 izracunatTrosakRadnje.setSlucaj(slucaj);
 
                 try {
                     getDatabaseHelper().getmIzracunatTrosakRadnjeDao().create(izracunatTrosakRadnje);
-                    Toast.makeText(PronadjeniSlucaj.this, "Izracunata radnja je dodata", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(PronadjeniSlucaj.this, izracunatTrosakRadnje.getDatum() +  " Izracunata radnja je dodata", Toast.LENGTH_SHORT).show();
                 } catch (SQLException e) {
                     e.printStackTrace();
                     Toast.makeText(PronadjeniSlucaj.this, "Izracunata radnja nije dodata", Toast.LENGTH_SHORT).show();
@@ -301,6 +304,14 @@ public class PronadjeniSlucaj extends BaseActivity {
         });
                 dialog.show();
 
+    }
+
+    private String getNowDate(){
+
+        Calendar c = Calendar.getInstance();
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+        String datestring = sdf.format(c.getTime());
+        return datestring;
     }
 
     private void dialogFixValuePlusHours(final double num){
