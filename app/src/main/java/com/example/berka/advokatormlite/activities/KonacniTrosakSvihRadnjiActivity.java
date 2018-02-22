@@ -1,6 +1,7 @@
 package com.example.berka.advokatormlite.activities;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -8,6 +9,7 @@ import android.graphics.pdf.PdfDocument;
 import android.os.Bundle;
 import android.os.CancellationSignal;
 import android.os.ParcelFileDescriptor;
+import android.preference.PreferenceManager;
 import android.print.PageRange;
 import android.print.PrintAttributes;
 import android.print.PrintDocumentAdapter;
@@ -35,6 +37,7 @@ import com.example.berka.advokatormlite.model.IzracunatTrosakRadnje;
 import com.example.berka.advokatormlite.model.Postupak;
 import com.example.berka.advokatormlite.model.Radnja;
 import com.example.berka.advokatormlite.model.Slucaj;
+import com.example.berka.advokatormlite.model.StrankaDetail;
 import com.j256.ormlite.android.apptools.OpenHelperManager;
 
 import java.io.FileOutputStream;
@@ -56,20 +59,34 @@ public class KonacniTrosakSvihRadnjiActivity extends BaseActivity{
     private Slucaj slucaj;
     public static List<IzracunatTrosakRadnje> sveIzracunateRadnje;
 
+    private String imeiprezime, adresa, mesto;
+
     private TextView tv_ukupna_cena;
 
     private int key;
-    private static int ukupnaCenaSvihRadnji = 0;
+    private static int ukupnaCenaSvihRadnji;
+
+    private  List<StrankaDetail> strankaDetailsList;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_konacni_trosak_svih_radnji);
 
+        getSharedPrefValues();
         loadSlucaj();
         setupToolbar();
         loadSpinner();
         ukupnaCena();
+    }
+
+    private void getSharedPrefValues(){
+        SharedPreferences mPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences.Editor editor = mPreferences.edit();
+
+         imeiprezime = mPreferences.getString("imeiprezime","");
+         adresa = mPreferences.getString("mesto","");
+         mesto = mPreferences.getString("adresa", "");
     }
 
     public void printDocument(MenuItem item){
@@ -107,6 +124,7 @@ public class KonacniTrosakSvihRadnjiActivity extends BaseActivity{
     private void ukupnaCena(){
 
         tv_ukupna_cena = (TextView) findViewById(R.id.tv_ukupna_cena_svih_radnji);
+        ukupnaCenaSvihRadnji = 0;
 
         ListIterator<IzracunatTrosakRadnje> iterator = null;
         iterator = sveIzracunateRadnje.listIterator();
@@ -159,7 +177,7 @@ public class KonacniTrosakSvihRadnjiActivity extends BaseActivity{
 
     public DatabaseHelper getDatabaseHelper(){
         if (databaseHelper == null) {
-            databaseHelper = OpenHelperManager.getHelper(this, DatabaseHelper.class);
+            databaseHelper = new DatabaseHelper(this);
         }
         return databaseHelper;
     }
@@ -168,8 +186,6 @@ public class KonacniTrosakSvihRadnjiActivity extends BaseActivity{
     protected void onDestroy() {
         super.onDestroy();
 
-        // nakon rada sa bazo podataka potrebno je obavezno
-        //osloboditi resurse!
         if (databaseHelper != null) {
             OpenHelperManager.releaseHelper();
             databaseHelper = null;
@@ -239,7 +255,6 @@ public class KonacniTrosakSvihRadnjiActivity extends BaseActivity{
             }
 
             return (int) Math.ceil((double) ukupanBrojStrana / itemsPerPage);
-
         }
 
         @Override
@@ -300,29 +315,42 @@ public class KonacniTrosakSvihRadnjiActivity extends BaseActivity{
             pagenumber++; // Make sure page numbers start at 1
             int titleBaseLine = 72;
             int leftMargin = 54;
+            int leftMarginForName = 100;
 
             Paint paint = new Paint();
             paint.setColor(Color.BLACK);
 
 
             paint.setTextSize(20);
-            canvas.drawText("Tuzitelj Mirolad Jovic iz Novog Sada", leftMargin, titleBaseLine, paint);
+            canvas.drawText("advokat: " + imeiprezime + " iz: " + adresa + " adresa: " + mesto, leftMargin, titleBaseLine, paint);
 
 
+            try {
+                strankaDetailsList = getDatabaseHelper().getmStrankaDetail().queryBuilder()
+                        .where()
+                        .eq(StrankaDetail.ID_SLUCAJA, slucaj.getId())
+                        .query();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+
+            //
             paint.setTextSize(20);
-            canvas.drawText("Tuzeni Skoko Milos Novi sad",
-                    leftMargin,
-                    titleBaseLine + 35,
-                    paint);
+            for (int i = 0; i < slucaj.getBroj_stranaka(); i++) {
+                canvas.drawText(strankaDetailsList.get(i).getIme_i_prezime() + ", " + strankaDetailsList.get(i).getAdresa() + ", " + strankaDetailsList.get(i).getMesto(),
+                        leftMarginForName,
+                        titleBaseLine += 35,
+                        paint);
+            }
 
-            titleBaseLine = 142;
+            //titleBaseLine = 142;
             Log.d("Broj", String.valueOf(titleBaseLine));
             for (int i = counterForListElements; i < lista.size(); i++) {
                 if(pageHeight -35>titleBaseLine){
                     counterForListElements++;
                     paint.setTextSize(14);
                     canvas.drawText(1+i + " " + lista.get(i).getNaziv_radnje(),leftMargin,titleBaseLine+=35, paint);
-                    canvas.drawText("Od " + lista.get(i).getDatum(),leftMargin + 250,titleBaseLine, paint);
+                    canvas.drawText("Od " + lista.get(i).getDatum(),leftMargin + 300,titleBaseLine, paint);
                     canvas.drawText(String.valueOf(lista.get(i).getCena_izracunate_jedinstvene_radnje()),leftMargin + 450,titleBaseLine, paint);
                 }
             }
@@ -342,7 +370,7 @@ public class KonacniTrosakSvihRadnjiActivity extends BaseActivity{
 
             Canvas canvas = page.getCanvas();
             pagenumber++; // Make sure page numbers start at 1
-            int titleBaseLine = 35;
+            int titleBaseLine = 25;
             int leftMargin = 54;
             Paint paint = new Paint();
             paint.setColor(Color.BLACK);
@@ -351,14 +379,14 @@ public class KonacniTrosakSvihRadnjiActivity extends BaseActivity{
                 if(pageHeight -35>titleBaseLine){
                     counterForListElements++;
                     paint.setTextSize(14);
-                    canvas.drawText(i + " " + lista.get(i).getNaziv_radnje(),leftMargin + 450,titleBaseLine+=35, paint);
+                    canvas.drawText(i + " " + lista.get(i).getNaziv_radnje(),leftMargin ,titleBaseLine+=35, paint);
                 }
             }
 
-            leftMargin = 300;
+            leftMargin = 350;
             if(counterForListElements==lista.size()){
                 Log.d("Uspelo", "works");
-                paint.setTextSize(30);
+                paint.setTextSize(14);
                 canvas.drawText("Ukupan trosak svih radnji  :" + KonacniTrosakSvihRadnjiActivity.ukupnaCenaSvihRadnji,
                         leftMargin,
                         titleBaseLine + 35,

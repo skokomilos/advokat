@@ -1,13 +1,18 @@
 package com.example.berka.advokatormlite.activities;
 
 import android.app.AlertDialog;
-import android.app.Dialog;
-import android.app.TimePickerDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.os.Build;
+import android.os.Handler;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.CardView;
 import android.text.InputType;
@@ -17,12 +22,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -31,7 +33,6 @@ import com.example.berka.advokatormlite.adapter.MyAdapterSviSlucajevi;
 import com.example.berka.advokatormlite.db.DatabaseHelper;
 import com.example.berka.advokatormlite.model.IzracunatTrosakRadnje;
 import com.example.berka.advokatormlite.model.Postupak;
-import com.example.berka.advokatormlite.model.Radnja;
 import com.example.berka.advokatormlite.model.Slucaj;
 import com.j256.ormlite.android.apptools.OpenHelperManager;
 import com.j256.ormlite.stmt.QueryBuilder;
@@ -45,7 +46,10 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
+
 public class MainActivity extends BaseActivity {
+
 
     //sources:
     //https://github.com/andreasschrade/android-design-template
@@ -57,13 +61,15 @@ public class MainActivity extends BaseActivity {
     public static String POSTUPAK_KEY = "POSTUPAK_KEY";
     public static String BROJ_STRANAKA = "BROJ_STRANAKA";
     private Postupak postupak;
-//    private CardView cv_add, cv_find, cv_all, cv_myprofile;
+
+    //permission
+    public static final int REQUEST_CODE_WRITE_STORAGE = 123;
+    public static boolean WRITE_STORAGE_GRANTED = false;
+    public static final String TAG = "Ljog";
 
 
     public static final String FROM_MAIN = "from_main";
     public static final String CASE_TYPE = "case_type";
-
-    Toast toast;
 
 
     @BindView(R.id.cv_find)
@@ -75,9 +81,14 @@ public class MainActivity extends BaseActivity {
     @BindView(R.id.cv_all)
     CardView cv_all;
 
+    @BindView(R.id.cv_my_profile)
+    CardView cv_my_profile;
+
+    @BindView(R.id.cv_isprave)
+    CardView cv_isprave;
+
     private List<Slucaj> slucajevi;
 
-    String str_broj_slucaja;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,14 +96,68 @@ public class MainActivity extends BaseActivity {
         setContentView(R.layout.avtivity_test);
 
 
+        isWriteStorageGranted();
         setupToolbar();
         ButterKnife.bind(MainActivity.this);
 
     }
 
+
+    public boolean isWriteStorageGranted() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            int hasWriteStoragePermission = ContextCompat.checkSelfPermission(MainActivity.this, WRITE_EXTERNAL_STORAGE);
+            if (hasWriteStoragePermission == PackageManager.PERMISSION_GRANTED) {
+                Log.d("Ljog", "permission granted");
+                return WRITE_STORAGE_GRANTED = true;
+            } else {
+
+                AlertDialog.Builder alertBuilder = new AlertDialog.Builder(this);
+                alertBuilder.setCancelable(true);
+                alertBuilder.setTitle("Camera permission necessary");
+                alertBuilder.setMessage("FITsociety need camera permission to read barcode.");
+                alertBuilder.setPositiveButton("next", new DialogInterface.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        ActivityCompat.requestPermissions(MainActivity.this, new String[]{WRITE_EXTERNAL_STORAGE}, REQUEST_CODE_WRITE_STORAGE);
+
+                    }
+                });
+
+                AlertDialog alert = alertBuilder.create();
+                alert.show();
+                return WRITE_STORAGE_GRANTED = false;
+            }
+        } else {
+            //permission is automatically granted on sdk<23 upon instalation
+            Log.d("Ljog", "permission granted ako je uredjaj ispod 23sdk");
+            return WRITE_STORAGE_GRANTED = true;
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+
+        Log.d("Mjetod", "onRequestPermissionsResult: starts");
+        switch (requestCode) {
+            case REQUEST_CODE_WRITE_STORAGE: {
+                //ako je request odbijen zatvori aplikaciju
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    Log.d("Mjetod", "onRequestPermissionsResult: granthil");
+                    WRITE_STORAGE_GRANTED = true;
+                } else {
+                    Log.d("Mjetod", "onRequestPermissionsResult: refjuzn");
+                    finish();
+                }
+            }
+        }
+
+        Log.d("Mjetod", "onRequestPermissionsResult: ends");
+    }
+
     //tri metoda pomocu kojih otvaram dijaloge za add, find, edit
     @OnClick(R.id.cv_find)
-    public void openDialogFind1(){
+    public void openDialogFind() {
 
         new MaterialDialog.Builder(this)
                 .title("Moj Dialog")
@@ -107,11 +172,11 @@ public class MainActivity extends BaseActivity {
     }
 
 
-    private void findCase(String string){
+    private void findCase(String string) {
         Log.d("Unesena sifra", string);
-        if(string == null || string.trim().equals("")){
+        if (string == null || string.trim().equals("")) {
             Toast.makeText(MainActivity.this, "Morate uneti broj", Toast.LENGTH_LONG).show();
-        }else {
+        } else {
             QueryBuilder<Slucaj, Integer> qb = null;
             try {
                 qb = getDatabaseHelper().getSlucajDao().queryBuilder();
@@ -123,22 +188,23 @@ public class MainActivity extends BaseActivity {
                 intent.putExtra(FROM, "find");
                 intent.putExtra(CASE_ID, slucajevi.get(0).getId());
                 startActivity(intent);
-            }catch (IndexOutOfBoundsException e){
+            } catch (IndexOutOfBoundsException e) {
                 Toast.makeText(this, "Slucaj sa tom sifrom ne postoji", Toast.LENGTH_LONG).show();
                 e.printStackTrace();
-            }
-            catch (SQLException e) {
+            } catch (NumberFormatException e) {
+                Toast.makeText(this, "Za testiranje dozvoljen unos samo brojeva", Toast.LENGTH_LONG).show();
+            } catch (SQLException e) {
                 e.printStackTrace();
             }
         }
     }
 
     @OnClick(R.id.cv_add)
-    public void addNewCase1(){
+    public void addNewCase() {
 
         AlertDialog.Builder mBuilder = new AlertDialog.Builder(MainActivity.this);
         View mView = getLayoutInflater().inflate(R.layout.dialog_add_case, null);
-        mBuilder.setTitle("Izaberi postupak");
+        mBuilder.setTitle(R.string.postupak_broj_stranaka);
 
         Spinner spinner = mView.findViewById(R.id.spnDialogAdd);
         EditText broj_stranaka = mView.findViewById(R.id.broj_stranaka);
@@ -153,7 +219,7 @@ public class MainActivity extends BaseActivity {
             e.printStackTrace();
         }
 
-        mBuilder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+        mBuilder.setPositiveButton("Potvrdi", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 Postupak postupakObject = (Postupak) spinner.getSelectedItem();
@@ -190,7 +256,7 @@ public class MainActivity extends BaseActivity {
                 }
             }
         });
-        mBuilder.setNegativeButton("Dissmiss", new DialogInterface.OnClickListener() {
+        mBuilder.setNegativeButton("Otkazi", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 dialogInterface.dismiss();
@@ -203,7 +269,7 @@ public class MainActivity extends BaseActivity {
 
 
     @OnClick(R.id.cv_all)
-    public void showaLL(){
+    public void showaLL() {
         AlertDialog.Builder mBuilder = new AlertDialog.Builder(MainActivity.this);
         View mView = getLayoutInflater().inflate(R.layout.dialog_all_cases, null);
         mBuilder.setTitle("Izaberi postupak");
@@ -216,6 +282,17 @@ public class MainActivity extends BaseActivity {
             listaTrenutneCene = (ArrayList<Double>) ukupnaCena(slucajevi);
             MyAdapterSviSlucajevi myadaper = new MyAdapterSviSlucajevi(MainActivity.this, (ArrayList<Slucaj>) slucajevi, listaTrenutneCene);
             listView.setAdapter(myadaper);
+            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                    Slucaj slucaj = (Slucaj) listView.getItemAtPosition(position);
+                    Intent intent = new Intent(MainActivity.this, PronadjeniSlucaj.class);
+                    intent.putExtra(FROM, "all");
+                    intent.putExtra(CASE_ID, slucaj.getId());
+                    startActivity(intent);
+                }
+            });
 
 
         } catch (SQLException e) {
@@ -234,21 +311,102 @@ public class MainActivity extends BaseActivity {
         dialog.show();
     }
 
-    private List<Double> ukupnaCena(List<Slucaj> slc){
+    @OnClick(R.id.cv_my_profile)
+    public void editMyProfile() {
+
+        AlertDialog.Builder mBuilder = new AlertDialog.Builder(MainActivity.this);
+        View mView = getLayoutInflater().inflate(R.layout.dialog_my_profile, null);
+        mBuilder.setTitle("Izaberi postupak");
+
+        EditText ime = mView.findViewById(R.id.dialog_profil_imeprezime);
+        EditText adresa = mView.findViewById(R.id.dialog_profil_adresa);
+        EditText mesto = mView.findViewById(R.id.dialog_profil_mesto);
+
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        ime.setText(sharedPreferences.getString("imeiprezime", ""));
+        adresa.setText(sharedPreferences.getString("adresa", ""));
+        mesto.setText(sharedPreferences.getString("mesto", ""));
+
+        mBuilder.setPositiveButton("sacuvaj podatke", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+
+                SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                SharedPreferences.Editor editor = sharedPref.edit();
+                editor.putString("imeiprezime", ime.getText().toString());
+                editor.putString("adresa", adresa.getText().toString());
+                editor.putString("mesto", mesto.getText().toString());
+                editor.apply();
+
+                Log.d("tag", "ovo je sacuvano");
+
+            }
+        });
+
+        mBuilder.setNegativeButton("Izadji", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.dismiss();
+            }
+        });
+
+        mBuilder.setView(mView);
+        AlertDialog dialog = mBuilder.create();
+        dialog.show();
+
+    }
+
+    public static SharedPreferences getMyProfileSharedPref(String ime, String adresa, String mesto, Context context) {
+        SharedPreferences prf = PreferenceManager.getDefaultSharedPreferences(context);
+        prf.getString(ime, "");
+        prf.getString(adresa, "");
+        prf.getString(mesto, "");
+        Log.d(TAG, "getMyProfileSharedPref: " + " " + prf.getString(ime, "") + " " + prf.getString(adresa, "") + " " + prf.getString(mesto, ""));
+        return prf;
+    }
+
+    @OnClick(R.id.cv_isprave)
+    public void goToIsprave() {
+
+        Intent intent = new Intent(MainActivity.this, IspraveActivity.class);
+        startActivity(intent);
+    }
+
+    private List<Double> ukupnaCena(List<Slucaj> slc) {
         double trenutnaVrednost = 0;
         ArrayList<Double> listaSvhihTrenutnihCena = new ArrayList<>();
         ListIterator<Slucaj> iterator = null;
         iterator = slc.listIterator();
         Slucaj s;
-        while (iterator.hasNext()){
+        while (iterator.hasNext()) {
             s = iterator.next();
-            for (IzracunatTrosakRadnje i : s.getListaIzracunatihTroskovaRadnji()){
-                trenutnaVrednost+=i.getCena_izracunate_jedinstvene_radnje();
+            for (IzracunatTrosakRadnje i : s.getListaIzracunatihTroskovaRadnji()) {
+                trenutnaVrednost += i.getCena_izracunate_jedinstvene_radnje();
             }
             listaSvhihTrenutnihCena.add(Double.valueOf(trenutnaVrednost));
             trenutnaVrednost = 0;
         }
         return listaSvhihTrenutnihCena;
+    }
+
+    private Boolean exit = false;
+
+    @Override
+    public void onBackPressed() {
+        if (exit) {
+            finish(); // finish activity
+        } else {
+            Toast.makeText(this, "Press Back again to Exit.", Toast.LENGTH_SHORT).show();
+            exit = true;
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    exit = false;
+                }
+            }, 3 * 1000);
+
+        }
+
     }
 
     //toolbar metode
@@ -289,7 +447,7 @@ public class MainActivity extends BaseActivity {
 
     public DatabaseHelper getDatabaseHelper() {
         if (databaseHelper == null) {
-            databaseHelper = OpenHelperManager.getHelper(this, DatabaseHelper.class);
+            databaseHelper = new DatabaseHelper(this);
         }
         return databaseHelper;
     }

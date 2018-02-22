@@ -1,6 +1,8 @@
 package com.example.berka.advokatormlite.activities;
 
+import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
@@ -10,14 +12,18 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.NumberPicker;
 import android.widget.RadioButton;
@@ -28,6 +34,10 @@ import android.widget.Toast;
 import com.example.berka.advokatormlite.R;
 import com.example.berka.advokatormlite.activities.NadjiSlucajActivity;
 import com.example.berka.advokatormlite.adapter.ExpandableAdapterRadnja;
+import com.example.berka.advokatormlite.adapter.MyAdapteAddEditStranke;
+import com.example.berka.advokatormlite.adapter.MyAdapterSveStranke;
+import com.example.berka.advokatormlite.adapter.MyAdapterSviSlucajevi;
+import com.example.berka.advokatormlite.adapter.MyResultAdapter;
 import com.example.berka.advokatormlite.db.DatabaseHelper;
 import com.example.berka.advokatormlite.model.IzracunatTrosakRadnje;
 import com.example.berka.advokatormlite.model.Postupak;
@@ -35,6 +45,7 @@ import com.example.berka.advokatormlite.model.PostupakTarifaJoin;
 import com.example.berka.advokatormlite.model.PostupakVrstaParniceJoin;
 import com.example.berka.advokatormlite.model.Radnja;
 import com.example.berka.advokatormlite.model.Slucaj;
+import com.example.berka.advokatormlite.model.StrankaDetail;
 import com.example.berka.advokatormlite.model.Tarifa;
 import com.example.berka.advokatormlite.model.VrsteParnica;
 import com.j256.ormlite.android.apptools.OpenHelperManager;
@@ -57,8 +68,8 @@ import java.util.List;
 public class PronadjeniSlucaj extends BaseActivity {
 
 
-    private ExpandableListView listView;
-    private ExpandableListAdapter listAdapter;
+    private ExpandableListView exlistView;
+    private ExpandableListAdapter exlistAdapter;
     private List<Tarifa> listDataHeader;
     private HashMap<Tarifa, List<Radnja>> listHashMap;
 
@@ -70,16 +81,22 @@ public class PronadjeniSlucaj extends BaseActivity {
     Radnja radnja;
     Slucaj slucaj;
 
-    private RadioButton radioButton;
-
     private String comingfrom;
 
-    private int caseid;
-    private int case_add;
-    private int caseid_find;
+    private int caseid, case_add, caseid_find, caseid_all;
+
+
+    List<StrankaDetail> detailStrankaList;
 
     //menja se svaki put kad promenim radnju(tarifa/radnja)
     private double privremenaCena;
+
+    private double vrednostJednogBodaUDinarima = 30;
+
+    private ListView listViewStrankeAddEdit;
+    int redni_broj_prvog_et_u_dialogu = 1;
+
+    MyAdapteAddEditStranke myadaper;
 
     //TODO iz main activitija dobijam broj pomocu koga trazim slucaj iz baze, treba pronaci id_slucaja i uzeti fiksni broj bodova, slucaj.getBrojBodova i dodeliti ga nekoj globalnoj promenljivoj koju cu zatim koristiti u svakom metodu iz switch petlje
 
@@ -89,12 +106,12 @@ public class PronadjeniSlucaj extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_second);
 
-        listView = (ExpandableListView) findViewById(R.id.lvExpendable);
-
+        exlistView = (ExpandableListView) findViewById(R.id.lvExpendable);
+        listViewStrankeAddEdit = findViewById(R.id.lista_add_edit_stranke);
         checkIntent();
 
         if(postupak.getNazivpostupka().equals("Krivicni postupak")){
-            Log.d("krivicni postupak", "funkcionise");
+            Log.d(String.valueOf(getLocalClassName()), "funkcionise");
             try {
                 initDataFromKrivica();
             } catch (SQLException e) {
@@ -102,7 +119,7 @@ public class PronadjeniSlucaj extends BaseActivity {
             }
         }else {
             try {
-                initDataFromOthers();
+                initDataFromOthersActivities();
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -122,10 +139,10 @@ public class PronadjeniSlucaj extends BaseActivity {
             }
         });
 
-        listAdapter = new ExpandableAdapterRadnja(this, listDataHeader, listHashMap);
-        listView.setAdapter(listAdapter);
+        exlistAdapter = new ExpandableAdapterRadnja(this, listDataHeader, listHashMap);
+        exlistView.setAdapter(exlistAdapter);
 
-        listView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
+        exlistView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
             @Override
             public boolean onChildClick(ExpandableListView parent, View v,int groupPosition, int childPosition, long id) {
 
@@ -138,34 +155,34 @@ public class PronadjeniSlucaj extends BaseActivity {
 
                 if( radnja != null){
 
-                    //Za radnju koja ce nositi celu vrednost bodova sifra biti 1, za radnju koja ce nositi vrednost umanjenu za 50p sifra 2
+                    //Za radnju koja ce nositi celu vrednost bodova sifra biti 1, za radnju koja ce nositi vrednost umanjenu za 50% sifra 2
                     //ovde u zavistosti na vrednost te sifre radnja.getSifra(), switch petlja i podmetode za racunjanje
                     //kad izracuna doda tu vrednost u listu radnji u klasi slucaj
                     //sifra 1: puna vrednost, 2: pola, 3: duplo, 4: vrednost i 50 bodova po satu, 5: puna vrednost i broj sati moze biti i pola ako se ne odrzi
                     switch (radnja.getSifra()){
 
                         case 1:
-                            //metoda koja racuna pravu vrednost
+                            //metoda koja racuna pravu vrednost i ima sifru 1
                             Toast.makeText(PronadjeniSlucaj.this,"Sifra ove radnje je " + String.valueOf(radnja.getSifra()) + " radnja ima fiksnu vrednost", Toast.LENGTH_SHORT).show();
                             privremenaCena = wholeValue(slucaj.getBroj_stranaka());
-                            openDialog(privremenaCena);
+                            openDialog(privremenaCena, radnja.getNaziv_radnje());
                             break;
                         case 2:
-                            //metoda koja racuna polovinu vrednosti
+                            //metoda koja racuna polovinu vrednosti ima sifru 2
                             Toast.makeText(PronadjeniSlucaj.this,"Sifra ove radnje je " +  String.valueOf(radnja.getSifra()) + " radnja ima polovinu vrednosti", Toast.LENGTH_SHORT).show();
                             privremenaCena = halfValue(slucaj.getBroj_stranaka());
-                            openDialog(privremenaCena);
+                            openDialog(privremenaCena, radnja.getNaziv_radnje());
                             break;
                         case 3:
-                            //metoda koja racuna duplu vrednost
+                            //metoda koja racuna duplu vrednost ima sifru 3
                             Toast.makeText(PronadjeniSlucaj.this,"Sifra ove radnje je " +  String.valueOf(radnja.getSifra() + " radnja ima dupliranu vrednost"), Toast.LENGTH_SHORT).show();
                             privremenaCena = doubleValue(slucaj.getBroj_stranaka());
-                            openDialog(privremenaCena);
+                            openDialog(privremenaCena, radnja.getNaziv_radnje());
                             break;
                         case 4:
-                            //metoda koja racuna pravu vrednost plus broj sati
+                            //metoda koja racuna pravu vrednost plus broj sati ima sifru 4
                             Toast.makeText(PronadjeniSlucaj.this, "Sifra ove radnje je " +  String.valueOf(radnja.getSifra()), Toast.LENGTH_SHORT).show();
-                            privremenaCena = doubleValue(slucaj.getBroj_stranaka());
+                            privremenaCena = wholePlusHours(slucaj.getBroj_stranaka());
                             dialogFixValuePlusHours(privremenaCena);
                             break;
                         default:
@@ -175,9 +192,7 @@ public class PronadjeniSlucaj extends BaseActivity {
                 return true;  // i missed this
             }
         });
-
     }
-
 
     private void checkIntent(){
 
@@ -193,18 +208,119 @@ public class PronadjeniSlucaj extends BaseActivity {
                 caseid_find = caseid;
                 addIdToSlucaj(caseid_find);
                 break;
+            case"all":
+                caseid_all = caseid;
+                addIdToSlucaj(caseid_all);
+                break;
             default:
         }
     }
 
     private void addIdToSlucaj(int caseid){
         try {
+            Log.d("id slucaja : ", String.valueOf(caseid));
             slucaj = getDatabaseHelper().getSlucajDao().queryForId(caseid);
+            Log.d("Sifra slucaja : ", String.valueOf(slucaj.getBroj_slucaja()));
         } catch (SQLException e) {
             e.printStackTrace();
         }
         postupak = slucaj.getPostupak();
-        Log.d("tresnja", postupak.getNazivpostupka());
+        Log.d("Naziv postupka je : ", postupak.getNazivpostupka());
+    }
+
+    private void prikaziSveStranke(){
+        AlertDialog.Builder mBuilder = new AlertDialog.Builder(PronadjeniSlucaj.this);
+        View mView = getLayoutInflater().inflate(R.layout.dialog_sve_stranke, null);
+        mBuilder.setTitle("Sve stranke ovog slucaja: ");
+        ListView listView = mView.findViewById(R.id.lista_sve_stranke);
+
+        try {
+            detailStrankaList = getDatabaseHelper().getmStrankaDetail().queryBuilder()
+            .where()
+            .eq(StrankaDetail.ID_SLUCAJA, slucaj.getId())
+            .query();
+
+            MyAdapterSveStranke myadaper = new MyAdapterSveStranke(PronadjeniSlucaj.this, (ArrayList<StrankaDetail>) detailStrankaList);
+            listView.setAdapter(myadaper);
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        mBuilder.setNegativeButton("Izadji", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.dismiss();
+            }
+        });
+
+        mBuilder.setView(mView);
+        AlertDialog dialog = mBuilder.create();
+        dialog.show();
+    }
+
+    private void dodajIzmeniStranke(){
+
+        AlertDialog.Builder mBuilder = new AlertDialog.Builder(PronadjeniSlucaj.this);
+        View mView = getLayoutInflater().inflate(R.layout.dialog_add_edit_stranke, null);
+        mBuilder.setTitle("Dodaj ili izmeni vec postojece podatke o strankama");
+        ListView listView = mView.findViewById(R.id.lista_add_edit_stranke);
+
+        try {
+            detailStrankaList = getDatabaseHelper().getmStrankaDetail().queryBuilder()
+                    .where()
+                    .eq(StrankaDetail.ID_SLUCAJA, slucaj.getId())
+                    .query();
+
+            myadaper = new MyAdapteAddEditStranke(PronadjeniSlucaj.this, (ArrayList<StrankaDetail>) detailStrankaList);
+            listView.setAdapter(myadaper);
+            myadaper.notifyDataSetChanged();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        mBuilder.setPositiveButton("Potvrdi", new DialogInterface.OnClickListener()  {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+
+                myadaper.notifyDataSetChanged();
+
+                Log.d("majstor", detailStrankaList.get(0).getIme_i_prezime());
+                for (int j = 0; j < detailStrankaList.size(); j++) {
+                    try {
+                        getDatabaseHelper().getmStrankaDetail().update(detailStrankaList.get(j));
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+            }
+        });
+
+        mBuilder.setNegativeButton("Izadji", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.dismiss();
+            }
+        });
+
+        mBuilder.setView(mView);
+        AlertDialog dialog = mBuilder.create();
+        dialog.show();
+}
+
+    @Override
+    public void onBackPressed() {
+        new AlertDialog.Builder(this)
+                .setTitle("Izadji")
+                .setMessage("Pritiskom na ok izlazite na glavni meni")
+                .setNegativeButton(android.R.string.no, null)
+                .setPositiveButton(android.R.string.yes, (arg0, arg1) -> {
+                    Intent i=new Intent(PronadjeniSlucaj.this,MainActivity.class);
+                    i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(i);
+                }).create().show();
     }
 
     //5 metoda za nav/toolbar
@@ -217,7 +333,7 @@ public class PronadjeniSlucaj extends BaseActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.sample_actions, menu);
+        getMenuInflater().inflate(R.menu.lista_stranaka_action, menu);
         return true;
     }
 
@@ -226,6 +342,13 @@ public class PronadjeniSlucaj extends BaseActivity {
         switch (item.getItemId()) {
             case android.R.id.home:
                 openDrawer();
+                return true;
+            case R.id.action_show_stranke:
+                prikaziSveStranke();
+                Toast.makeText(PronadjeniSlucaj.this, "Good job", Toast.LENGTH_LONG).show();
+                return true;
+            case R.id.action_edit_stranke:
+                dodajIzmeniStranke();
                 return true;
         }
         return super.onOptionsItemSelected(item);
@@ -247,63 +370,53 @@ public class PronadjeniSlucaj extends BaseActivity {
     private double wholeValue(int brojStranaka){
 
         double cena = Double.valueOf(slucaj.getTabelaBodova().getBodovi());
-        double izracunato = cena + ((cena/2) * (brojStranaka -1));
-        return izracunato;
+        double izrecunataVrednostUBodovima = cena + ((cena/2) * (brojStranaka -1));
+        return izrecunataVrednostUBodovima * vrednostJednogBodaUDinarima;
     }
 
     private double halfValue(int brojStranaka){
 
         double cena = Double.valueOf(slucaj.getTabelaBodova().getBodovi());
-        double izracunato = (cena + ((cena/2) * (brojStranaka -1))) / 2;
-        return izracunato;
+        double izrecunataVrednostUBodovima = (cena + ((cena/2) * (brojStranaka -1))) / 2;
+        return izrecunataVrednostUBodovima * vrednostJednogBodaUDinarima;
     }
 
     private double doubleValue(int brojStranaka){
 
         double cena = Double.valueOf(slucaj.getTabelaBodova().getBodovi());
-        double izracunato = (cena + ((cena/2) * (brojStranaka -1))) * 2;
-        return izracunato;
+        double izrecunataVrednostUBodovima = (cena + ((cena/2) * (brojStranaka -1))) * 2;
+        return izrecunataVrednostUBodovima * vrednostJednogBodaUDinarima;
     }
 
-    private double wholePlusHours(int brojStranaka, int brojSati){
+    private double wholePlusHours(int brojStranaka){
 
         int cena = slucaj.getTabelaBodova().getBodovi();
-        double izracunato = (cena + ((cena/2) * (brojStranaka -1))) + (brojSati * 50);
-        return izracunato;
+        double izrecunataVrednostUBodovima = cena + ((cena/2) * (brojStranaka -1));
+        return izrecunataVrednostUBodovima * vrednostJednogBodaUDinarima;
     }
 
-    private void openDialog(final double num){
+    private void openDialog(double num, String imeRadnje){
 
-        final Dialog dialog = new Dialog(this);
-        dialog.setContentView(R.layout.dialog_add_points);
+        new AlertDialog.Builder(this)
+        .setTitle(imeRadnje)
+        .setMessage("Vrednost ove radnje iznosi: " +  String.valueOf(num) + " dinara" +  "\n\n" + "Da li zelite da je dodate?")
+                .setNegativeButton(android.R.string.no, null)
+                .setPositiveButton(android.R.string.yes, (arg0, arg1) -> {
 
-        //final double cenaRadnje = num;
-        TextView tv_broj_bodova = dialog.findViewById(R.id.box_tv_points);
-        tv_broj_bodova.setText(String.valueOf(num));
+                    IzracunatTrosakRadnje izracunatTrosakRadnje = new IzracunatTrosakRadnje();
+                    izracunatTrosakRadnje.setDatum(getNowDate());
+                    izracunatTrosakRadnje.setCena_izracunate_jedinstvene_radnje(num);
+                    izracunatTrosakRadnje.setNaziv_radnje(radnja.getNaziv_radnje());
+                    izracunatTrosakRadnje.setSlucaj(slucaj);
 
-        Button button_yes = dialog.findViewById(R.id.box_btn_yes);
-        button_yes.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                IzracunatTrosakRadnje izracunatTrosakRadnje = new IzracunatTrosakRadnje();
-                izracunatTrosakRadnje.setDatum(getNowDate());
-                izracunatTrosakRadnje.setCena_izracunate_jedinstvene_radnje(num);
-                izracunatTrosakRadnje.setNaziv_radnje(radnja.getNaziv_radnje());
-                izracunatTrosakRadnje.setSlucaj(slucaj);
-
-                try {
-                    getDatabaseHelper().getmIzracunatTrosakRadnjeDao().create(izracunatTrosakRadnje);
-                    Toast.makeText(PronadjeniSlucaj.this, izracunatTrosakRadnje.getDatum() +  " Izracunata radnja je dodata", Toast.LENGTH_SHORT).show();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                    Toast.makeText(PronadjeniSlucaj.this, "Izracunata radnja nije dodata", Toast.LENGTH_SHORT).show();
-                }
-                dialog.dismiss();
-            }
-        });
-                dialog.show();
-
+                    try {
+                        getDatabaseHelper().getmIzracunatTrosakRadnjeDao().create(izracunatTrosakRadnje);
+                        Toast.makeText(PronadjeniSlucaj.this, izracunatTrosakRadnje.getDatum() +  " Izracunata radnja je dodata", Toast.LENGTH_SHORT).show();
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                        Toast.makeText(PronadjeniSlucaj.this, "Izracunata radnja nije dodata", Toast.LENGTH_SHORT).show();
+                    }
+                }).create().show();
     }
 
     private String getNowDate(){
@@ -314,7 +427,7 @@ public class PronadjeniSlucaj extends BaseActivity {
         return datestring;
     }
 
-    private void dialogFixValuePlusHours(final double num){
+    private void dialogFixValuePlusHours(final double cena){
 
         final Dialog dialog = new Dialog(this);
         dialog.setContentView(R.layout.dialog_fix_plus_hours);
@@ -343,17 +456,16 @@ public class PronadjeniSlucaj extends BaseActivity {
 
                 double izracunato = 0;
                 final int selecteid = radioGroup.getCheckedRadioButtonId();
-                radioButton = (RadioButton) findViewById(selecteid);
 
                 Log.d("Selektovani", String.valueOf(selecteid));
                 switch (selecteid){
 
                     case R.id.radioButtonYes:
-                        izracunato = num + (scrollableNumberPicker.getValue()*50);
+                        izracunato = cena + (scrollableNumberPicker.getValue()*50);
                         Toast.makeText(PronadjeniSlucaj.this, String.valueOf(izracunato), Toast.LENGTH_LONG).show();
                         break;
                     case R.id.radioButtonNo:
-                        izracunato = num / 2 + (scrollableNumberPicker.getValue()*50);
+                        izracunato = cena / 2 + (scrollableNumberPicker.getValue()*50);
                         Toast.makeText(PronadjeniSlucaj.this, String.valueOf(izracunato), Toast.LENGTH_LONG).show();
                         break;
                     default:
@@ -362,6 +474,7 @@ public class PronadjeniSlucaj extends BaseActivity {
                 }
 
                 IzracunatTrosakRadnje izracunatTrosakRadnje = new IzracunatTrosakRadnje();
+                izracunatTrosakRadnje.setDatum(getNowDate());
                 izracunatTrosakRadnje.setCena_izracunate_jedinstvene_radnje(izracunato);
                 izracunatTrosakRadnje.setNaziv_radnje(radnja.getNaziv_radnje());
                 izracunatTrosakRadnje.setSlucaj(slucaj);
@@ -373,16 +486,13 @@ public class PronadjeniSlucaj extends BaseActivity {
                     e.printStackTrace();
                     Toast.makeText(PronadjeniSlucaj.this, "Izracunata radnja nije dodata", Toast.LENGTH_SHORT).show();
                 }
-                //todo resito dodavanje u bazu
                 dialog.dismiss();
-
             }
         });
-
                 dialog.show();
     }
 
-    //TODO ODAVDE METODE VISE NA VISE I DA RESIM ISPIS U INITDATA()
+    //TODO ODAVDE METODE VISE NA VISE
     //metode many to many  https://github.com/j256/ormlite-jdbc/tree/master/src/test/java/com/j256/ormlite/examples/manytomany
 
 
@@ -442,9 +552,6 @@ public class PronadjeniSlucaj extends BaseActivity {
         return postQb.prepare();
     }
 
-
-    //TODO DOVDE IDE NOVI DEO
-
     private void initDataFromKrivica()throws SQLException{
 
         //checkIntent();
@@ -457,7 +564,7 @@ public class PronadjeniSlucaj extends BaseActivity {
                     .eq(Tarifa.FIELD_TARIFA_POSTUPAK, postupak.getId())
                     .query();
 
-            Log.d("ListaTarifa", String.valueOf(listDataHeader.size()));
+            Log.d("FromKrivica", String.valueOf(listDataHeader.size()));
             if(listDataHeader==null){
                 return;
             }
@@ -469,7 +576,6 @@ public class PronadjeniSlucaj extends BaseActivity {
         for (int i = 0; i < listDataHeader.size(); i++) {
 
             if (listDataHeader.get(i).getRadnje() == null) {
-
                 return;
             } else {
                 listaRadnji = new ArrayList<>(listDataHeader.get(i).getRadnje());
@@ -479,42 +585,39 @@ public class PronadjeniSlucaj extends BaseActivity {
         }
     }
 
-    private void initDataFromOthers() throws SQLException{
+    private void initDataFromOthersActivities() throws SQLException{
         listHashMap = new HashMap<>();
-        List<Radnja> showShowShow = new ArrayList<>();
+        List<Radnja> radnje = new ArrayList<>();
 
         //checkIntent();
         listDataHeader = lookUpTarifeForPostupak(postupak);
+        Log.d("listaradnji", String.valueOf(postupak.getNazivpostupka()));
 
             for (int i = 0; i < listDataHeader.size(); i++) {
 
-            Log.d("Provera", String.valueOf(listDataHeader.get(i).getRadnje().size()));
-            if(showShowShow==null){
-                Log.d("Knjiga", "Greska");
-                return;
-            }else{
+            Log.d("Provera", String.valueOf(listDataHeader.size()));
+
                 //Log.d("Greska", showShowShow.get(0).getNaziv_radnje());
                 //listaRadnji = new ArrayList<>(listDataHeader.get(i).getRadnje());
                 try {
-                    showShowShow = getDatabaseHelper().getmRadnjaDao().queryBuilder()
+                    radnje = getDatabaseHelper().getmRadnjaDao().queryBuilder()
                             .where()
                             .eq(Radnja.FIELD_RADNJA_TARIFA, listDataHeader.get(i).getId())
                             .and()
                             .eq(Radnja.FIELD_SIFRA_POSTUPKA, postupak.getId())
                             .query();
-                    Log.d("ListaRadnji", String.valueOf(showShowShow.size()));
+                    Log.d("ListaRadnji", String.valueOf(radnje.size()));
                 } catch (SQLException e) {
                     e.printStackTrace();
+                    Log.d("Liste tarifa i radnji", "Ne mogu da se dodaju");
                 }
-
-                listHashMap.put(listDataHeader.get(i), showShowShow);
-            }
+                listHashMap.put(listDataHeader.get(i), radnje);
         }
     }
 
     public DatabaseHelper getDatabaseHelper(){
         if (databaseHelper == null) {
-            databaseHelper = OpenHelperManager.getHelper(this, DatabaseHelper.class);
+            databaseHelper = new DatabaseHelper(this);
         }
         return databaseHelper;
     }

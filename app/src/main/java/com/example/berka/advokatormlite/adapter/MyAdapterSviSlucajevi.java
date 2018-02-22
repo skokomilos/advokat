@@ -60,10 +60,13 @@ public class MyAdapterSviSlucajevi extends BaseAdapter {
         }
 
         TextView sif_slucaja = convertView.findViewById(R.id.adr_sifra_slucaja);
-        sif_slucaja.setText(String.valueOf(slucajevi.get(position).getBroj_slucaja()));
+        sif_slucaja.setText(String.valueOf("Sifra slucaja: " + slucajevi.get(position).getBroj_slucaja()));
+
+        TextView vrsta_postupka = convertView.findViewById(R.id.adr_vrsta_postupka);
+        vrsta_postupka.setText(String.valueOf("Vrsta postupka: " + slucajevi.get(position).getPostupak()));
 
         TextView trenutva_vrednost = convertView.findViewById(R.id.adr_trenutna_vrednost);
-        trenutva_vrednost.setText(String.valueOf(izracunateTarife.get(position)));
+        trenutva_vrednost.setText(String.valueOf("Trenutna vrednost: " + izracunateTarife.get(position)));
 
         return convertView;
     }

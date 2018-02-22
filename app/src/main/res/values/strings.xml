@@ -17,4 +17,8 @@
     <string name="settings">Settings</string>
     <string name="print_pdf">Stampaj konacnu tarifu</string>
     <string name="unos_stranke_details_txt">Osnovne podatke o strankama mozete dodati sad ili posle, takodje ne morate ih dodavati ako zelite da obavite samo brzo racunanje vec postojeceg slucaja.</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="postupak_broj_stranaka">Izaberi postupak i broj stranaka</string>
 </resources>

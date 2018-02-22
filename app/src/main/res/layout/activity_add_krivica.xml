@@ -1,28 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView  xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
 <LinearLayout
+    android:id="@+id/probniid"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:id="@+id/probniid">
+    android:layout_marginLeft="12dp"
+    android:layout_marginTop="12dp"
+    android:layout_marginRight="12dp">
 
     <EditText
         android:id="@+id/et_sifra_add_krivica"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="sifra slucaja"/>
-
-
-   <TextView android:hint="Text"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:paddingLeft="7dp"
-    android:gravity="start"
-    android:text="Okrivljen/Optuzen?"/>
 
     <RadioGroup
         android:id="@+id/okrivljen_ostecen_radio_group"
@@ -47,59 +43,33 @@
 
     </RadioGroup>
 
-    <LinearLayout
-        android:layout_width="match_parent"
+    <TextView
+        android:layout_marginTop="12dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@color/colorSecodaryLight"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="7dp"
-        android:layout_marginRight="7dp"
-        android:gravity="center"
-        android:orientation="vertical"
-        android:weightSum="1">
-
-        <TextView
-            android:paddingLeft="4dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Broj stranaka"/>
-
-        <com.michaelmuenzer.android.scrollablennumberpicker.ScrollableNumberPicker
-            android:id="@+id/snp_broj_stranaka"
-            android:paddingBottom="4dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/number_picker_bg"
-            app:snp_buttonIconLeft="@drawable/ic_left"
-            app:snp_buttonIconRight="@drawable/ic_right"
-            app:snp_maxValue="100"
-            app:snp_minValue="1"
-            app:snp_orientation="horizontal"
-            app:snp_stepSize="1"
-            app:snp_updateInterval="10"
-            app:snp_value="1" />
-
-    </LinearLayout>
+        android:text="zaprecena kazna"/>
 
     <Spinner
         android:id="@+id/spinnerKrivicaKazne"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        />
 
     <Button
         android:id="@+id/btn_dodaj_krivicu"
         android:text="dodaj slucaj"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="12dp"/>
 
         <GridLayout
             xmlns:android="http://schemas.android.com/apk/res/android"
-            android:id="@+id/ll_for_users_info_text_fields"
+            android:id="@+id/krivica_gridlayout_za_dinamicko_dodavanje_polja"
             android:columnCount="1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="20dp">
+            android:layout_marginTop="12dp">
 
 
             <LinearLayout

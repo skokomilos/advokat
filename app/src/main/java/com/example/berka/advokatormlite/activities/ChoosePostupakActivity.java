@@ -69,7 +69,7 @@ public class ChoosePostupakActivity extends AppCompatActivity implements View.On
 
     public DatabaseHelper getDatabaseHelper() {
         if (databaseHelper == null) {
-            databaseHelper = OpenHelperManager.getHelper(ChoosePostupakActivity.this, DatabaseHelper.class);
+            databaseHelper = new DatabaseHelper(this);
         }
         return databaseHelper;
     }

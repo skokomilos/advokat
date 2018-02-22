@@ -61,7 +61,7 @@ public class PostupakListActivity extends AppCompatActivity {
 
     public DatabaseHelper getDatabaseHelper() {
         if (databaseHelper == null) {
-            databaseHelper = OpenHelperManager.getHelper(this, DatabaseHelper.class);
+            databaseHelper = new DatabaseHelper(this);
         }
         return databaseHelper;
     }
