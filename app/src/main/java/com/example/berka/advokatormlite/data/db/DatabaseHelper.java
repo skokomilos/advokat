@@ -1,4 +1,4 @@
-package com.example.berka.advokatormlite.db;
+package com.example.berka.advokatormlite.data.db;
 
         import android.content.Context;
 
@@ -20,10 +20,13 @@ package com.example.berka.advokatormlite.db;
         import com.readystatesoftware.sqliteasset.SQLiteAssetHelper;
         import java.sql.SQLException;
 
+        import javax.inject.Inject;
+        import javax.inject.Singleton;
+
 /**
  * Created by berka on 7/21/2017.
  */
-
+@Singleton
 public class DatabaseHelper extends SQLiteAssetHelper {
 
     protected AndroidConnectionSource mConnectionSource = new AndroidConnectionSource(this);
@@ -48,12 +51,11 @@ public class DatabaseHelper extends SQLiteAssetHelper {
 
 
 
+    @Inject
     public DatabaseHelper(Context context)
     {
-
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
         this.mContext = context;
-
     }
 
 

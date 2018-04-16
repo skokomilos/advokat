@@ -1,5 +1,9 @@
 package com.example.berka.advokatormlite.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+import android.support.design.widget.TabLayout;
+
 import com.j256.ormlite.dao.ForeignCollection;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.field.ForeignCollectionField;
@@ -11,7 +15,7 @@ import java.util.List;
  * Created by berka on 22-Sep-17.
  */
 @DatabaseTable(tableName = Slucaj.TABLE_NAME)
-public class Slucaj {
+public class Slucaj implements Parcelable{
 
     public static final String TABLE_NAME = "slucaj";
     public static final String ID_SLCJ = "id";
@@ -48,6 +52,36 @@ public class Slucaj {
 
     @ForeignCollectionField(columnName = Slucaj.LISTA_STRANAKA, eager = true)
     private ForeignCollection<StrankaDetail> lista_stranaka;
+
+    protected Slucaj(Parcel input){
+        id = input.readInt();
+        broj_slucaja = input.readInt();
+        broj_stranaka = input.readInt();
+        okrivljen = input.readInt();
+        postupak = input.readParcelable(Postupak.class.getClassLoader());
+        tabelaBodova = input.readParcelable(TabelaBodova.class.getClassLoader());
+    }
+
+    public Slucaj() {
+    }
+
+    @Override
+    public void writeToParcel(Parcel destination, int flags) {
+        //responsible for saving data
+        destination.writeInt(id);
+        destination.writeInt(broj_slucaja);
+        destination.writeInt(broj_stranaka);
+        destination.writeInt(okrivljen);
+        destination.writeParcelable(postupak, 0);
+        destination.writeParcelable(tabelaBodova, 1);
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+
 
     public int getId() {
         return id;
@@ -117,4 +151,16 @@ public class Slucaj {
     public String toString() {
         return String.valueOf(broj_slucaja);
     }
+
+    public static final Creator<Slucaj> CREATOR = new Creator<Slucaj>() {
+        @Override
+        public Slucaj createFromParcel(Parcel source) {
+            return new Slucaj(source);
+        }
+
+        @Override
+        public Slucaj[] newArray(int size) {
+            return new Slucaj[size];
+        }
+    };
 }

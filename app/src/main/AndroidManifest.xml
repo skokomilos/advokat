@@ -9,10 +9,11 @@
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+        android:name=".dependencyinjection.App"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar">
-        <activity android:name=".activities.MainActivity">
+        <activity android:name=".activities.main.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -20,18 +21,17 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".activities.PronadjeniSlucaj"
+        <activity android:name=".activities.add_points.PronadjeniSlucajActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan"/>
-        <activity android:name=".activities.NadjiSlucajActivity"/>
-        <activity android:name=".activities.PostupakListActivity"/>
-        <activity android:name=".activities.AddNewCaseActivity"/>
-        <activity android:name=".activities.KonacniTrosakSvihRadnjiActivity"/>
-        <activity android:name=".activities.ChoosePostupakActivity"/>
-        <activity android:name=".activities.AddParnicaActivity"/>
-        <activity android:name=".activities.AddKrivicaActivity"/>
-        <activity android:name=".activities.AddPrekrsajniActivity"/>
-        <activity android:name=".activities.AddUstavniActivity"/>
+        <activity android:name=".activities.add_points.PronadjeniSlucajActivity1"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan"/>
+        <activity android:name=".activities.konacni.KonacniTrosakSvihRadnjiActivity"/>
+        <activity android:name=".activities.parnica.AddParnicaActivity"/>
+        <activity android:name=".activities.krivica.AddKrivicaActivity"/>
+        <activity android:name=".activities.prekrsaj.AddPrekrsajniActivity"/>
+        <activity android:name=".activities.ustavni.AddUstavniActivity"/>
         <activity android:name=".activities.IspraveActivity"/>
 
     </application>

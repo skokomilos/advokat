@@ -1,5 +1,8 @@
 package com.example.berka.advokatormlite.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
@@ -7,7 +10,7 @@ import com.j256.ormlite.table.DatabaseTable;
  * Created by berka on 27-Dec-17.
  */
 @DatabaseTable(tableName = StrankaDetail.TABLE_NAME)
-public class StrankaDetail {
+public class StrankaDetail implements Parcelable {
 
     public static final String TABLE_NAME = "stranka_detail";
     public static final String ID = "id";
@@ -70,4 +73,41 @@ public class StrankaDetail {
     public void setSlucaj(Slucaj slucaj) {
         this.slucaj = slucaj;
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(this.id);
+        dest.writeString(this.ime_i_prezime);
+        dest.writeString(this.adresa);
+        dest.writeString(this.mesto);
+        dest.writeParcelable(this.slucaj, flags);
+    }
+
+    public StrankaDetail() {
+    }
+
+    protected StrankaDetail(Parcel in) {
+        this.id = in.readInt();
+        this.ime_i_prezime = in.readString();
+        this.adresa = in.readString();
+        this.mesto = in.readString();
+        this.slucaj = in.readParcelable(Slucaj.class.getClassLoader());
+    }
+
+    public static final Parcelable.Creator<StrankaDetail> CREATOR = new Parcelable.Creator<StrankaDetail>() {
+        @Override
+        public StrankaDetail createFromParcel(Parcel source) {
+            return new StrankaDetail(source);
+        }
+
+        @Override
+        public StrankaDetail[] newArray(int size) {
+            return new StrankaDetail[size];
+        }
+    };
 }

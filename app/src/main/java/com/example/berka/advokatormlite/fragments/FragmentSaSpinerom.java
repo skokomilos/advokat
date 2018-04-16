@@ -1,6 +1,5 @@
 package com.example.berka.advokatormlite.fragments;
 
-import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -16,8 +15,7 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.example.berka.advokatormlite.R;
-import com.example.berka.advokatormlite.activities.AddParnicaActivity;
-import com.example.berka.advokatormlite.db.DatabaseHelper;
+import com.example.berka.advokatormlite.data.db.DatabaseHelper;
 import com.example.berka.advokatormlite.model.Postupak;
 import com.example.berka.advokatormlite.model.PostupakVrstaParniceJoin;
 import com.example.berka.advokatormlite.model.TabelaBodova;

@@ -59,12 +59,16 @@ dependencies {
     //add library for dialog
     implementation 'com.afollestad.material-dialogs:core:0.9.5.0'
 
+    // Add Dagger dependencies
+    compile 'com.google.dagger:dagger:2.9'
+    annotationProcessor 'com.google.dagger:dagger-compiler:2.9'
+
     //add library butter knife
     api "com.jakewharton:butterknife:8.8.1"
     annotationProcessor "com.jakewharton:butterknife-compiler:8.8.1"
 
     //za permission ali nisam koristio
-    implementation 'com.github.karanchuri:PermissionManager:0.1.0'
+//    implementation 'com.github.karanchuri:PermissionManager:0.1.0'
 
     //za prebacivanje vec postojece baze
     implementation 'com.readystatesoftware.sqliteasset:sqliteassethelper:+'

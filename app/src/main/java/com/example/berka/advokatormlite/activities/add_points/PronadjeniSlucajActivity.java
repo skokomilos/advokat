@@ -1,4 +1,4 @@
-package com.example.berka.advokatormlite.activities;
+package com.example.berka.advokatormlite.activities.add_points;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -7,47 +7,32 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
 import android.support.annotation.Nullable;
-import android.support.design.widget.NavigationView;
-import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.NumberPicker;
-import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.berka.advokatormlite.R;
-import com.example.berka.advokatormlite.activities.NadjiSlucajActivity;
+import com.example.berka.advokatormlite.activities.BaseActivity;
+import com.example.berka.advokatormlite.activities.main.MainActivity;
 import com.example.berka.advokatormlite.adapter.ExpandableAdapterRadnja;
 import com.example.berka.advokatormlite.adapter.MyAdapteAddEditStranke;
 import com.example.berka.advokatormlite.adapter.MyAdapterSveStranke;
-import com.example.berka.advokatormlite.adapter.MyAdapterSviSlucajevi;
-import com.example.berka.advokatormlite.adapter.MyResultAdapter;
-import com.example.berka.advokatormlite.db.DatabaseHelper;
+import com.example.berka.advokatormlite.data.db.DatabaseHelper;
 import com.example.berka.advokatormlite.model.IzracunatTrosakRadnje;
 import com.example.berka.advokatormlite.model.Postupak;
 import com.example.berka.advokatormlite.model.PostupakTarifaJoin;
-import com.example.berka.advokatormlite.model.PostupakVrstaParniceJoin;
 import com.example.berka.advokatormlite.model.Radnja;
 import com.example.berka.advokatormlite.model.Slucaj;
 import com.example.berka.advokatormlite.model.StrankaDetail;
 import com.example.berka.advokatormlite.model.Tarifa;
-import com.example.berka.advokatormlite.model.VrsteParnica;
 import com.j256.ormlite.android.apptools.OpenHelperManager;
 import com.j256.ormlite.stmt.PreparedQuery;
 import com.j256.ormlite.stmt.QueryBuilder;
@@ -61,11 +46,13 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 
+import javax.inject.Inject;
+
 /**
  * Created by berka on 7/21/2017.
  */
 
-public class PronadjeniSlucaj extends BaseActivity {
+public class PronadjeniSlucajActivity extends BaseActivity {
 
 
     private ExpandableListView exlistView;
@@ -100,13 +87,15 @@ public class PronadjeniSlucaj extends BaseActivity {
 
     //TODO iz main activitija dobijam broj pomocu koga trazim slucaj iz baze, treba pronaci id_slucaja i uzeti fiksni broj bodova, slucaj.getBrojBodova i dodeliti ga nekoj globalnoj promenljivoj koju cu zatim koristiti u svakom metodu iz switch petlje
 
+    @Inject
+    PronadjeniContractMVP.Presenter presenter;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_second);
 
-        exlistView = (ExpandableListView) findViewById(R.id.lvExpendable);
+        //exlistView = (ExpandableListView) findViewById(R.id.lvExpendable);
         listViewStrankeAddEdit = findViewById(R.id.lista_add_edit_stranke);
         checkIntent();
 
@@ -128,16 +117,16 @@ public class PronadjeniSlucaj extends BaseActivity {
         setupToolbar();
 
 
-        Button izracunaj = (Button) findViewById(R.id.izracunaj_vrednost);
-        izracunaj.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                Intent intent = new Intent(PronadjeniSlucaj.this, KonacniTrosakSvihRadnjiActivity.class);
-                intent.putExtra(SLUCAJ_KEY, slucaj.getId());
-                startActivity(intent);
-            }
-        });
+//        Button izracunaj = (Button) findViewById(R.id.izracunaj_vrednost);
+//        izracunaj.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//
+//                Intent intent = new Intent(PronadjeniSlucajActivity.this, KonacniTrosakSvihRadnjiActivity.class);
+//                intent.putExtra(SLUCAJ_KEY, slucaj.getId());
+//                startActivity(intent);
+//            }
+//        });
 
         exlistAdapter = new ExpandableAdapterRadnja(this, listDataHeader, listHashMap);
         exlistView.setAdapter(exlistAdapter);
@@ -163,25 +152,25 @@ public class PronadjeniSlucaj extends BaseActivity {
 
                         case 1:
                             //metoda koja racuna pravu vrednost i ima sifru 1
-                            Toast.makeText(PronadjeniSlucaj.this,"Sifra ove radnje je " + String.valueOf(radnja.getSifra()) + " radnja ima fiksnu vrednost", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(PronadjeniSlucajActivity.this,"Sifra ove radnje je " + String.valueOf(radnja.getSifra()) + " radnja ima fiksnu vrednost", Toast.LENGTH_SHORT).show();
                             privremenaCena = wholeValue(slucaj.getBroj_stranaka());
                             openDialog(privremenaCena, radnja.getNaziv_radnje());
                             break;
                         case 2:
                             //metoda koja racuna polovinu vrednosti ima sifru 2
-                            Toast.makeText(PronadjeniSlucaj.this,"Sifra ove radnje je " +  String.valueOf(radnja.getSifra()) + " radnja ima polovinu vrednosti", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(PronadjeniSlucajActivity.this,"Sifra ove radnje je " +  String.valueOf(radnja.getSifra()) + " radnja ima polovinu vrednosti", Toast.LENGTH_SHORT).show();
                             privremenaCena = halfValue(slucaj.getBroj_stranaka());
                             openDialog(privremenaCena, radnja.getNaziv_radnje());
                             break;
                         case 3:
                             //metoda koja racuna duplu vrednost ima sifru 3
-                            Toast.makeText(PronadjeniSlucaj.this,"Sifra ove radnje je " +  String.valueOf(radnja.getSifra() + " radnja ima dupliranu vrednost"), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(PronadjeniSlucajActivity.this,"Sifra ove radnje je " +  String.valueOf(radnja.getSifra() + " radnja ima dupliranu vrednost"), Toast.LENGTH_SHORT).show();
                             privremenaCena = doubleValue(slucaj.getBroj_stranaka());
                             openDialog(privremenaCena, radnja.getNaziv_radnje());
                             break;
                         case 4:
                             //metoda koja racuna pravu vrednost plus broj sati ima sifru 4
-                            Toast.makeText(PronadjeniSlucaj.this, "Sifra ove radnje je " +  String.valueOf(radnja.getSifra()), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(PronadjeniSlucajActivity.this, "Sifra ove radnje je " +  String.valueOf(radnja.getSifra()), Toast.LENGTH_SHORT).show();
                             privremenaCena = wholePlusHours(slucaj.getBroj_stranaka());
                             dialogFixValuePlusHours(privremenaCena);
                             break;
@@ -194,6 +183,13 @@ public class PronadjeniSlucaj extends BaseActivity {
         });
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        //presenter.setView(this);
+    }
+
+    //1 ANDROID DEO
     private void checkIntent(){
 
         comingfrom=getIntent().getStringExtra("from");
@@ -216,6 +212,7 @@ public class PronadjeniSlucaj extends BaseActivity {
         }
     }
 
+    //2 JAVA DEO/DATABASE
     private void addIdToSlucaj(int caseid){
         try {
             Log.d("id slucaja : ", String.valueOf(caseid));
@@ -228,8 +225,9 @@ public class PronadjeniSlucaj extends BaseActivity {
         Log.d("Naziv postupka je : ", postupak.getNazivpostupka());
     }
 
+    //ANDROID DEO SA DIALOGOM, JAVA/DATABASE DEO SA BAZOM PODATAKA
     private void prikaziSveStranke(){
-        AlertDialog.Builder mBuilder = new AlertDialog.Builder(PronadjeniSlucaj.this);
+        AlertDialog.Builder mBuilder = new AlertDialog.Builder(PronadjeniSlucajActivity.this);
         View mView = getLayoutInflater().inflate(R.layout.dialog_sve_stranke, null);
         mBuilder.setTitle("Sve stranke ovog slucaja: ");
         ListView listView = mView.findViewById(R.id.lista_sve_stranke);
@@ -240,7 +238,7 @@ public class PronadjeniSlucaj extends BaseActivity {
             .eq(StrankaDetail.ID_SLUCAJA, slucaj.getId())
             .query();
 
-            MyAdapterSveStranke myadaper = new MyAdapterSveStranke(PronadjeniSlucaj.this, (ArrayList<StrankaDetail>) detailStrankaList);
+            MyAdapterSveStranke myadaper = new MyAdapterSveStranke(PronadjeniSlucajActivity.this, (ArrayList<StrankaDetail>) detailStrankaList);
             listView.setAdapter(myadaper);
 
         } catch (SQLException e) {
@@ -259,9 +257,10 @@ public class PronadjeniSlucaj extends BaseActivity {
         dialog.show();
     }
 
+    //ANDROID - DIALOG, JAVA/DB POZIV
     private void dodajIzmeniStranke(){
 
-        AlertDialog.Builder mBuilder = new AlertDialog.Builder(PronadjeniSlucaj.this);
+        AlertDialog.Builder mBuilder = new AlertDialog.Builder(PronadjeniSlucajActivity.this);
         View mView = getLayoutInflater().inflate(R.layout.dialog_add_edit_stranke, null);
         mBuilder.setTitle("Dodaj ili izmeni vec postojece podatke o strankama");
         ListView listView = mView.findViewById(R.id.lista_add_edit_stranke);
@@ -272,7 +271,7 @@ public class PronadjeniSlucaj extends BaseActivity {
                     .eq(StrankaDetail.ID_SLUCAJA, slucaj.getId())
                     .query();
 
-            myadaper = new MyAdapteAddEditStranke(PronadjeniSlucaj.this, (ArrayList<StrankaDetail>) detailStrankaList);
+            myadaper = new MyAdapteAddEditStranke(PronadjeniSlucajActivity.this, (ArrayList<StrankaDetail>) detailStrankaList);
             listView.setAdapter(myadaper);
             myadaper.notifyDataSetChanged();
 
@@ -310,6 +309,8 @@ public class PronadjeniSlucaj extends BaseActivity {
         dialog.show();
 }
 
+
+//ANDROID DEO
     @Override
     public void onBackPressed() {
         new AlertDialog.Builder(this)
@@ -317,7 +318,7 @@ public class PronadjeniSlucaj extends BaseActivity {
                 .setMessage("Pritiskom na ok izlazite na glavni meni")
                 .setNegativeButton(android.R.string.no, null)
                 .setPositiveButton(android.R.string.yes, (arg0, arg1) -> {
-                    Intent i=new Intent(PronadjeniSlucaj.this,MainActivity.class);
+                    Intent i=new Intent(PronadjeniSlucajActivity.this,MainActivity.class);
                     i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(i);
                 }).create().show();
@@ -345,7 +346,7 @@ public class PronadjeniSlucaj extends BaseActivity {
                 return true;
             case R.id.action_show_stranke:
                 prikaziSveStranke();
-                Toast.makeText(PronadjeniSlucaj.this, "Good job", Toast.LENGTH_LONG).show();
+                Toast.makeText(PronadjeniSlucajActivity.this, "Good job", Toast.LENGTH_LONG).show();
                 return true;
             case R.id.action_edit_stranke:
                 dodajIzmeniStranke();
@@ -367,6 +368,7 @@ public class PronadjeniSlucaj extends BaseActivity {
     //////////////////////////////////////////////////////////////////////////////////////////////////
     //metode koje racunaju bodove i smestaju ih u bazu tj tabelu SLUCAJ kolona LISTA_BODOVA
 
+    //JAVA DEO
     private double wholeValue(int brojStranaka){
 
         double cena = Double.valueOf(slucaj.getTabelaBodova().getBodovi());
@@ -395,38 +397,18 @@ public class PronadjeniSlucaj extends BaseActivity {
         return izrecunataVrednostUBodovima * vrednostJednogBodaUDinarima;
     }
 
-    private void openDialog(double num, String imeRadnje){
+    private void openDialog(double cenaRadnje, String imeRadnje){
 
         new AlertDialog.Builder(this)
         .setTitle(imeRadnje)
-        .setMessage("Vrednost ove radnje iznosi: " +  String.valueOf(num) + " dinara" +  "\n\n" + "Da li zelite da je dodate?")
+        .setMessage("Vrednost ove radnje iznosi: " +  String.valueOf(cenaRadnje) + " dinara" +  "\n\n" + "Da li zelite da je dodate?")
                 .setNegativeButton(android.R.string.no, null)
                 .setPositiveButton(android.R.string.yes, (arg0, arg1) -> {
-
-                    IzracunatTrosakRadnje izracunatTrosakRadnje = new IzracunatTrosakRadnje();
-                    izracunatTrosakRadnje.setDatum(getNowDate());
-                    izracunatTrosakRadnje.setCena_izracunate_jedinstvene_radnje(num);
-                    izracunatTrosakRadnje.setNaziv_radnje(radnja.getNaziv_radnje());
-                    izracunatTrosakRadnje.setSlucaj(slucaj);
-
-                    try {
-                        getDatabaseHelper().getmIzracunatTrosakRadnjeDao().create(izracunatTrosakRadnje);
-                        Toast.makeText(PronadjeniSlucaj.this, izracunatTrosakRadnje.getDatum() +  " Izracunata radnja je dodata", Toast.LENGTH_SHORT).show();
-                    } catch (SQLException e) {
-                        e.printStackTrace();
-                        Toast.makeText(PronadjeniSlucaj.this, "Izracunata radnja nije dodata", Toast.LENGTH_SHORT).show();
-                    }
+                    presenter.addRadnjaButtonClicked(cenaRadnje, imeRadnje, slucaj);
                 }).create().show();
     }
 
-    private String getNowDate(){
-
-        Calendar c = Calendar.getInstance();
-        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
-        String datestring = sdf.format(c.getTime());
-        return datestring;
-    }
-
+//ANDROID DEO DIALOG, JAVA DEO DODAVANJE U BAZU
     private void dialogFixValuePlusHours(final double cena){
 
         final Dialog dialog = new Dialog(this);
@@ -462,14 +444,14 @@ public class PronadjeniSlucaj extends BaseActivity {
 
                     case R.id.radioButtonYes:
                         izracunato = cena + (scrollableNumberPicker.getValue()*50);
-                        Toast.makeText(PronadjeniSlucaj.this, String.valueOf(izracunato), Toast.LENGTH_LONG).show();
+                        Toast.makeText(PronadjeniSlucajActivity.this, String.valueOf(izracunato), Toast.LENGTH_LONG).show();
                         break;
                     case R.id.radioButtonNo:
                         izracunato = cena / 2 + (scrollableNumberPicker.getValue()*50);
-                        Toast.makeText(PronadjeniSlucaj.this, String.valueOf(izracunato), Toast.LENGTH_LONG).show();
+                        Toast.makeText(PronadjeniSlucajActivity.this, String.valueOf(izracunato), Toast.LENGTH_LONG).show();
                         break;
                     default:
-                        Toast.makeText(PronadjeniSlucaj.this, "Oznaci da li je radnja odrzana", Toast.LENGTH_LONG).show();
+                        Toast.makeText(PronadjeniSlucajActivity.this, "Oznaci da li je radnja odrzana", Toast.LENGTH_LONG).show();
                         //todo resiti problem kad cekiram NE da ne dozvoli koriscenje scrolablenumberpickera
                 }
 
@@ -481,15 +463,23 @@ public class PronadjeniSlucaj extends BaseActivity {
 
                 try {
                     getDatabaseHelper().getmIzracunatTrosakRadnjeDao().create(izracunatTrosakRadnje);
-                    Toast.makeText(PronadjeniSlucaj.this, "Izracunata radnja je dodata", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(PronadjeniSlucajActivity.this, "Izracunata radnja je dodata", Toast.LENGTH_SHORT).show();
                 } catch (SQLException e) {
                     e.printStackTrace();
-                    Toast.makeText(PronadjeniSlucaj.this, "Izracunata radnja nije dodata", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(PronadjeniSlucajActivity.this, "Izracunata radnja nije dodata", Toast.LENGTH_SHORT).show();
                 }
                 dialog.dismiss();
             }
         });
                 dialog.show();
+    }
+
+    private String getNowDate(){
+
+        Calendar c = Calendar.getInstance();
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+        String datestring = sdf.format(c.getTime());
+        return datestring;
     }
 
     //TODO ODAVDE METODE VISE NA VISE

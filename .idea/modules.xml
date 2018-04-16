@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/AdvokatORMLite.iml" filepath="$PROJECT_DIR$/AdvokatORMLite.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/advokat_mvp_02.iml" filepath="$PROJECT_DIR$/.idea/advokat_mvp_02.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>

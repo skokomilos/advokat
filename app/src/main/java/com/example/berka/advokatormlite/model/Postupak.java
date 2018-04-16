@@ -1,5 +1,8 @@
 package com.example.berka.advokatormlite.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.j256.ormlite.dao.ForeignCollection;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.field.ForeignCollectionField;
@@ -14,7 +17,7 @@ import static com.example.berka.advokatormlite.model.Postupak.POSTUPAK_VRSTEPARN
  */
 
 @DatabaseTable(tableName = Postupak.TABLE_NAME_POSTUPAK)
-public class Postupak {
+public class Postupak implements Parcelable {
 
     public static final String TABLE_NAME_POSTUPAK = "postupak";
     public static final String POSTUPAK_ID = "_id";
@@ -75,4 +78,32 @@ public class Postupak {
     public String toString() {
         return  nazivpostupka;
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(this.id);
+        dest.writeString(this.nazivpostupka);
+    }
+
+    protected Postupak(Parcel in) {
+        this.id = in.readInt();
+        this.nazivpostupka = in.readString();
+    }
+
+    public static final Parcelable.Creator<Postupak> CREATOR = new Parcelable.Creator<Postupak>() {
+        @Override
+        public Postupak createFromParcel(Parcel source) {
+            return new Postupak(source);
+        }
+
+        @Override
+        public Postupak[] newArray(int size) {
+            return new Postupak[size];
+        }
+    };
 }

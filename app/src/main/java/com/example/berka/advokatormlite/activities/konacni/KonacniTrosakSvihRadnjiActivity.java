@@ -1,4 +1,4 @@
-package com.example.berka.advokatormlite.activities;
+package com.example.berka.advokatormlite.activities.konacni;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -18,24 +18,20 @@ import android.print.PrintManager;
 import android.print.pdf.PrintedPdfDocument;
 import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Adapter;
-import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.berka.advokatormlite.R;
+import com.example.berka.advokatormlite.activities.BaseActivity;
+import com.example.berka.advokatormlite.activities.add_points.PronadjeniSlucajActivity;
 import com.example.berka.advokatormlite.adapter.SviTroskviAdapter;
-import com.example.berka.advokatormlite.db.DatabaseHelper;
+import com.example.berka.advokatormlite.data.db.DatabaseHelper;
 import com.example.berka.advokatormlite.model.IzracunatTrosakRadnje;
 import com.example.berka.advokatormlite.model.Postupak;
-import com.example.berka.advokatormlite.model.Radnja;
 import com.example.berka.advokatormlite.model.Slucaj;
 import com.example.berka.advokatormlite.model.StrankaDetail;
 import com.j256.ormlite.android.apptools.OpenHelperManager;
@@ -44,7 +40,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.ListIterator;
 
@@ -52,7 +47,7 @@ import java.util.ListIterator;
  * Created by berka on 11-Oct-17.
  */
 
-public class KonacniTrosakSvihRadnjiActivity extends BaseActivity{
+public class KonacniTrosakSvihRadnjiActivity extends BaseActivity {
 
     DatabaseHelper databaseHelper;
     private Postupak postupak;
@@ -97,7 +92,7 @@ public class KonacniTrosakSvihRadnjiActivity extends BaseActivity{
     }
 
     private void loadSlucaj(){
-        key = getIntent().getExtras().getInt(PronadjeniSlucaj.SLUCAJ_KEY);
+        key = getIntent().getExtras().getInt(PronadjeniSlucajActivity.SLUCAJ_KEY);
         try {
             slucaj = getDatabaseHelper().getSlucajDao().queryForId(key);
         } catch (SQLException e) {

@@ -16,6 +16,8 @@ import com.example.berka.advokatormlite.model.Slucaj;
 import java.util.ArrayList;
 import java.util.List;
 
+import static android.support.v4.util.Preconditions.checkNotNull;
+
 /**
  * Created by berka on 23-Nov-17.
  */
@@ -23,24 +25,34 @@ import java.util.List;
 public class MyAdapterSviSlucajevi extends BaseAdapter {
 
     Context context;
-    ArrayList<Slucaj> slucajevi;
+    List<Slucaj> mSlucajevi;
     List<Double> izracunateTarife;
 
 
-    public MyAdapterSviSlucajevi(Context context, ArrayList<Slucaj> slucajevi, List<Double> izracunateTarife) {
+    public MyAdapterSviSlucajevi(Context context, List<Slucaj> slucajevi, List<Double> izracunateTarife) {
         this.context = context;
-        this.slucajevi = slucajevi;
+        this.mSlucajevi = slucajevi;
         this.izracunateTarife = izracunateTarife;
+    }
+
+
+    public void replaceData(List<Slucaj> slucajevi) {
+        setList(slucajevi);
+        notifyDataSetChanged();
+    }
+
+    private void setList(List<Slucaj> slucajevi) {
+        mSlucajevi = (ArrayList<Slucaj>) slucajevi;
     }
 
     @Override
     public int getCount() {
-        return slucajevi.size();
+        return mSlucajevi.size();
     }
 
     @Override
     public Object getItem(int position) {
-        return slucajevi.get(position);
+        return mSlucajevi.get(position);
     }
 
     @Override
@@ -60,10 +72,10 @@ public class MyAdapterSviSlucajevi extends BaseAdapter {
         }
 
         TextView sif_slucaja = convertView.findViewById(R.id.adr_sifra_slucaja);
-        sif_slucaja.setText(String.valueOf("Sifra slucaja: " + slucajevi.get(position).getBroj_slucaja()));
+        sif_slucaja.setText(String.valueOf("Sifra slucaja: " + mSlucajevi.get(position).getBroj_slucaja()));
 
         TextView vrsta_postupka = convertView.findViewById(R.id.adr_vrsta_postupka);
-        vrsta_postupka.setText(String.valueOf("Vrsta postupka: " + slucajevi.get(position).getPostupak()));
+        vrsta_postupka.setText(String.valueOf("Vrsta postupka: " + mSlucajevi.get(position).getPostupak()));
 
         TextView trenutva_vrednost = convertView.findViewById(R.id.adr_trenutna_vrednost);
         trenutva_vrednost.setText(String.valueOf("Trenutna vrednost: " + izracunateTarife.get(position)));
