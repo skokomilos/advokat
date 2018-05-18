@@ -1,4 +1,4 @@
-package com.example.berka.advokatormlite.activities.krivica;
+package com.example.berka.advokatormlite.activities.add_case;
 
 import com.example.berka.advokatormlite.model.Postupak;
 import com.example.berka.advokatormlite.model.Slucaj;

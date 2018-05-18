@@ -1,6 +1,5 @@
 package com.example.berka.advokatormlite.activities.parnica;
 
-import com.example.berka.advokatormlite.activities.krivica.AddKrivicaContractMVP;
 import com.example.berka.advokatormlite.interfaces.DynamicalEditTexts;
 import com.example.berka.advokatormlite.model.Postupak;
 import com.example.berka.advokatormlite.model.TabelaBodova;

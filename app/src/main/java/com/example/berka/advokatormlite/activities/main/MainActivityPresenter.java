@@ -2,6 +2,10 @@ package com.example.berka.advokatormlite.activities.main;
 
 import android.support.annotation.Nullable;
 
+import com.example.berka.advokatormlite.activities.add_case.views_fragments.UpperFragmentForKrivica;
+import com.example.berka.advokatormlite.activities.add_case.views_fragments.UpperFragmentForParnica;
+import com.example.berka.advokatormlite.activities.add_case.views_fragments.UpperFragmentPrekrsaj;
+import com.example.berka.advokatormlite.activities.add_case.views_fragments.UpperFragmentUstavniSud;
 import com.example.berka.advokatormlite.model.IzracunatTrosakRadnje;
 import com.example.berka.advokatormlite.model.Postupak;
 import com.example.berka.advokatormlite.model.Slucaj;
@@ -28,6 +32,7 @@ public class MainActivityPresenter implements MainActivityContractMVP.Presenter{
     public void setView(MainActivityContractMVP.View view) {
         this.view = view;
     }
+
 
     @Override
     public void caseItemClicked(Slucaj slucaj) {
@@ -81,7 +86,7 @@ public class MainActivityPresenter implements MainActivityContractMVP.Presenter{
                         break;
                     default:
                         //add sve ostale koji imaju procenjene i neprocenjene predmete
-                        view.startIntentOstaleKojeImajuProcenjivoNeprocenjivo(Integer.valueOf(broj_stranaka), postupak.getId());
+                        view.startIntentOstaleKojeImajuProcenjivoNeprocenjivo(postupak, Integer.valueOf(broj_stranaka));
                         break;
                 }
             }
@@ -148,6 +153,7 @@ public class MainActivityPresenter implements MainActivityContractMVP.Presenter{
             view.updateLawyerPlace(place);
         }
     }
+
 
     @Override
     public void prefUserDialogSaveData(String name, String address, String  place){

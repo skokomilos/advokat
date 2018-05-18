@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/probniid"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="12dp"
+    android:layout_marginRight="12dp"
+    android:layout_marginTop="12dp"
+    android:orientation="vertical">
+
+    <EditText
+        android:id="@+id/upper_fragment_krivica__et_sifra_slucaja_id"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="sifra slucaja" />
+
+    <RadioGroup
+        android:id="@+id/upper_fragment_krivica__radio_group_id"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:checkedButton="@+id/upper_fragment_krivica_rbOkrivljen"
+        android:orientation="vertical">
+
+        <RadioButton
+            android:id="@+id/upper_fragment_krivica_rbOkrivljen"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:tag="1"
+            android:text="Okrivljen" />
+
+        <RadioButton
+            android:id="@+id/upper_fragment_krivica_rbOstecen"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:tag="0"
+            android:text="Ostecen" />
+
+    </RadioGroup>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:text="zaprecena kazna" />
+
+    <Spinner
+        android:id="@+id/upper_fragment_krivica_spinnerKrivicaKazne"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <Button
+        android:id="@+id/upper_fragment_krivica_btn_dodaj_krivicu"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="12dp"
+        android:text="dodaj slucaj" />
+
+</LinearLayout>

@@ -2,6 +2,8 @@ package com.example.berka.advokatormlite.activities.main;
 
 import android.widget.Spinner;
 
+import com.example.berka.advokatormlite.activities.add_case.views_fragments.BaseFragment;
+import com.example.berka.advokatormlite.activities.add_case.views_fragments.UpperFragmentForKrivica;
 import com.example.berka.advokatormlite.model.Postupak;
 import com.example.berka.advokatormlite.model.Slucaj;
 
@@ -45,7 +47,7 @@ public interface MainActivityContractMVP {
 
            void startIntentIsprave(int postupakId, int broj_stranaka);
 
-           void startIntentOstaleKojeImajuProcenjivoNeprocenjivo(int postupakId, int broj_stranaka);
+           void startIntentOstaleKojeImajuProcenjivoNeprocenjivo(Postupak postupak, int broj_stranaka);
 
 
            void showCaseSavedMessage();
@@ -63,6 +65,7 @@ public interface MainActivityContractMVP {
         interface Presenter{
 
             void setView(MainActivityContractMVP.View view);
+
             void caseItemClicked(Slucaj slucaj);
 
             void findCaseButtonClicked(String slucajId);
@@ -80,6 +83,8 @@ public interface MainActivityContractMVP {
             void detachView();
 
             void prefUserDialogCreated();
+
+
         }
 
         interface Model{

@@ -176,6 +176,7 @@ public class PronadjeniSlucajActivity1 extends BaseActivity implements Pronadjen
         super.onResume();
 
          presenter.setView(this);
+        Log.d(TAG, "onResume: " + presenter.toString());
          presenter.loadExpandableListViewData(slucaj);
     }
 

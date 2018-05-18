@@ -1,4 +1,4 @@
-package com.example.berka.advokatormlite.activities.krivica;
+package com.example.berka.advokatormlite.activities.add_case;
 
 import com.example.berka.advokatormlite.data.db.DatabaseHelper;
 
@@ -12,14 +12,14 @@ import dagger.Provides;
 public class AddKrivicaModule {
 
     @Provides
-    public AddKrivicaContractMVP.Presenter providedAddKrivicaPresenter(AddKrivicaContractMVP.Model model){
-        return new AddKrivicaPresenter(model);
+    public AddSlucajMVP.Presenter providedAddKrivicaPresenter(AddSlucajMVP.Model model){
+        return new AddSlucajPresenter(model);
     }
 
-    @Provides
-    public AddKrivicaContractMVP.Model providedAddKrivicaModel(AddKrivicaRepository repository){
-        return new AddKrivicaModel(repository);
-    }
+//    @Provides
+//    public AddSlucajMVP.Model providedAddKrivicaModel(AddKrivicaRepository repository){
+//        return new AddSlucajModel(repository);
+//    }
 
     @Provides
     public AddKrivicaRepository providedAddKrivicaRepository(DatabaseHelper databaseHelper){

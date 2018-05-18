@@ -4,11 +4,9 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Handler;
-import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -29,10 +27,8 @@ import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.example.berka.advokatormlite.R;
-import com.example.berka.advokatormlite.activities.add_points.PronadjeniSlucajActivity;
 import com.example.berka.advokatormlite.activities.add_points.PronadjeniSlucajActivity1;
-import com.example.berka.advokatormlite.activities.krivica.AddKrivicaActivity;
-import com.example.berka.advokatormlite.activities.parnica.AddParnicaActivity;
+import com.example.berka.advokatormlite.activities.add_case.AddSlucaj;
 import com.example.berka.advokatormlite.activities.prekrsaj.AddPrekrsajniActivity;
 import com.example.berka.advokatormlite.activities.ustavni.AddUstavniActivity;
 import com.example.berka.advokatormlite.activities.BaseActivity;
@@ -218,6 +214,7 @@ public class MainActivity extends BaseActivity implements MainActivityContractMV
     public void updateLawyerPlace(String place) {
         lawyerPlace.setText(place);
     }
+
 
     @OnClick(R.id.cv_isprave)
     public void goToIsprave() {
@@ -438,14 +435,14 @@ public class MainActivity extends BaseActivity implements MainActivityContractMV
 
     @Override
     public void startIntentKrivica(Postupak postupak, int broj_stranaka) {
-//        Intent intent = new Intent(MainActivity.this, AddKrivicaActivity.class);
+//        Intent intent = new Intent(MainActivity.this, AddSlucaj.class);
 //        Log.d(TAG, "postupak koji saljem: " + postupak);
 //        intent.putExtra(POSTUPAK_KEY, postupak);
 //        intent.putExtra(BROJ_STRANAKA, broj_stranaka);
 //        startActivity(intent);
 
         //Log.d(TAG, "gotoFoundCaseFromFindCaseDialog: " + slucaj.getBroj_stranaka());
-        Intent intent = new Intent(MainActivity.this, AddKrivicaActivity.class);
+        Intent intent = new Intent(MainActivity.this, AddSlucaj.class);
         intent.putExtra(FROM, "myDataKey");
         intent.putExtra("myDataKey", postupak);
         intent.putExtra("numberOfParties", broj_stranaka);
@@ -469,10 +466,11 @@ public class MainActivity extends BaseActivity implements MainActivityContractMV
     }
 
     @Override
-    public void startIntentOstaleKojeImajuProcenjivoNeprocenjivo(int postupakId, int broj_stranaka) {
-        Intent intent = new Intent(MainActivity.this, AddParnicaActivity.class);
-        intent.putExtra(POSTUPAK_KEY, postupakId);
-        intent.putExtra(BROJ_STRANAKA, broj_stranaka);
+    public void startIntentOstaleKojeImajuProcenjivoNeprocenjivo(Postupak postupak, int broj_stranaka) {
+        Intent intent = new Intent(MainActivity.this, AddSlucaj.class);
+        intent.putExtra(FROM, "myDataKey");
+        intent.putExtra("myDataKey", postupak);
+        intent.putExtra("numberOfParties", broj_stranaka);
         startActivity(intent);
     }
 

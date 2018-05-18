@@ -29,7 +29,7 @@
             android:windowSoftInputMode="adjustPan"/>
         <activity android:name=".activities.konacni.KonacniTrosakSvihRadnjiActivity"/>
         <activity android:name=".activities.parnica.AddParnicaActivity"/>
-        <activity android:name=".activities.krivica.AddKrivicaActivity"/>
+        <activity android:name=".activities.add_case.AddSlucaj"/>
         <activity android:name=".activities.prekrsaj.AddPrekrsajniActivity"/>
         <activity android:name=".activities.ustavni.AddUstavniActivity"/>
         <activity android:name=".activities.IspraveActivity"/>

@@ -1,24 +1,9 @@
 package com.example.berka.advokatormlite.activities.parnica;
 
-import android.database.sqlite.SQLiteConstraintException;
 import android.support.annotation.Nullable;
-import android.util.Log;
 
-import com.example.berka.advokatormlite.activities.krivica.AddKrivicaContractMVP;
-import com.example.berka.advokatormlite.data.db.DatabaseHelper;
 import com.example.berka.advokatormlite.model.Postupak;
-import com.example.berka.advokatormlite.model.PostupakVrstaParniceJoin;
-import com.example.berka.advokatormlite.model.Slucaj;
-import com.example.berka.advokatormlite.model.StrankaDetail;
 import com.example.berka.advokatormlite.model.TabelaBodova;
-import com.example.berka.advokatormlite.model.VrsteParnica;
-import com.j256.ormlite.stmt.PreparedQuery;
-import com.j256.ormlite.stmt.QueryBuilder;
-import com.j256.ormlite.stmt.SelectArg;
-
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by berka on 24-Feb-18.

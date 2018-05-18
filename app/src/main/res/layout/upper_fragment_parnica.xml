@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="12dp"
+    android:layout_marginRight="12dp"
+    android:layout_marginTop="12dp"
+    android:orientation="vertical">
+
+    <EditText
+        android:id="@+id/sifra_Slucaja_Parnica"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="sifra slucaja"
+        android:inputType="number" />
+
+    <Spinner
+        android:id="@+id/spinner_Vrste_Parnice"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp" />
+
+    <Spinner
+        android:id="@+id/spinner_Kazne_tabela_bodova"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp" />
+
+    <Button
+        android:id="@+id/btn_Add_Slucaj_Parnica"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="24dp"
+        android:text="dodaj slucaj" />
+
+</LinearLayout>

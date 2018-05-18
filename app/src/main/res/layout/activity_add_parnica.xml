@@ -38,28 +38,34 @@
         android:layout_marginTop="24dp"
         android:text="dodaj slucaj" />
 
-    <GridLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/parnica_gridlayout_za_dinamicko_dodavanje_polja"
-        android:columnCount="1"
+    <FrameLayout
+        android:id="@+id/dymanic_fragment_container"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp">
+        android:layout_height="wrap_content">
+    </FrameLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
+    <!--<GridLayout-->
+        <!--xmlns:android="http://schemas.android.com/apk/res/android"-->
+        <!--android:id="@+id/parnica_gridlayout_za_dinamicko_dodavanje_polja"-->
+        <!--android:columnCount="1"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_marginTop="8dp">-->
 
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/unos_stranke_details_txt"
-                android:padding="8dp"
-                android:textColor="#000"/>
-        </LinearLayout>
-    </GridLayout>
+        <!--<LinearLayout-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:orientation="horizontal">-->
+
+            <!--<TextView-->
+                <!--android:layout_width="0dp"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_weight="1"-->
+                <!--android:text="@string/unos_stranke_details_txt"-->
+                <!--android:padding="8dp"-->
+                <!--android:textColor="#000"/>-->
+        <!--</LinearLayout>-->
+    <!--</GridLayout>-->
 
 </LinearLayout>
 </ScrollView>

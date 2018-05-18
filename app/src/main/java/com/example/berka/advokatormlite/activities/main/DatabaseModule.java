@@ -1,4 +1,4 @@
-package com.example.berka.advokatormlite.dependencyinjection;
+package com.example.berka.advokatormlite.activities.main;
 
 import android.content.SharedPreferences;
 

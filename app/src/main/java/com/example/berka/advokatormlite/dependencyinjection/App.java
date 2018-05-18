@@ -2,10 +2,12 @@ package com.example.berka.advokatormlite.dependencyinjection;
 
 import android.app.Application;
 
+import com.example.berka.advokatormlite.activities.add_case.AddSlucajModule;
+import com.example.berka.advokatormlite.activities.add_case.modules.BottomFragmentModule;
+import com.example.berka.advokatormlite.activities.add_case.modules.KrivicaModule;
+import com.example.berka.advokatormlite.activities.add_case.modules.ParnicaModule;
 import com.example.berka.advokatormlite.activities.add_points.PronadjeniModule;
-import com.example.berka.advokatormlite.activities.krivica.AddKrivicaModule;
-import com.example.berka.advokatormlite.activities.parnica.AddParnicaModule;
-import com.example.berka.advokatormlite.data.db.DatabaseHelper;
+import com.example.berka.advokatormlite.activities.main.DatabaseModule;
 
 /**
  * Created by berka on 05-Mar-18.
@@ -13,25 +15,33 @@ import com.example.berka.advokatormlite.data.db.DatabaseHelper;
 
 public class App extends Application {
 
-    private ApplicationComponent component;
 
-//    @Inject
-//    DatabaseHelper databaseHelper;
+    private static App myApp;
+    private ApplicationComponent component;
 
     @Override
     public void onCreate() {
         super.onCreate();
 
+        myApp = this;
+
         component = DaggerApplicationComponent.builder()
                 .applicationModule(new ApplicationModule(this))
                 .databaseModule(new DatabaseModule())
                 .pronadjeniModule(new PronadjeniModule())
-                .addKrivicaModule(new AddKrivicaModule())
-                .addParnicaModule(new AddParnicaModule())
+                .bottomFragmentModule(new BottomFragmentModule())
+                .krivicaModule(new KrivicaModule())
+                .parnicaModule(new ParnicaModule())
                 .build();
+    }
+
+    public static App getMyApp() {
+        return myApp;
     }
 
     public ApplicationComponent getComponent(){
         return component;
     }
+
+
 }
