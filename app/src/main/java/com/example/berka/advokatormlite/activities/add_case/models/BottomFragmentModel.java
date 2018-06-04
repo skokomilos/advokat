@@ -22,14 +22,15 @@ public class BottomFragmentModel implements BottomFragmentContract.Model{
 
     @Override
     public void saveSlucaj(Slucaj slucaj) {
-            repository.equals(null);
+
+        Log.d(TAG, "saveSlucaj: " + slucaj.getPostupak());
+        repository.insertSlucajToDatabase(slucaj);
     }
+
 
     @Override
     public void saveStrankaDetails(StrankaDetail strankaDetail) {
 
-        Log.d(TAG, "saveStrankaDetails: dodat je jedan klijentic" + strankaDetail.getIme_i_prezime());
-        Log.d(TAG, "saveStrankaDetails: dodat je jedan klijentic" + strankaDetail.getAdresa());
-        Log.d(TAG, "saveStrankaDetails: dodat je jedan klijentic" + strankaDetail.getMesto());
+        repository.insertStrankaDetailsToDatabase(strankaDetail);
     }
 }

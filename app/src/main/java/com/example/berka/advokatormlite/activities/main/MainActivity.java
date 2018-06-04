@@ -4,9 +4,11 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Handler;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -176,12 +178,21 @@ public class MainActivity extends BaseActivity implements MainActivityContractMV
         lawyerAddress = mView.findViewById(R.id.dialog_profil_adresa);
         lawyerPlace = mView.findViewById(R.id.dialog_profil_mesto);
 
+
+
         //ovde popunjavam ime, adresu, mesto ako je sacuvano to zamenjuje ovo dadfole
         presenter.prefUserDialogCreated();
 
         mBuilder.setPositiveButton("sacuvaj podatke", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
+
+                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
+                SharedPreferences.Editor editor = preferences.edit();
+                editor.putString("prefName", lawyerName.getText().toString());
+                editor.putString("prefAdres", lawyerAddress.getText().toString());
+                editor.putString("prefPlace", lawyerPlace.getText().toString());
+                editor.apply();
 
                 presenter.prefUserDialogSaveData(lawyerName.getText().toString(), lawyerAddress.getText().toString(), lawyerPlace.getText().toString());
             }
@@ -326,8 +337,8 @@ public class MainActivity extends BaseActivity implements MainActivityContractMV
     public void gotoFoundCaseFromFindCaseDialog(Slucaj slucaj) {
         Log.d(TAG, "gotoFoundCaseFromFindCaseDialog: " + slucaj.getBroj_stranaka());
         Intent intent = new Intent(MainActivity.this, PronadjeniSlucajActivity1.class);
-        intent.putExtra(FROM, "myDataKey");
-        intent.putExtra("myDataKey", slucaj);
+        //intent.putExtra(FROM, "moj_slucaj");
+        intent.putExtra("moj_slucaj", slucaj);
         startActivity(intent);
     }
 

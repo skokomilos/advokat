@@ -5,6 +5,7 @@ import android.util.Log;
 import com.example.berka.advokatormlite.model.Postupak;
 import com.example.berka.advokatormlite.model.Radnja;
 import com.example.berka.advokatormlite.model.Slucaj;
+import com.example.berka.advokatormlite.model.StrankaDetail;
 import com.example.berka.advokatormlite.model.Tarifa;
 
 import java.util.ArrayList;
@@ -57,5 +58,15 @@ public class PronadjeniModel implements PronadjeniContractMVP.Model {
     @Override
     public void saveRadnja(double cenaRadnje, String imeRadnje, Slucaj slucaj) {
         repository.insertRadnja(cenaRadnje, imeRadnje, slucaj);
+    }
+
+    @Override
+    public List<StrankaDetail> getAllPartiesOfCase(Slucaj slucaj) {
+        return repository.loadForAllPartiesForThisCase(slucaj);
+    }
+
+    @Override
+    public void setStrankaDetail(StrankaDetail strankaDetail) {
+        repository.updateStranka(strankaDetail);
     }
 }

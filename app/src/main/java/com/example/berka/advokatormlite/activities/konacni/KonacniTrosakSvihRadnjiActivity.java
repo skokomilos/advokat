@@ -49,6 +49,7 @@ import java.util.ListIterator;
 
 public class KonacniTrosakSvihRadnjiActivity extends BaseActivity {
 
+    private static final String TAG = "KonacniTrosakSvihRadnji";
     DatabaseHelper databaseHelper;
     private Postupak postupak;
     private Slucaj slucaj;
@@ -69,7 +70,9 @@ public class KonacniTrosakSvihRadnjiActivity extends BaseActivity {
         setContentView(R.layout.activity_konacni_trosak_svih_radnji);
 
         getSharedPrefValues();
-        loadSlucaj();
+
+        slucaj = getIntent().getParcelableExtra("myDataKey");
+
         setupToolbar();
         loadSpinner();
         ukupnaCena();
@@ -79,9 +82,11 @@ public class KonacniTrosakSvihRadnjiActivity extends BaseActivity {
         SharedPreferences mPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         SharedPreferences.Editor editor = mPreferences.edit();
 
-         imeiprezime = mPreferences.getString("imeiprezime","");
-         adresa = mPreferences.getString("mesto","");
-         mesto = mPreferences.getString("adresa", "");
+         imeiprezime = mPreferences.getString("prefName","");
+         adresa = mPreferences.getString("prefAdres","");
+         mesto = mPreferences.getString("prefPlace", "");
+         editor.commit();
+        Log.d(TAG, "getSharedPrefValues: " + imeiprezime + adresa + mesto);
     }
 
     public void printDocument(MenuItem item){
@@ -332,7 +337,7 @@ public class KonacniTrosakSvihRadnjiActivity extends BaseActivity {
             //
             paint.setTextSize(20);
             for (int i = 0; i < slucaj.getBroj_stranaka(); i++) {
-                canvas.drawText(strankaDetailsList.get(i).getIme_i_prezime() + ", " + strankaDetailsList.get(i).getAdresa() + ", " + strankaDetailsList.get(i).getMesto(),
+                canvas.drawText("Stranka: " + strankaDetailsList.get(i).getIme_i_prezime() + ", mesto stanovanja: " + strankaDetailsList.get(i).getAdresa() + ", iz: " + strankaDetailsList.get(i).getMesto(),
                         leftMarginForName,
                         titleBaseLine += 35,
                         paint);

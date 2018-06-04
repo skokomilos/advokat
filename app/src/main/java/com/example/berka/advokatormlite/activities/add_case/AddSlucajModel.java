@@ -35,4 +35,5 @@ public class AddSlucajModel implements AddSlucajMVP.Model {
     public void saveStrankaDetails(StrankaDetail strankaDetail) {
 
     }
+
 }

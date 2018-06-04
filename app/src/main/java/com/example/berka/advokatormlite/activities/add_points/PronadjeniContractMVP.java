@@ -3,6 +3,7 @@ package com.example.berka.advokatormlite.activities.add_points;
 import com.example.berka.advokatormlite.model.Postupak;
 import com.example.berka.advokatormlite.model.Radnja;
 import com.example.berka.advokatormlite.model.Slucaj;
+import com.example.berka.advokatormlite.model.StrankaDetail;
 import com.example.berka.advokatormlite.model.Tarifa;
 
 import java.util.HashMap;
@@ -22,13 +23,17 @@ public interface PronadjeniContractMVP {
 
         void showSomeError();
 
+        void showEditPartiesDialog(List<StrankaDetail> sveStrankeSlucaja);
+
         void openDialog(double privremenaCena, String naziv_radnje);
 
-        void dialogFixValuePlusHours(double privremenaCena);
+        void dialogFixValuePlusHours(double privremenaCena, String nazivRadnje);
 
         void cantAddRadnjaShowMessage();
 
         void radnjaAddedMessage();
+
+        void showPartiesInDialog(List<StrankaDetail> sveStrankeSlucaja);
 
     }
 
@@ -43,6 +48,12 @@ public interface PronadjeniContractMVP {
         void buttonclicked();
 
         void addRadnjaButtonClicked(double cenaRadnje, String imeRadnje, Slucaj slucaj);
+
+        void loadAllParties(Slucaj slucaj);
+
+        void loadAllPartiesForChange(Slucaj slucaj);
+
+        void editParties(List<StrankaDetail> sveStrankeSlucaja);
     }
 
     interface Model{
@@ -56,5 +67,9 @@ public interface PronadjeniContractMVP {
         List<Tarifa> getHeadersNonKrivica(Postupak postupak);
 
         void saveRadnja(double cenaRadnje, String imeRadnje, Slucaj slucaj);
+
+        List<StrankaDetail> getAllPartiesOfCase(Slucaj slucaj);
+
+        void setStrankaDetail(StrankaDetail strankaDetail);
     }
 }

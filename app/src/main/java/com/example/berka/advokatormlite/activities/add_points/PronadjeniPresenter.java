@@ -1,20 +1,16 @@
 package com.example.berka.advokatormlite.activities.add_points;
 
 import android.support.annotation.Nullable;
-import android.util.Log;
-import android.widget.Toast;
 
-import com.example.berka.advokatormlite.activities.main.MainActivityContractMVP;
 import com.example.berka.advokatormlite.model.Radnja;
 import com.example.berka.advokatormlite.model.Slucaj;
+import com.example.berka.advokatormlite.model.StrankaDetail;
 import com.example.berka.advokatormlite.model.Tarifa;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
-
-import static com.example.berka.advokatormlite.activities.main.MainActivity.TAG;
 
 /**
  * Created by berka on 12-Mar-18.
@@ -42,27 +38,27 @@ public class PronadjeniPresenter implements PronadjeniContractMVP.Presenter {
     public void loadExpandableListViewData(Slucaj slucaj) {
         HashMap<Tarifa, List<Radnja>> listHashMap = null;
         List<Tarifa> listViewHeaders;
-            if (!slucaj.equals(null)) {
-                if (slucaj.getPostupak().getNazivpostupka().equals("Krivicni postupak")) {
-                    listViewHeaders = model.getHeadersKrivica(slucaj.getPostupak());
-                    if (!listViewHeaders.isEmpty()) {
-                        listHashMap = model.getHashMapKrivica(listViewHeaders);
-                    }
-                } else {
-                    listViewHeaders = model.getHeadersNonKrivica(slucaj.getPostupak());
-
-                    if (!listViewHeaders.isEmpty()) {
-                        listHashMap = model.getHashMapNonKrivica(listViewHeaders, slucaj.getPostupak());
-                    }
+        if (!slucaj.equals(null)) {
+            if (slucaj.getPostupak().getNazivpostupka().equals("Krivicni postupak")) {
+                listViewHeaders = model.getHeadersKrivica(slucaj.getPostupak());
+                if (!listViewHeaders.isEmpty()) {
+                    listHashMap = model.getHashMapKrivica(listViewHeaders);
                 }
-
-                if (!listHashMap.isEmpty()) {
-                    view.populateExpandableListView(listViewHeaders, listHashMap);
-                }
-
             } else {
-                view.showSomeError();
+                listViewHeaders = model.getHeadersNonKrivica(slucaj.getPostupak());
+
+                if (!listViewHeaders.isEmpty()) {
+                    listHashMap = model.getHashMapNonKrivica(listViewHeaders, slucaj.getPostupak());
+                }
             }
+
+            if (!listHashMap.isEmpty()) {
+                view.populateExpandableListView(listViewHeaders, listHashMap);
+            }
+
+        } else {
+            view.showSomeError();
+        }
     }
 
     @Override
@@ -92,7 +88,7 @@ public class PronadjeniPresenter implements PronadjeniContractMVP.Presenter {
                 case 4:
                     //metoda koja racuna pravu vrednost plus broj sati ima sifru 4
                     privremenaCena = wholePlusHours(slucaj);
-                    view.dialogFixValuePlusHours(privremenaCena);
+                    view.dialogFixValuePlusHours(privremenaCena, radnja.getNaziv_radnje());
                     break;
                 default:
             }
@@ -100,7 +96,7 @@ public class PronadjeniPresenter implements PronadjeniContractMVP.Presenter {
     }
 
     @Override
-    public void buttonclicked(){
+    public void buttonclicked() {
         view.showSomeError();
     }
 
@@ -115,6 +111,40 @@ public class PronadjeniPresenter implements PronadjeniContractMVP.Presenter {
             view.cantAddRadnjaShowMessage();
         }
     }
+
+    @Override
+    public void loadAllParties(Slucaj slucaj) {
+
+        List<StrankaDetail> sveStrankeSlucaja = null;
+        if (slucaj != null) {
+            sveStrankeSlucaja = model.getAllPartiesOfCase(slucaj);
+        }
+        if (view != null) {
+            view.showPartiesInDialog(sveStrankeSlucaja);
+        }
+    }
+
+    @Override
+    public void loadAllPartiesForChange(Slucaj slucaj) {
+
+        List<StrankaDetail> sveStrankeSlucaja = null;
+        if (slucaj != null) {
+            sveStrankeSlucaja = model.getAllPartiesOfCase(slucaj);
+        }
+
+        if (view != null) {
+            view.showEditPartiesDialog(sveStrankeSlucaja);
+        }
+    }
+
+    @Override
+    public void editParties(List<StrankaDetail> sveStrankeSlucaja) {
+
+        for (int i = 0; i < sveStrankeSlucaja.size(); i++) {
+            model.setStrankaDetail(sveStrankeSlucaja.get(i));
+        }
+    }
+
 
     private double wholeValue(Slucaj slucaj) {
         double cena = Double.valueOf(slucaj.getTabelaBodova().getBodovi());

@@ -3,6 +3,7 @@ package com.example.berka.advokatormlite.activities.add_points;
 import com.example.berka.advokatormlite.model.Postupak;
 import com.example.berka.advokatormlite.model.Radnja;
 import com.example.berka.advokatormlite.model.Slucaj;
+import com.example.berka.advokatormlite.model.StrankaDetail;
 import com.example.berka.advokatormlite.model.Tarifa;
 
 import java.util.HashMap;
@@ -23,4 +24,8 @@ public interface PronadjeniRepository {
     List<Tarifa> queryForNonKrivicaHeaders(Postupak postupak);
 
     HashMap<Tarifa, List<Radnja>> queryForNonKrivicaHashMap(List<Tarifa> headers, Postupak postupak);
+
+    List<StrankaDetail> loadForAllPartiesForThisCase(Slucaj slucaj);
+
+    void updateStranka(StrankaDetail strankaDetail);
 }

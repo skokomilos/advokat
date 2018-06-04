@@ -1,11 +1,14 @@
 package com.example.berka.advokatormlite.activities.add_points;
 
+import android.util.Log;
+
 import com.example.berka.advokatormlite.data.db.DatabaseHelper;
 import com.example.berka.advokatormlite.model.IzracunatTrosakRadnje;
 import com.example.berka.advokatormlite.model.Postupak;
 import com.example.berka.advokatormlite.model.PostupakTarifaJoin;
 import com.example.berka.advokatormlite.model.Radnja;
 import com.example.berka.advokatormlite.model.Slucaj;
+import com.example.berka.advokatormlite.model.StrankaDetail;
 import com.example.berka.advokatormlite.model.Tarifa;
 import com.j256.ormlite.stmt.PreparedQuery;
 import com.j256.ormlite.stmt.QueryBuilder;
@@ -42,6 +45,7 @@ public class PronadjeniDatabaseRespository implements PronadjeniRepository {
         izracunatTrosakRadnje.setNaziv_radnje(naziv_radnje);
         izracunatTrosakRadnje.setSlucaj(slucaj);
 
+        Log.d("PronadjeniDatabaseRespository", "insertRadnja: " + cenaRadnje);
         try {
             databaseHelper.getmIzracunatTrosakRadnjeDao().create(izracunatTrosakRadnje);
         } catch (SQLException e) {
@@ -103,6 +107,31 @@ public class PronadjeniDatabaseRespository implements PronadjeniRepository {
         }
 
         return null;
+    }
+
+    @Override
+    public List<StrankaDetail> loadForAllPartiesForThisCase(Slucaj slucaj) {
+        List<StrankaDetail> lista = null;
+        try {
+             lista = databaseHelper.getmStrankaDetail().queryBuilder()
+                    .where()
+                    .eq(StrankaDetail.ID_SLUCAJA, slucaj.getId())
+                    .query();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        
+        return lista;
+    }
+
+    @Override
+    public void updateStranka(StrankaDetail strankaDetail) {
+
+        try {
+            databaseHelper.getmStrankaDetail().update(strankaDetail);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     private String getNowDate(){

@@ -1,6 +1,7 @@
 package com.example.berka.advokatormlite.activities.add_case.views_fragments;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -14,8 +15,11 @@ import android.widget.GridLayout;
 import android.widget.Toast;
 
 import com.example.berka.advokatormlite.R;
+import com.example.berka.advokatormlite.activities.add_case.AddSlucaj;
 import com.example.berka.advokatormlite.activities.add_case.mvp_contracts.BottomFragmentContract;
 import com.example.berka.advokatormlite.activities.add_case.presenters.BottomFragmentPresenter;
+import com.example.berka.advokatormlite.activities.add_points.PronadjeniSlucajActivity1;
+import com.example.berka.advokatormlite.activities.main.MainActivity;
 import com.example.berka.advokatormlite.adapter.StrankaDynamicViews;
 import com.example.berka.advokatormlite.dependencyinjection.App;
 import com.example.berka.advokatormlite.model.Postupak;
@@ -32,6 +36,7 @@ import javax.inject.Singleton;
 public class FragmentForDynamicEditText extends Fragment implements BottomFragmentContract.View{
 
     private static final String TAG = "FragmentForDynamic";
+    private static final String FROM = "add_case_activity";
 
     @Singleton
     @Inject
@@ -105,6 +110,11 @@ public class FragmentForDynamicEditText extends Fragment implements BottomFragme
 
     @Override
     public void goToPronadjeniSlucajActivity() {
+
+        Log.d(TAG, "gotoFoundCaseFromFindCaseDialog: :))" + slucaj1.getBroj_stranaka());
+        Intent i = new Intent(getActivity().getBaseContext(), PronadjeniSlucajActivity1.class);
+        i.putExtra("moj_slucaj", slucaj1);
+        startActivity(i);
 
         // TODO: 10-May-18 OVO USKORO ODRADITI
         //ime ovoga metod promeniti u nesto jasnije, ovde kreiram intent i odazim na aktivity sa prosirivom listview.

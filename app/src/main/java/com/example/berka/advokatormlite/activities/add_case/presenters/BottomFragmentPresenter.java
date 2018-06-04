@@ -53,6 +53,7 @@ public class BottomFragmentPresenter implements BottomFragmentContract.Presenter
 
         Log.d(TAG, "saveCaseDataAndClientsData: ovo je krajnja destinacija ovde kreiram slucaj i dodajem klijente" + slucaj.getBroj_slucaja());
 
+        //todo ovde verovatno treba asinhrono ubacivanje ubazu a zatum ubaciti durgi deo
         model.saveSlucaj(slucaj);
 
         if(slucaj != null){
