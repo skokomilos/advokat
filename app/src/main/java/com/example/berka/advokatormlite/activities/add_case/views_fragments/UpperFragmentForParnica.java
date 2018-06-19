@@ -15,6 +15,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.example.berka.advokatormlite.R;
 import com.example.berka.advokatormlite.activities.add_case.OnAddCaseButtonClicked;
@@ -107,8 +108,15 @@ public class UpperFragmentForParnica  extends BaseFragment implements ParnicaCon
     @Override
     public void AddSlucaj() {
 
-        Slucaj slucaj = parnicaPresenter.saveCaseButtonClicked(Integer.parseInt(et_sifra_slucaja.getText().toString()), postupak,(TabelaBodova) spinnerTabelaBodova.getSelectedItem(), broj_stranaka);
-        onAddCaseButtonClicked.setCase(slucaj);
+        if(et_sifra_slucaja.getText().toString().trim().equals("")){
+            Toast.makeText(getContext(), "Morate uneti sifru slucaja", Toast.LENGTH_SHORT).show();
+        }else {
+            onAddCaseButtonClicked.setCase(parnicaPresenter.saveCaseButtonClicked(
+                    Integer.parseInt(et_sifra_slucaja.getText().toString()),
+                    postupak,
+                    (TabelaBodova) spinnerTabelaBodova.getSelectedItem(),
+                    broj_stranaka));
+        }
     }
 
     @Override

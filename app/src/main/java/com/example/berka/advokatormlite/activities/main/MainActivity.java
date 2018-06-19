@@ -24,6 +24,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.PopupMenu;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -334,10 +335,9 @@ public class MainActivity extends BaseActivity implements MainActivityContractMV
     }
 
     @Override
-    public void gotoFoundCaseFromFindCaseDialog(Slucaj slucaj) {
+    public void gotoFoundCase(Slucaj slucaj) {
         Log.d(TAG, "gotoFoundCaseFromFindCaseDialog: " + slucaj.getBroj_stranaka());
         Intent intent = new Intent(MainActivity.this, PronadjeniSlucajActivity1.class);
-        //intent.putExtra(FROM, "moj_slucaj");
         intent.putExtra("moj_slucaj", slucaj);
         startActivity(intent);
     }
@@ -408,6 +408,9 @@ public class MainActivity extends BaseActivity implements MainActivityContractMV
 
         View mView = getLayoutInflater().inflate(R.layout.dialog_all_cases, null);
         ListView listView = mView.findViewById(R.id.lista_svih_slucajeva);
+        mBuilder.setView(mView);
+        AlertDialog dialog = mBuilder.create();
+        dialog.show();
 
         MyAdapterSviSlucajevi slucajeviAdapter = new MyAdapterSviSlucajevi(this, slucajevi, izracunateTarife);
         listView.setAdapter(slucajeviAdapter);
@@ -415,37 +418,28 @@ public class MainActivity extends BaseActivity implements MainActivityContractMV
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                //presenter.caseItemClicked((Slucaj)listView.getItemAtPosition(position));
-
-                listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        Slucaj slucaj = (Slucaj) listView.getItemAtPosition(position);
-                        gotoFoundCaseFromAllCasesDialog(slucaj);
-
-                    }
-                });
-
-                mBuilder.setNegativeButton("Izadji", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        dialogInterface.dismiss();
-                    }
-                });
+                Slucaj slucaj = (Slucaj) listView.getItemAtPosition(position);
+                Log.d(TAG, "onItemClick: " + slucaj.getPostupak());
+                gotoFoundCase(slucaj);
+                dialog.dismiss();
             }
         });
-        mBuilder.setView(mView);
-        AlertDialog dialog = mBuilder.create();
-        dialog.show();
+
+        mBuilder.setNegativeButton("Izadji", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.dismiss();
+            }
+        });
     }
 
     @Override
     public void displayNoPostupci() {
-        Toast.makeText(this, "E druze ovde nema nikakvih postupaka", Toast.LENGTH_LONG).show();
+        Toast.makeText(this, "Nema slucaja sa ovom sifrom", Toast.LENGTH_LONG).show();
     }
 
     @Override
-    public void startIntentKrivica(Postupak postupak, int broj_stranaka) {
+    public void startIntentAddCase(Postupak postupak, int broj_stranaka) {
 //        Intent intent = new Intent(MainActivity.this, AddSlucaj.class);
 //        Log.d(TAG, "postupak koji saljem: " + postupak);
 //        intent.putExtra(POSTUPAK_KEY, postupak);
@@ -461,27 +455,10 @@ public class MainActivity extends BaseActivity implements MainActivityContractMV
     }
 
     @Override
-    public void startIntentPrekrsaj(int postupakId, int broj_stranaka) {
-        Intent intent = new Intent(MainActivity.this, AddPrekrsajniActivity.class);
-        intent.putExtra(POSTUPAK_KEY, postupakId);
-        intent.putExtra(BROJ_STRANAKA, broj_stranaka);
-        startActivity(intent);
-    }
-
-    @Override
     public void startIntentIsprave(int postupakId, int broj_stranaka) {
         Intent intent = new Intent(MainActivity.this, AddUstavniActivity.class);
         intent.putExtra(POSTUPAK_KEY, postupakId);
         intent.putExtra(BROJ_STRANAKA, broj_stranaka);
-        startActivity(intent);
-    }
-
-    @Override
-    public void startIntentOstaleKojeImajuProcenjivoNeprocenjivo(Postupak postupak, int broj_stranaka) {
-        Intent intent = new Intent(MainActivity.this, AddSlucaj.class);
-        intent.putExtra(FROM, "myDataKey");
-        intent.putExtra("myDataKey", postupak);
-        intent.putExtra("numberOfParties", broj_stranaka);
         startActivity(intent);
     }
 

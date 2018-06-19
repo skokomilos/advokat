@@ -90,4 +90,9 @@ public class ParnicaPresenter implements ParnicaContract.Presenter{
 
         view = null;
     }
+
+    @Override
+    public Slucaj saveCaseButtonClicked(int broj_slucaja, Postupak postupak, TabelaBodova selectedItem, int valueOkrivljenOstecen, int broj_stranaka) {
+        return null;
+    }
 }

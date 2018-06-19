@@ -26,19 +26,15 @@ public interface ParnicaContract {
 //        void loadSpinner(List<TabelaBodova> tabelaBodova);
     }
 
-    interface Presenter{
+    interface Presenter extends BaseContract.Presenter<View>{
 
         void getVrsteParnica_ProcenjivoNeprocenjivo(Postupak postupak);
 
-        Slucaj saveCaseButtonClicked(int broj_slucaja, Postupak postupak, TabelaBodova selectedItem, int broj_stranaka);
-
         void getVrednostiTabeleBodovaZaOvajPostupak(VrsteParnica vrsteParnica, Postupak postupak);
 
-        void setView(ParnicaContract.View view);
+        Slucaj saveCaseButtonClicked(int broj_slucaja, Postupak postupak, TabelaBodova selectedItem, int broj_stranaka);
 
         void welcomeMessage();
-
-        void detachView();
     }
 
     interface Model{

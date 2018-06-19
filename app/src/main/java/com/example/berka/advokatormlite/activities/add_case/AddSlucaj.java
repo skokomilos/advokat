@@ -35,7 +35,7 @@ import butterknife.ButterKnife;
  * Created by berka on 19-Oct-17.
  */
 
-public class AddSlucaj extends AppCompatActivity implements AddSlucajMVP.View, OnAddCaseButtonClicked{
+public class AddSlucaj extends AppCompatActivity implements OnAddCaseButtonClicked{
 
     private static final String TAG = "AddSlucaj";
     private static final String POSTUPAK_STATE = "postupak_state";
@@ -46,9 +46,6 @@ public class AddSlucaj extends AppCompatActivity implements AddSlucajMVP.View, O
 
     public static final String FROM = "from";
     public static final String CASE_ID = "case_id";
-
-    @Inject
-    AddSlucajMVP.Presenter mPresenter;
 
     private Postupak postupak;
     private int broj_stranaka;
@@ -62,8 +59,6 @@ public class AddSlucaj extends AppCompatActivity implements AddSlucajMVP.View, O
 
         ButterKnife.bind(AddSlucaj.this);
         strankaDynamicViews = new StrankaDynamicViews(this);
-
-        ((App) getApplication()).getComponent().inject(this);
 
         if(findViewById(R.id.upper_fragment_container) != null && findViewById(R.id.dymanic_fragment_container) != null){
 
@@ -130,12 +125,6 @@ public class AddSlucaj extends AppCompatActivity implements AddSlucajMVP.View, O
                     startActivity(i);
                 }).create().show();
 
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        mPresenter.setView(this);
     }
 
     private void createUpperFragment(Fragment fragment, Postupak postupak, int broj_stranaka) {

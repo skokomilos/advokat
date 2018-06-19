@@ -42,18 +42,23 @@ public class MainActivityDatabaseHelperRepository implements MainActivityResposi
 
     @Override
     public Slucaj findCaseById(String slucajId) {
-            List<Slucaj> slucajevi = null;
-            QueryBuilder<Slucaj, Integer> qb = null;
+            List<Slucaj> slucajevi = new ArrayList<>();
+            QueryBuilder<Slucaj, Integer> qb;
             try {
                 qb = databaseHelper.getSlucajDao().queryBuilder();
                 qb.where().eq(Slucaj.BROJ_SLUCAJA, Integer.parseInt(slucajId));
-                slucajevi = qb.query();
-                Log.d(TAG, "findCaseById: " + slucajevi.get(0).getPostupak());
-                return slucajevi.get(0);
+                if(qb.queryForFirst() == null){
+                    Log.d(TAG, "findCaseById: SLUCAJ NE POSTOJI SA OVOM SIFROM");
+                    return null;
+                }else {
+                    slucajevi = qb.query();
+                    return slucajevi.get(0);
+                }
             } catch (SQLException e) {
                 e.printStackTrace();
             }
-            return slucajevi.get(0);
+        Log.d(TAG, "findCaseById: da li je ovo ispisuje");
+            return null;
     }
 
     @Override

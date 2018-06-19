@@ -18,6 +18,7 @@ import java.util.List;
 
 public class PronadjeniModel implements PronadjeniContractMVP.Model {
 
+    private static final String TAG = "PronadjeniModel";
     PronadjeniRepository repository;
 
     public PronadjeniModel(PronadjeniRepository repository) {
@@ -26,7 +27,6 @@ public class PronadjeniModel implements PronadjeniContractMVP.Model {
 
     @Override
     public HashMap<Tarifa, List<Radnja>> getHashMapKrivica(List<Tarifa> listViewHeaders) {
-
 
         HashMap<Tarifa, List<Radnja>> listHashMap = new HashMap<>();
         List<Radnja> listaRadnji;

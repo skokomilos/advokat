@@ -29,6 +29,7 @@ import javax.inject.Inject;
 
 public class PronadjeniDatabaseRespository implements PronadjeniRepository {
 
+    private static final String TAG = "PronadjeniDataba";
     @Inject
     DatabaseHelper databaseHelper;
 
@@ -45,7 +46,9 @@ public class PronadjeniDatabaseRespository implements PronadjeniRepository {
         izracunatTrosakRadnje.setNaziv_radnje(naziv_radnje);
         izracunatTrosakRadnje.setSlucaj(slucaj);
 
-        Log.d("PronadjeniDatabaseRespository", "insertRadnja: " + cenaRadnje);
+        Log.d("PronadjeniDatabase", "insertRadnja: " + izracunatTrosakRadnje.getDatum());
+        Log.d("PronadjeniDatabase", "insertRadnja: " + izracunatTrosakRadnje.getNaziv_radnje());
+        Log.d("PronadjeniDatabase", "insertRadnja: " + izracunatTrosakRadnje.getCena_izracunate_jedinstvene_radnje());
         try {
             databaseHelper.getmIzracunatTrosakRadnjeDao().create(izracunatTrosakRadnje);
         } catch (SQLException e) {
@@ -89,7 +92,7 @@ public class PronadjeniDatabaseRespository implements PronadjeniRepository {
 
     @Override
     public HashMap<Tarifa, List<Radnja>> queryForNonKrivicaHashMap(List<Tarifa> headers, Postupak postupak) {
-        HashMap<Tarifa, List<Radnja>> listHashMap = null;
+        HashMap<Tarifa, List<Radnja>> listHashMap = new HashMap<>();
         List<Radnja> radnje = new ArrayList<>();
 
         for (int i = 0; i < headers.size(); i++) {
@@ -103,14 +106,16 @@ public class PronadjeniDatabaseRespository implements PronadjeniRepository {
             } catch (SQLException e) {
                 e.printStackTrace();
             }
+            Log.d(TAG, "queryForNonKrivicaHashMap: SUSTINA " + headers.get(i).getNaslov_tarife()  + " " + radnje.size());
             listHashMap.put(headers.get(i), radnje);
         }
 
-        return null;
+        return listHashMap;
     }
 
     @Override
     public List<StrankaDetail> loadForAllPartiesForThisCase(Slucaj slucaj) {
+
         List<StrankaDetail> lista = null;
         try {
              lista = databaseHelper.getmStrankaDetail().queryBuilder()
@@ -120,7 +125,7 @@ public class PronadjeniDatabaseRespository implements PronadjeniRepository {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        
+
         return lista;
     }
 

@@ -26,7 +26,7 @@ public interface MainActivityContractMVP {
 
            void caseNotFound();
 
-           void gotoFoundCaseFromFindCaseDialog(Slucaj slucaj);
+           void gotoFoundCase(Slucaj slucaj);
 
            void gotoFoundCaseFromAllCasesDialog(Slucaj slucaj);
 
@@ -41,14 +41,9 @@ public interface MainActivityContractMVP {
            //ovo bas i nije bitno, mozda neki metod koji je univerzalan za greske
            void displayNoPostupci();
 
-           void startIntentKrivica(Postupak postupak, int broj_stranaka);
-
-           void startIntentPrekrsaj(int postupakId, int broj_stranaka);
+           void startIntentAddCase(Postupak postupak, int broj_stranaka);
 
            void startIntentIsprave(int postupakId, int broj_stranaka);
-
-           void startIntentOstaleKojeImajuProcenjivoNeprocenjivo(Postupak postupak, int broj_stranaka);
-
 
            void showCaseSavedMessage();
            void pleaseEnterNumber();

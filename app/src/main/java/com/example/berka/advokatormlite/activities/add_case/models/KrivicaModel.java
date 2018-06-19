@@ -23,21 +23,6 @@ public class KrivicaModel implements KrivicaContract.Model{
     }
 
     @Override
-    public List<TabelaBodova> zaprecenjeKazneZaKrivicu(Postupak postupak) {
-        return null;
-    }
-
-    @Override
-    public Slucaj saveSlucaj(Slucaj slucaj) {
-        return null;
-    }
-
-    @Override
-    public void saveStrankaDetails(StrankaDetail strankaDetail) {
-
-    }
-
-    @Override
     public List<TabelaBodova> getZapreceneKazne(Postupak postupak) {
 
         return repository.queryForAllTabelaBodova(postupak);

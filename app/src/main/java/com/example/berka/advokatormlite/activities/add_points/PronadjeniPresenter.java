@@ -1,6 +1,7 @@
 package com.example.berka.advokatormlite.activities.add_points;
 
 import android.support.annotation.Nullable;
+import android.util.Log;
 
 import com.example.berka.advokatormlite.model.Radnja;
 import com.example.berka.advokatormlite.model.Slucaj;
@@ -18,6 +19,7 @@ import java.util.List;
 
 public class PronadjeniPresenter implements PronadjeniContractMVP.Presenter {
 
+    private static final String TAG = "PronadjeniPresenter";
     @Nullable
     private PronadjeniContractMVP.View view;
     private PronadjeniContractMVP.Model model;
@@ -46,13 +48,16 @@ public class PronadjeniPresenter implements PronadjeniContractMVP.Presenter {
                 }
             } else {
                 listViewHeaders = model.getHeadersNonKrivica(slucaj.getPostupak());
+                Log.d(TAG, "Parnica je ili  nesto drugo" + listViewHeaders.get(0).getNaslov_tarife());
 
                 if (!listViewHeaders.isEmpty()) {
+                    Log.d(TAG, "loadExpandableListViewData:" + listViewHeaders.size() + " " + slucaj.getBroj_slucaja());
                     listHashMap = model.getHashMapNonKrivica(listViewHeaders, slucaj.getPostupak());
                 }
             }
 
             if (!listHashMap.isEmpty()) {
+                Log.d(TAG, "loadExpandableListViewData: HASH nije prejzan  ");
                 view.populateExpandableListView(listViewHeaders, listHashMap);
             }
 

@@ -1,18 +1,12 @@
 package com.example.berka.advokatormlite.activities.add_case.presenters;
 
 import android.support.annotation.Nullable;
-import android.support.design.widget.TabLayout;
 import android.util.Log;
-import android.widget.Toast;
 
+import com.example.berka.advokatormlite.activities.add_case.OnAddCaseButtonClicked;
 import com.example.berka.advokatormlite.activities.add_case.mvp_contracts.KrivicaContract;
-import com.example.berka.advokatormlite.activities.add_case.views_fragments.UpperFragmentForKrivica;
-import com.example.berka.advokatormlite.activities.add_case.views_fragments.UpperFragmentForParnica;
-import com.example.berka.advokatormlite.activities.add_case.views_fragments.UpperFragmentPrekrsaj;
-import com.example.berka.advokatormlite.activities.add_case.views_fragments.UpperFragmentUstavniSud;
 import com.example.berka.advokatormlite.model.Postupak;
 import com.example.berka.advokatormlite.model.Slucaj;
-import com.example.berka.advokatormlite.model.StrankaDetail;
 import com.example.berka.advokatormlite.model.TabelaBodova;
 
 import java.util.List;
@@ -38,18 +32,6 @@ public class KrivicaPresenter implements KrivicaContract.Presenter{
     }
 
     @Override
-    public void getZapreceneKazne(Postupak postupak) {
-
-        List<TabelaBodova> zapreceneKazne;
-        if(!postupak.equals(null)){
-            zapreceneKazne = model.getZapreceneKazne(postupak);
-            Log.d(TAG, "getZapreceneKazne: " + zapreceneKazne.get(0).getTarifni_uslov());
-            view.loadSpinner(zapreceneKazne);
-        }
-
-    }
-
-    @Override
     public int radioButtonCurrentValue(String radiovalue) {
         return 0;
     }
@@ -68,15 +50,21 @@ public class KrivicaPresenter implements KrivicaContract.Presenter{
     }
 
     @Override
+    public void getVrednostiTabeleBodova(Postupak postupak) {
+
+        List<TabelaBodova> zapreceneKazne;
+        if(!postupak.equals(null)){
+            zapreceneKazne = model.getZapreceneKazne(postupak);
+            Log.d(TAG, "getZapreceneKazne: " + zapreceneKazne.get(0).getTarifni_uslov());
+            view.loadSpinnerTabelaBodova(zapreceneKazne);
+        }
+    }
+
+    @Override
     public void detachView() {
 
         view = null;
     }
 
-    @Override
-    public void presenterWelcomeMessage() {
-
-        view.emptyCasePasswordWarning();
-    }
 
 }

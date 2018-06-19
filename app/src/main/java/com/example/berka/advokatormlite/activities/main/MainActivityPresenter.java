@@ -1,6 +1,7 @@
 package com.example.berka.advokatormlite.activities.main;
 
 import android.support.annotation.Nullable;
+import android.util.Log;
 
 import com.example.berka.advokatormlite.activities.add_case.views_fragments.UpperFragmentForKrivica;
 import com.example.berka.advokatormlite.activities.add_case.views_fragments.UpperFragmentForParnica;
@@ -20,6 +21,7 @@ import java.util.ListIterator;
 
 public class MainActivityPresenter implements MainActivityContractMVP.Presenter{
 
+    private static final String TAG = "MainActivityPresenter";
     @Nullable
     private MainActivityContractMVP.View view;
     private MainActivityContractMVP.Model model;
@@ -50,15 +52,18 @@ public class MainActivityPresenter implements MainActivityContractMVP.Presenter{
     @Override
     public void findCaseButtonClicked(String slucajid) {
 
+        Slucaj slucaj;
+
         if(view != null){
             if(slucajid.equals("")){
                 view.showNoValuesTypedError();
             }else {
-                Slucaj slucaj = model.getSlucaj(slucajid);
-                if(slucaj.equals(null)){
+                slucaj = model.getSlucaj(slucajid);
+
+                if(slucaj==null){
                     view.displayNoPostupci();
                 }else {
-                    view.gotoFoundCaseFromFindCaseDialog(slucaj);
+                    view.gotoFoundCase(slucaj);
                 }
             }
         }
@@ -71,24 +76,7 @@ public class MainActivityPresenter implements MainActivityContractMVP.Presenter{
             if(broj_stranaka.trim().equals("")|| postupak.equals(null)){
                 view.enterNumberOfClients();
             }else {
-                switch (postupak.getId()) {
-                    case 2:
-                        //add krivica
-                        view.startIntentKrivica(postupak, Integer.valueOf(broj_stranaka));
-                        break;
-                    case 4:
-                        //add prekrsajni postupak
-                        view.startIntentPrekrsaj(Integer.valueOf(broj_stranaka), postupak.getId());
-                        break;
-                    case 13:
-                        //add isprave
-                        view.startIntentIsprave(Integer.valueOf(broj_stranaka), postupak.getId());
-                        break;
-                    default:
-                        //add sve ostale koji imaju procenjene i neprocenjene predmete
-                        view.startIntentOstaleKojeImajuProcenjivoNeprocenjivo(postupak, Integer.valueOf(broj_stranaka));
-                        break;
-                }
+                view.startIntentAddCase(postupak, Integer.valueOf(broj_stranaka));
             }
         }
     }

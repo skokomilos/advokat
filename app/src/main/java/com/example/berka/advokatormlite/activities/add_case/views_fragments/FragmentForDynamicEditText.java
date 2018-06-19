@@ -15,16 +15,11 @@ import android.widget.GridLayout;
 import android.widget.Toast;
 
 import com.example.berka.advokatormlite.R;
-import com.example.berka.advokatormlite.activities.add_case.AddSlucaj;
 import com.example.berka.advokatormlite.activities.add_case.mvp_contracts.BottomFragmentContract;
-import com.example.berka.advokatormlite.activities.add_case.presenters.BottomFragmentPresenter;
 import com.example.berka.advokatormlite.activities.add_points.PronadjeniSlucajActivity1;
-import com.example.berka.advokatormlite.activities.main.MainActivity;
 import com.example.berka.advokatormlite.adapter.StrankaDynamicViews;
 import com.example.berka.advokatormlite.dependencyinjection.App;
-import com.example.berka.advokatormlite.model.Postupak;
 import com.example.berka.advokatormlite.model.Slucaj;
-import com.example.berka.advokatormlite.model.TabelaBodova;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -56,6 +51,13 @@ public class FragmentForDynamicEditText extends Fragment implements BottomFragme
 
     public void updateFromMain(String s){
         Log.d(TAG, "updateFromMain: " + s);
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+
+        Log.d(TAG, "onAttach: ATACOVAN JE");
     }
 
     @Nullable
@@ -90,8 +92,6 @@ public class FragmentForDynamicEditText extends Fragment implements BottomFragme
         super.onResume();
 
         presenter.setView(this);
-        presenter.tjestMetod("tjestiramo");
-
     }
 
     @Override
@@ -111,7 +111,7 @@ public class FragmentForDynamicEditText extends Fragment implements BottomFragme
     @Override
     public void goToPronadjeniSlucajActivity() {
 
-        Log.d(TAG, "gotoFoundCaseFromFindCaseDialog: :))" + slucaj1.getBroj_stranaka());
+        Log.d(TAG, "gotoFoundCaseFromFindCaseDialog: :))" + slucaj1.getBroj_slucaja());
         Intent i = new Intent(getActivity().getBaseContext(), PronadjeniSlucajActivity1.class);
         i.putExtra("moj_slucaj", slucaj1);
         startActivity(i);
@@ -168,8 +168,35 @@ public class FragmentForDynamicEditText extends Fragment implements BottomFragme
     }
 
     @Override
-    public void errorMessage() {
+    public void errorMessage(String string) {
         
-        Toast.makeText(getContext(), "Doslo je do greske", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getContext(), string, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onShowToast(String msg) {
+
+        showToast(msg);
+    }
+
+
+    @Override
+    public FragmentForDynamicEditText getActivityContext() {
+        return this;
+    }
+
+    /**
+     * Shows a toast in the Activity with a short time
+     * @param msg   Message to show
+     */
+    protected void showToast(String msg) {
+        Toast.makeText(
+                getContext(), msg, Toast.LENGTH_SHORT
+        ).show();
+    }
+
+    @Override
+    public boolean isActive() {
+        return isAdded();
     }
 }

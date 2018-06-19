@@ -2,10 +2,10 @@ package com.example.berka.advokatormlite.dependencyinjection;
 
 import android.app.Application;
 
-import com.example.berka.advokatormlite.activities.add_case.AddSlucajModule;
 import com.example.berka.advokatormlite.activities.add_case.modules.BottomFragmentModule;
 import com.example.berka.advokatormlite.activities.add_case.modules.KrivicaModule;
 import com.example.berka.advokatormlite.activities.add_case.modules.ParnicaModule;
+import com.example.berka.advokatormlite.activities.add_case.modules.PrekrsajModule;
 import com.example.berka.advokatormlite.activities.add_points.PronadjeniModule;
 import com.example.berka.advokatormlite.activities.main.DatabaseModule;
 
@@ -32,6 +32,7 @@ public class App extends Application {
                 .bottomFragmentModule(new BottomFragmentModule())
                 .krivicaModule(new KrivicaModule())
                 .parnicaModule(new ParnicaModule())
+                .prekrsajModule(new PrekrsajModule())
                 .build();
     }
 

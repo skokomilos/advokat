@@ -180,6 +180,7 @@ public class PronadjeniSlucajActivity1 extends BaseActivity implements Pronadjen
     @Override
     public void showEditPartiesDialog(List<StrankaDetail> sveStrankeSlucaja) {
 
+        Log.d(TAG, "showEditPartiesDialog: " + sveStrankeSlucaja.get(0).getIme_i_prezime());
         AlertDialog.Builder mBuilder = new AlertDialog.Builder(PronadjeniSlucajActivity1.this);
         View mView = getLayoutInflater().inflate(R.layout.dialog_add_edit_stranke, null);
         mBuilder.setTitle("Dodaj ili izmeni vec postojece podatke o strankama");

@@ -1,12 +1,16 @@
 package com.example.berka.advokatormlite.activities.add_case.mvp_contracts;
 
+import android.content.Context;
 import android.os.Bundle;
 
+import com.example.berka.advokatormlite.activities.add_case.presenters.BasePresenter;
 import com.example.berka.advokatormlite.activities.add_case.views_fragments.FragmentForDynamicEditText;
 import com.example.berka.advokatormlite.model.Postupak;
 import com.example.berka.advokatormlite.model.Slucaj;
 import com.example.berka.advokatormlite.model.StrankaDetail;
 import com.example.berka.advokatormlite.model.TabelaBodova;
+
+import java.sql.SQLException;
 
 /**
  * Created by berka on 23-Apr-18.
@@ -14,7 +18,7 @@ import com.example.berka.advokatormlite.model.TabelaBodova;
 
 public interface BottomFragmentContract {
 
-    interface View{
+    interface View extends BaseView<Presenter>{
 
         void getCase(Bundle bundle);
 
@@ -32,30 +36,54 @@ public interface BottomFragmentContract {
 
         String getClientPlace(int i);
 
-        void errorMessage();
+        void errorMessage(String string);
 
         void caseAddedToDataBaseMessage();
 
         void goToPronadjeniSlucajActivity();
+
+        boolean isActive();
+
+        void onShowToast(String msg);
+
+        FragmentForDynamicEditText getActivityContext();
+
     }
 
-    interface Presenter{
+    interface Presenter extends BasePresenter<View>{
 
         void addEditTextsForClient(int broj_stranaka);
 
         void saveCaseDataAndClientsData(Slucaj slucaj);
 
+        void loadStatistics();
+
         void setView(BottomFragmentContract.View view);
 
         void detachView();
-
-        void tjestMetod(String cao);
     }
 
     interface Model{
 
-        void saveSlucaj(Slucaj slucaj);
+        boolean saveSlucaj(Slucaj slucaj);
 
         void saveStrankaDetails(StrankaDetail strankaDetail);
+    }
+
+    interface RequiredModelOps {
+
+        void sameCaseNumberError(String string);
+    }
+
+    interface RequiredPresenterOps{
+
+        void sameCaseNumberError(String string);
+    }
+
+    interface requiredViewOps extends ActivityView{
+
+        public void finalDest(String string);
+
+
     }
 }
