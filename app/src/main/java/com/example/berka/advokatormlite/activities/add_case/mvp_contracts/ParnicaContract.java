@@ -1,7 +1,6 @@
 package com.example.berka.advokatormlite.activities.add_case.mvp_contracts;
 
 import com.example.berka.advokatormlite.model.Postupak;
-import com.example.berka.advokatormlite.model.Slucaj;
 import com.example.berka.advokatormlite.model.TabelaBodova;
 import com.example.berka.advokatormlite.model.VrsteParnica;
 
@@ -32,7 +31,7 @@ public interface ParnicaContract {
 
         void getVrednostiTabeleBodovaZaOvajPostupak(VrsteParnica vrsteParnica, Postupak postupak);
 
-        Slucaj saveCaseButtonClicked(int broj_slucaja, Postupak postupak, TabelaBodova selectedItem, int broj_stranaka);
+        //Slucaj saveCaseButtonClicked(int broj_slucaja, Postupak postupak, TabelaBodova selectedItem, int broj_stranaka);
 
         void welcomeMessage();
     }

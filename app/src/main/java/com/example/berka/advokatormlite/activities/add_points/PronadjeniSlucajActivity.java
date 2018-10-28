@@ -93,7 +93,7 @@ public class PronadjeniSlucajActivity extends BaseActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_second);
+        setContentView(R.layout.activity_expandable_listview);
 
         //exlistView = (ExpandableListView) findViewById(R.id.lvExpendable);
         listViewStrankeAddEdit = findViewById(R.id.lista_add_edit_stranke);
@@ -412,7 +412,7 @@ public class PronadjeniSlucajActivity extends BaseActivity {
     private void dialogFixValuePlusHours(final double cena){
 
         final Dialog dialog = new Dialog(this);
-        dialog.setContentView(R.layout.dialog_fix_plus_hours);
+        dialog.setContentView(R.layout.dialog_cancelable_case_plus_hours);
 
         final Button no = dialog.findViewById(R.id.fix_hours_box_btn_no);
 

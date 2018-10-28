@@ -6,6 +6,7 @@ import com.example.berka.advokatormlite.activities.add_case.modules.BottomFragme
 import com.example.berka.advokatormlite.activities.add_case.modules.KrivicaModule;
 import com.example.berka.advokatormlite.activities.add_case.modules.ParnicaModule;
 import com.example.berka.advokatormlite.activities.add_case.modules.PrekrsajModule;
+import com.example.berka.advokatormlite.activities.add_case.modules.UstavniSudModule;
 import com.example.berka.advokatormlite.activities.add_points.PronadjeniModule;
 import com.example.berka.advokatormlite.activities.main.DatabaseModule;
 
@@ -33,6 +34,7 @@ public class App extends Application {
                 .krivicaModule(new KrivicaModule())
                 .parnicaModule(new ParnicaModule())
                 .prekrsajModule(new PrekrsajModule())
+                .ustavniSudModule(new UstavniSudModule())
                 .build();
     }
 

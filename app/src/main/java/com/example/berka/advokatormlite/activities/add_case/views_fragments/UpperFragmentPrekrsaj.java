@@ -4,11 +4,12 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -16,10 +17,8 @@ import android.widget.Toast;
 import com.example.berka.advokatormlite.R;
 import com.example.berka.advokatormlite.activities.add_case.OnAddCaseButtonClicked;
 import com.example.berka.advokatormlite.activities.add_case.mvp_contracts.PrekrsajContract;
-import com.example.berka.advokatormlite.activities.add_case.presenters.PrekrsajPresenter;
 import com.example.berka.advokatormlite.dependencyinjection.App;
 import com.example.berka.advokatormlite.model.Postupak;
-import com.example.berka.advokatormlite.model.Slucaj;
 import com.example.berka.advokatormlite.model.TabelaBodova;
 
 import java.util.List;
@@ -43,6 +42,9 @@ public class UpperFragmentPrekrsaj extends BaseFragment implements PrekrsajContr
 
     @BindView(R.id.tabelaBodovaPrekrsajni)
     Spinner spinner;
+
+    @BindView(R.id.upper_fragment_krivica_btn_dodaj_prekrsajni)
+    Button button;
 
     @Inject
     PrekrsajContract.Presenter presenter;
@@ -104,18 +106,18 @@ public class UpperFragmentPrekrsaj extends BaseFragment implements PrekrsajContr
         Log.d(TAG, "onDestroy: " + " fragment parnica je otkazan");
     }
 
-    @OnClick(R.id.button_add_prekrsajni)
+    @OnClick(R.id.upper_fragment_krivica_btn_dodaj_prekrsajni)
     @Override
     public void addSlucaj() {
 
         if(sifraSlucaja.getText().toString().trim().equals("")){
             Toast.makeText(getContext(), "Morate uneti sifru slucaja", Toast.LENGTH_SHORT).show();
         }else {
+            Log.d(TAG, "Prvi pokusaj");
             onAddCaseButtonClicked.setCase(presenter.saveCaseButtonClicked(
                     Integer.parseInt(sifraSlucaja.getText().toString()),
                     postupak,
                     (TabelaBodova) spinner.getSelectedItem(),
-                    Integer.parseInt(null),
                     broj_stranaka));
         }
     }
@@ -146,7 +148,10 @@ public class UpperFragmentPrekrsaj extends BaseFragment implements PrekrsajContr
     }
 
     @Override
-    public void loadSpinnerTabelaBodova(List<TabelaBodova> tabelaBodova) {
-
+    public void loadSpinnerTabelaBodova(List<TabelaBodova> zapreceneKazne) {
+        ArrayAdapter<TabelaBodova> adapter = new ArrayAdapter<TabelaBodova>(getContext(), android.R.layout.simple_spinner_dropdown_item, zapreceneKazne);
+        spinner.setAdapter(adapter);
     }
+
+
 }

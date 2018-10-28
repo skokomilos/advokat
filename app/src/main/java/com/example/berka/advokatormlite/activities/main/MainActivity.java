@@ -7,14 +7,15 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
-import android.os.Bundle;
 import android.support.v7.widget.CardView;
+import android.support.v7.widget.Toolbar;
 import android.text.InputType;
 import android.util.Log;
 import android.view.Menu;
@@ -23,23 +24,21 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.PopupMenu;
 import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.example.berka.advokatormlite.R;
-import com.example.berka.advokatormlite.activities.add_points.PronadjeniSlucajActivity1;
-import com.example.berka.advokatormlite.activities.add_case.AddSlucaj;
-import com.example.berka.advokatormlite.activities.prekrsaj.AddPrekrsajniActivity;
-import com.example.berka.advokatormlite.activities.ustavni.AddUstavniActivity;
 import com.example.berka.advokatormlite.activities.BaseActivity;
 import com.example.berka.advokatormlite.activities.IspraveActivity;
+import com.example.berka.advokatormlite.activities.add_case.AddSlucaj;
+import com.example.berka.advokatormlite.activities.add_points.PronadjeniSlucajActivity1;
 import com.example.berka.advokatormlite.adapter.MyAdapterSviSlucajevi;
+import com.example.berka.advokatormlite.dependencyinjection.App;
 import com.example.berka.advokatormlite.model.Postupak;
 import com.example.berka.advokatormlite.model.Slucaj;
-import com.example.berka.advokatormlite.dependencyinjection.App;
 
 import java.util.List;
 
@@ -408,7 +407,16 @@ public class MainActivity extends BaseActivity implements MainActivityContractMV
 
         View mView = getLayoutInflater().inflate(R.layout.dialog_all_cases, null);
         ListView listView = mView.findViewById(R.id.lista_svih_slucajeva);
+
+
         mBuilder.setView(mView);
+        mBuilder.setNegativeButton("Izadji", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.dismiss();
+            }
+        });
+
         AlertDialog dialog = mBuilder.create();
         dialog.show();
 
@@ -422,13 +430,6 @@ public class MainActivity extends BaseActivity implements MainActivityContractMV
                 Log.d(TAG, "onItemClick: " + slucaj.getPostupak());
                 gotoFoundCase(slucaj);
                 dialog.dismiss();
-            }
-        });
-
-        mBuilder.setNegativeButton("Izadji", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                dialogInterface.dismiss();
             }
         });
     }
@@ -456,10 +457,10 @@ public class MainActivity extends BaseActivity implements MainActivityContractMV
 
     @Override
     public void startIntentIsprave(int postupakId, int broj_stranaka) {
-        Intent intent = new Intent(MainActivity.this, AddUstavniActivity.class);
-        intent.putExtra(POSTUPAK_KEY, postupakId);
-        intent.putExtra(BROJ_STRANAKA, broj_stranaka);
-        startActivity(intent);
+//        Intent intent = new Intent(MainActivity.this, AddUstavniActivity.class);
+//        intent.putExtra(POSTUPAK_KEY, postupakId);
+//        intent.putExtra(BROJ_STRANAKA, broj_stranaka);
+//        startActivity(intent);
     }
 
     @Override

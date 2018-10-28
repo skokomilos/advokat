@@ -3,7 +3,6 @@ package com.example.berka.advokatormlite.activities.add_case.presenters;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
-import com.example.berka.advokatormlite.activities.add_case.OnAddCaseButtonClicked;
 import com.example.berka.advokatormlite.activities.add_case.mvp_contracts.KrivicaContract;
 import com.example.berka.advokatormlite.model.Postupak;
 import com.example.berka.advokatormlite.model.Slucaj;
@@ -47,6 +46,11 @@ public class KrivicaPresenter implements KrivicaContract.Presenter{
                 slucaj.setBroj_stranaka(broj_stranaka);
                 Log.d(TAG, "saveCaseButtonClicked: " + slucaj.getBroj_slucaja() + " slucaj je u presenteru");
                 return slucaj;
+    }
+
+    @Override
+    public Slucaj saveCaseButtonClicked(int broj_slucaja, Postupak postupak, TabelaBodova selectedItem, int broj_stranaka) {
+        return null;
     }
 
     @Override

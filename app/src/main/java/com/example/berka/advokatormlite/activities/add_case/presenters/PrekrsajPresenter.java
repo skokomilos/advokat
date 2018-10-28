@@ -1,10 +1,8 @@
 package com.example.berka.advokatormlite.activities.add_case.presenters;
 
-import android.support.design.widget.TabLayout;
 import android.util.Log;
 
 import com.example.berka.advokatormlite.activities.add_case.mvp_contracts.PrekrsajContract;
-import com.example.berka.advokatormlite.activities.add_case.views_fragments.UpperFragmentPrekrsaj;
 import com.example.berka.advokatormlite.model.Postupak;
 import com.example.berka.advokatormlite.model.Slucaj;
 import com.example.berka.advokatormlite.model.TabelaBodova;
@@ -17,6 +15,7 @@ import java.util.List;
 
 public class PrekrsajPresenter implements PrekrsajContract.Presenter{
 
+    private static final String TAG = "PrekrsajPresenter";
     PrekrsajContract.View view;
     PrekrsajContract.Model model;
 
@@ -46,13 +45,18 @@ public class PrekrsajPresenter implements PrekrsajContract.Presenter{
 
     @Override
     public Slucaj saveCaseButtonClicked(int broj_slucaja, Postupak postupak, TabelaBodova selectedItem, int valueOkrivljenOstecen, int broj_stranaka) {
+        return null;
+    }
+
+    @Override
+    public Slucaj saveCaseButtonClicked(int broj_slucaja, Postupak postupak, TabelaBodova selectedItem, int broj_stranaka) {
 
         Slucaj slucaj = new Slucaj();
         slucaj.setBroj_slucaja(broj_slucaja);
         slucaj.setPostupak(postupak);
         slucaj.setTabelaBodova(selectedItem);
-        slucaj.setOkrivljen(valueOkrivljenOstecen);
         slucaj.setBroj_stranaka(broj_stranaka);
+        Log.d(TAG, "saveCaseButtonClicked: " + slucaj.getBroj_slucaja() + " slucaj je u presenteru");
         return slucaj;
     }
 

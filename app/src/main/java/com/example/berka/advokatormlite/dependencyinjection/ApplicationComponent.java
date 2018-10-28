@@ -5,10 +5,12 @@ import com.example.berka.advokatormlite.activities.add_case.modules.BottomFragme
 import com.example.berka.advokatormlite.activities.add_case.modules.KrivicaModule;
 import com.example.berka.advokatormlite.activities.add_case.modules.ParnicaModule;
 import com.example.berka.advokatormlite.activities.add_case.modules.PrekrsajModule;
+import com.example.berka.advokatormlite.activities.add_case.modules.UstavniSudModule;
 import com.example.berka.advokatormlite.activities.add_case.views_fragments.FragmentForDynamicEditText;
 import com.example.berka.advokatormlite.activities.add_case.views_fragments.UpperFragmentForKrivica;
 import com.example.berka.advokatormlite.activities.add_case.views_fragments.UpperFragmentForParnica;
 import com.example.berka.advokatormlite.activities.add_case.views_fragments.UpperFragmentPrekrsaj;
+import com.example.berka.advokatormlite.activities.add_case.views_fragments.UpperFragmentUstavniSud;
 import com.example.berka.advokatormlite.activities.add_points.PronadjeniModule;
 import com.example.berka.advokatormlite.activities.add_points.PronadjeniSlucajActivity1;
 import com.example.berka.advokatormlite.activities.main.DatabaseModule;
@@ -29,7 +31,8 @@ import dagger.Component;
         BottomFragmentModule.class,
         KrivicaModule.class,
         ParnicaModule.class,
-        PrekrsajModule.class})
+        PrekrsajModule.class,
+        UstavniSudModule.class})
 public interface ApplicationComponent {
 
     void inject(MainActivity target);
@@ -43,4 +46,6 @@ public interface ApplicationComponent {
     void inject(UpperFragmentForParnica target);
 
     void inject(UpperFragmentPrekrsaj target);
+
+    void inject(UpperFragmentUstavniSud target);
 }

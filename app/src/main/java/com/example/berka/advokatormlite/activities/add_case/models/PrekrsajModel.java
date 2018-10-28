@@ -21,6 +21,6 @@ public class PrekrsajModel implements PrekrsajContract.Model{
 
     @Override
     public List<TabelaBodova> getZapreceneKazne(Postupak postupak) {
-        return null;
+        return repository.queryForAllTabelaBodova(postupak);
     }
 }

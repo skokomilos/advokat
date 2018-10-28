@@ -6,7 +6,6 @@ import com.example.berka.advokatormlite.activities.add_case.repository_interface
 import com.example.berka.advokatormlite.data.db.DatabaseHelper;
 import com.example.berka.advokatormlite.model.Postupak;
 import com.example.berka.advokatormlite.model.Slucaj;
-import com.example.berka.advokatormlite.model.StrankaDetail;
 import com.example.berka.advokatormlite.model.TabelaBodova;
 import com.j256.ormlite.stmt.QueryBuilder;
 
@@ -28,6 +27,7 @@ public class KrivicaRepository implements KrivicaRepositoryInterface{
 
     public KrivicaRepository(DatabaseHelper databaseHelper) {
         this.databaseHelper = databaseHelper;
+        Log.d(TAG, "KrivicaRepository: " + databaseHelper.toString());
     }
 
     @Override

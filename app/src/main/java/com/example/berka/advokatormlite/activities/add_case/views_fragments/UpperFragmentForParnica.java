@@ -4,8 +4,6 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.TabLayout;
-import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,10 +18,8 @@ import android.widget.Toast;
 import com.example.berka.advokatormlite.R;
 import com.example.berka.advokatormlite.activities.add_case.OnAddCaseButtonClicked;
 import com.example.berka.advokatormlite.activities.add_case.mvp_contracts.ParnicaContract;
-import com.example.berka.advokatormlite.activities.add_case.presenters.ParnicaPresenter;
 import com.example.berka.advokatormlite.dependencyinjection.App;
 import com.example.berka.advokatormlite.model.Postupak;
-import com.example.berka.advokatormlite.model.Slucaj;
 import com.example.berka.advokatormlite.model.TabelaBodova;
 import com.example.berka.advokatormlite.model.VrsteParnica;
 
@@ -107,7 +103,6 @@ public class UpperFragmentForParnica  extends BaseFragment implements ParnicaCon
     @OnClick(R.id.btn_Add_Slucaj_Parnica)
     @Override
     public void AddSlucaj() {
-
         if(et_sifra_slucaja.getText().toString().trim().equals("")){
             Toast.makeText(getContext(), "Morate uneti sifru slucaja", Toast.LENGTH_SHORT).show();
         }else {

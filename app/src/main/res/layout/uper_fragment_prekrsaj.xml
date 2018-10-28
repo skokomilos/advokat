@@ -25,7 +25,7 @@
         <Button
             android:layout_marginTop="12dp"
             android:text="Dodaj slucaj"
-            android:id="@+id/button_add_prekrsajni"
+            android:id="@+id/upper_fragment_krivica_btn_dodaj_prekrsajni"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"/>

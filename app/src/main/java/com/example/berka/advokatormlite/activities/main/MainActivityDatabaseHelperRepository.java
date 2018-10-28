@@ -27,6 +27,7 @@ public class MainActivityDatabaseHelperRepository implements MainActivityResposi
 
     public MainActivityDatabaseHelperRepository(DatabaseHelper databaseHelper) {
         this.databaseHelper = databaseHelper;
+        Log.d(TAG, "MainActivityDatabaseHelperRepository: " + databaseHelper.toString());
     }
 
     @Override

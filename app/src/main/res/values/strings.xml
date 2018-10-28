@@ -3,7 +3,7 @@
 
     <string name="activity_first_toolbar_title" />
 
-    <string name="app_name">AdvokatORMLite</string>
+    <string name="app_name">Advokatska Tarifa</string>
     <string name="create_case">Dodaj</string>
     <string name="find_case">Nadji</string>
     <string name="edit_case">Promeni</string>

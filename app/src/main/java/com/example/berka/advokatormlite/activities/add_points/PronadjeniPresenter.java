@@ -91,10 +91,19 @@ public class PronadjeniPresenter implements PronadjeniContractMVP.Presenter {
                     view.openDialog(privremenaCena, radnja.getNaziv_radnje());
                     break;
                 case 4:
-                    //metoda koja racuna pravu vrednost plus broj sati ima sifru 4
+                    //metoda koja racuna pravu vrednost plus broj sati i koja moze biti otkazana ima sifru 4
                     privremenaCena = wholePlusHours(slucaj);
-                    view.dialogFixValuePlusHours(privremenaCena, radnja.getNaziv_radnje());
+                    view.openCancelableCaseDialogWithHours(privremenaCena, radnja.getNaziv_radnje());
                     break;
+                case 5:
+                    //metoda koja racuna celu vrednost plus broj sati i koja nema opciju otkazano ima sifru 5
+                    privremenaCena = wholePlusHours(slucaj);
+                    view.openDialogWithHours(privremenaCena, radnja.getNaziv_radnje());
+                    break;
+                case 6:
+                    //metoda koja racuna pola vrednosti plus sati i nema opciju otkazano
+                    privremenaCena = halfValue(slucaj);
+                    view.openDialogWithHours(privremenaCena, radnja.getNaziv_radnje());
                 default:
             }
         }

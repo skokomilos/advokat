@@ -27,7 +27,9 @@ public interface PronadjeniContractMVP {
 
         void openDialog(double privremenaCena, String naziv_radnje);
 
-        void dialogFixValuePlusHours(double privremenaCena, String nazivRadnje);
+        void openCancelableCaseDialogWithHours (double privremenaCena, String nazivRadnje);
+
+        void openDialogWithHours(double cena, String nazivRadnje);
 
         void cantAddRadnjaShowMessage();
 

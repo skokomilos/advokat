@@ -1,23 +1,26 @@
 package com.example.berka.advokatormlite.activities.add_points;
 
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.net.NetworkInfo;
 import android.os.Bundle;
-import android.support.annotation.IdRes;
 import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBar;
+import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.AttributeSet;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ExpandableListView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import com.example.berka.advokatormlite.R;
@@ -32,7 +35,6 @@ import com.example.berka.advokatormlite.model.Radnja;
 import com.example.berka.advokatormlite.model.Slucaj;
 import com.example.berka.advokatormlite.model.StrankaDetail;
 import com.example.berka.advokatormlite.model.Tarifa;
-import com.michaelmuenzer.android.scrollablennumberpicker.ScrollableNumberPicker;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -53,6 +55,8 @@ public class PronadjeniSlucajActivity1 extends BaseActivity implements Pronadjen
 
     private static final String SLUCAJ_OBJ_STATE = "slucaj_obj_state";
     private static final String TAG = "Pronadjeni";
+    private double vrednostJednogBodaUDinarima = 30;
+    Toolbar toolbar;
 
 
     @Inject
@@ -64,13 +68,16 @@ public class PronadjeniSlucajActivity1 extends BaseActivity implements Pronadjen
     @BindView(R.id.lvExpendable)
     ExpandableListView expandableListView;
 
+    @BindView(R.id.et_search)
+    EditText search_edit_text;
+
     ExpandableAdapterRadnja expandableListAdapter;
     private Slucaj slucaj;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_second);
+        setContentView(R.layout.activity_expandable_listview);
 
         ((App) getApplication()).getComponent().inject(this);
 
@@ -110,8 +117,9 @@ public class PronadjeniSlucajActivity1 extends BaseActivity implements Pronadjen
 
     //todo ovo isto odkomentarisati obavjezno
     public void setUpToolbar(){
+
         final ActionBar ab = getActionBarToolbar();
-        ab.setHomeAsUpIndicator(R.drawable.ic_menu);
+        //ab.setHomeAsUpIndicator(R.drawable.ic_menu);
         //ab.setDisplayHomeAsUpEnabled(true);
         ab.setTitle(slucaj.getPostupak().getNazivpostupka());
     }
@@ -143,6 +151,24 @@ public class PronadjeniSlucajActivity1 extends BaseActivity implements Pronadjen
                 Radnja radnja = listHashMap.get(listViewHeaders.get(groupPosition)).get(childPosition);
                 presenter.radnjaItemHasBeenClicked(radnja, slucaj);
                 return true;
+            }
+        });
+
+        //todo ovde pokusavam do ubacim search opicju u aplikaciju
+        search_edit_text.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
             }
         });
     }
@@ -180,7 +206,7 @@ public class PronadjeniSlucajActivity1 extends BaseActivity implements Pronadjen
     @Override
     public void showEditPartiesDialog(List<StrankaDetail> sveStrankeSlucaja) {
 
-        Log.d(TAG, "showEditPartiesDialog: " + sveStrankeSlucaja.get(0).getIme_i_prezime());
+
         AlertDialog.Builder mBuilder = new AlertDialog.Builder(PronadjeniSlucajActivity1.this);
         View mView = getLayoutInflater().inflate(R.layout.dialog_add_edit_stranke, null);
         mBuilder.setTitle("Dodaj ili izmeni vec postojece podatke o strankama");
@@ -188,13 +214,14 @@ public class PronadjeniSlucajActivity1 extends BaseActivity implements Pronadjen
 
         MyAdapteAddEditStranke myAdapteAddEditStranke = new MyAdapteAddEditStranke(PronadjeniSlucajActivity1.this, (ArrayList<StrankaDetail>) sveStrankeSlucaja);
         listView.setAdapter(myAdapteAddEditStranke);
-        myAdapteAddEditStranke.notifyDataSetChanged();
+        //myAdapteAddEditStranke.notifyDataSetChanged();
 
         mBuilder.setPositiveButton("Potrvrdi", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                myAdapteAddEditStranke.notifyDataSetChanged();
+
                 presenter.editParties(sveStrankeSlucaja);
+                //myAdapteAddEditStranke.notifyDataSetChanged();
             }
         });
         mBuilder.setNegativeButton("Izadji", new DialogInterface.OnClickListener() {
@@ -207,6 +234,9 @@ public class PronadjeniSlucajActivity1 extends BaseActivity implements Pronadjen
         mBuilder.setView(mView);
         AlertDialog dialog = mBuilder.create();
         dialog.show();
+        dialog.getWindow().clearFlags( WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE |WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM);
+        dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+
     }
 
     @Override
@@ -220,61 +250,76 @@ public class PronadjeniSlucajActivity1 extends BaseActivity implements Pronadjen
                 }).create().show();
     }
 
+
     @Override
-    public void dialogFixValuePlusHours(double cena, String nazivRadnje) {
+    public void openDialogWithHours(double cena, String nazivRadnje) {
 
-        final Dialog dialog = new Dialog(this);
-        dialog.setContentView(R.layout.dialog_fix_plus_hours);
+        AlertDialog.Builder mBuilder = new AlertDialog.Builder(PronadjeniSlucajActivity1.this);
+        View mView = getLayoutInflater().inflate(R.layout.dialog_with_hours, null);
+        EditText editText = mView.findViewById(R.id.dialog_with_hours_edit_text);
 
-        final Button no = dialog.findViewById(R.id.fix_hours_box_btn_no);
-        Button btnYes = dialog.findViewById(R.id.fix_hours_box_btn_yes);
-        final RadioGroup radioGroup = dialog.findViewById(R.id.radioGroupFixHours);
-        final ScrollableNumberPicker scrollableNumberPicker = dialog.findViewById(R.id.snp_dialog_fix_plus_hours);
+        mBuilder.setTitle(nazivRadnje)
+                .setMessage("Odaberite broj sati")
+                .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        int brojSati = Integer.parseInt(editText.getText().toString());
+                        final double izracunataCena = cena + (brojSati * 50 * vrednostJednogBodaUDinarima);
+                        presenter.addRadnjaButtonClicked(izracunataCena, nazivRadnje, slucaj);
+                    }
+                })
+                .setNegativeButton("Otkazi", null)
+                .setView(mView)
+                .show();
+    }
 
-        radioGroup.check(R.id.radioButtonYes);
-        radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+    @Override
+    public void openCancelableCaseDialogWithHours(double cena, String nazivRadnje) {
+
+        AlertDialog.Builder mBuilder = new AlertDialog.Builder(PronadjeniSlucajActivity1.this);
+        View mView = getLayoutInflater().inflate(R.layout.dialog_with_hours, null);
+        EditText editText = mView.findViewById(R.id.dialog_with_hours_edit_text);
+
+
+        String[] lista = new String[]{"odrzan", "nije odrzan"};
+
+        mBuilder.setTitle(nazivRadnje)
+                .setSingleChoiceItems(lista,0, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                        if(which > 0){
+                            Toast.makeText(PronadjeniSlucajActivity1.this,"Vrednost je " + which, Toast.LENGTH_SHORT).show();
+                            editText.setVisibility(View.GONE);
+                        }else {
+                            editText.setVisibility(View.VISIBLE);
+                        }
+                    }
+                }).setPositiveButton("Da", new DialogInterface.OnClickListener() {
             @Override
-            public void onCheckedChanged(RadioGroup group, @IdRes int checkedId) {
-
-                if(checkedId==R.id.radioButtonNo) {
-                    scrollableNumberPicker.setEnabled(false);
-                }else if(checkedId == R.id.radioButtonYes){
-                    scrollableNumberPicker.setVisibility(View.VISIBLE);
+            public void onClick(DialogInterface dialog, int which) {
+                ListView lw = ((AlertDialog)dialog).getListView();
+                Object checkedItem = lw.getAdapter().getItem(lw.getCheckedItemPosition());
+                if(checkedItem.equals("odrzan")){
+                    int brojSati = Integer.parseInt(editText.getText().toString());
+                    final double izracunataCena = cena + (brojSati * 50 * vrednostJednogBodaUDinarima);
+                    presenter.addRadnjaButtonClicked(izracunataCena, nazivRadnje, slucaj);
+                }else if(checkedItem.equals("nije odrzan")){
+                    int brojSati = Integer.parseInt(editText.getText().toString());
+                    //todo sta znaci ovde jedan sat
+                    final double izracunataCena = cena / 2 + (brojSati*50* vrednostJednogBodaUDinarima);
+                    presenter.addRadnjaButtonClicked(izracunataCena, nazivRadnje, slucaj);
                 }
             }
-        });
-
-        btnYes.setOnClickListener(new View.OnClickListener() {
+        }).setNegativeButton("Ne", new DialogInterface.OnClickListener() {
             @Override
-            public void onClick(View v) {
-
-                double izracunataCena = 0;
-                final int selecteid = radioGroup.getCheckedRadioButtonId();
-
-                switch (selecteid){
-
-                    case R.id.radioButtonYes:
-                        izracunataCena = cena + (scrollableNumberPicker.getValue()*50);
-                        presenter.addRadnjaButtonClicked(izracunataCena, nazivRadnje, slucaj);
-                        break;
-                    case R.id.radioButtonNo:
-                        izracunataCena = cena / 2 + (scrollableNumberPicker.getValue()*50);
-                        presenter.addRadnjaButtonClicked(izracunataCena, nazivRadnje, slucaj);
-                        break;
-                    default:
-                        Toast.makeText(PronadjeniSlucajActivity1.this, "Oznaci da li je radnja odrzana", Toast.LENGTH_LONG).show();
-                        //todo resiti problem kad cekiram NE da ne dozvoli koriscenje scrolablenumberpickera
-                }
+            public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
             }
-        });
-        no.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-            }
-        });
-                dialog.show();
+        }).setView(mView);
+        AlertDialog dialog = mBuilder.create();
+        dialog.show();
+
 
     }
 

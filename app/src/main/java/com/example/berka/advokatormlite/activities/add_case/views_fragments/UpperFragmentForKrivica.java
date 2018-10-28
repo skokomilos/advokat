@@ -14,14 +14,12 @@ import android.widget.EditText;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.Toast;
-import android.widget.Toolbar;
 
 import com.example.berka.advokatormlite.R;
 import com.example.berka.advokatormlite.activities.add_case.OnAddCaseButtonClicked;
 import com.example.berka.advokatormlite.activities.add_case.mvp_contracts.KrivicaContract;
 import com.example.berka.advokatormlite.dependencyinjection.App;
 import com.example.berka.advokatormlite.model.Postupak;
-import com.example.berka.advokatormlite.model.Slucaj;
 import com.example.berka.advokatormlite.model.TabelaBodova;
 
 import java.util.List;
@@ -69,15 +67,6 @@ public class UpperFragmentForKrivica extends BaseFragment implements KrivicaCont
 //    }
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-
-        App.getMyApp().getComponent().inject(this);
-        //navigationPresenter.addFragment(new UpperFragmentForKrivica());
-        //okrivljenOstecenValue();
-    }
-
-    @Override
     public void onAttach(Context context) {
         super.onAttach(context);
 
@@ -88,8 +77,6 @@ public class UpperFragmentForKrivica extends BaseFragment implements KrivicaCont
         }catch (Exception e){
             e.printStackTrace();
         }
-
-
     }
 
     @Override
@@ -100,6 +87,15 @@ public class UpperFragmentForKrivica extends BaseFragment implements KrivicaCont
             broj_stranaka = getArguments().getInt("brojstranaka");
             postupak = getArguments().getParcelable("myDataKey");
         }
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        App.getMyApp().getComponent().inject(this);
+        //navigationPresenter.addFragment(new UpperFragmentForKrivica());
+        //okrivljenOstecenValue();
     }
 
     //    @Nullable

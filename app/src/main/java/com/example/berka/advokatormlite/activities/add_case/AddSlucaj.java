@@ -5,29 +5,19 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.widget.RadioButton;
-import android.widget.Toast;
 
 import com.example.berka.advokatormlite.R;
-import com.example.berka.advokatormlite.activities.add_case.views_fragments.BaseFragment;
 import com.example.berka.advokatormlite.activities.add_case.views_fragments.FragmentForDynamicEditText;
-import com.example.berka.advokatormlite.activities.add_case.views_fragments.FragmentNavigation;
 import com.example.berka.advokatormlite.activities.add_case.views_fragments.UpperFragmentForKrivica;
 import com.example.berka.advokatormlite.activities.add_case.views_fragments.UpperFragmentForParnica;
 import com.example.berka.advokatormlite.activities.add_case.views_fragments.UpperFragmentPrekrsaj;
 import com.example.berka.advokatormlite.activities.add_case.views_fragments.UpperFragmentUstavniSud;
 import com.example.berka.advokatormlite.activities.main.MainActivity;
 import com.example.berka.advokatormlite.adapter.StrankaDynamicViews;
-import com.example.berka.advokatormlite.dependencyinjection.App;
 import com.example.berka.advokatormlite.model.Postupak;
 import com.example.berka.advokatormlite.model.Slucaj;
-import com.example.berka.advokatormlite.model.TabelaBodova;
-
-import javax.inject.Inject;
 
 import butterknife.ButterKnife;
 
@@ -35,7 +25,7 @@ import butterknife.ButterKnife;
  * Created by berka on 19-Oct-17.
  */
 
-public class AddSlucaj extends AppCompatActivity implements OnAddCaseButtonClicked{
+public class AddSlucaj extends AppCompatActivity implements OnAddCaseButtonClicked {
 
     private static final String TAG = "AddSlucaj";
     private static final String POSTUPAK_STATE = "postupak_state";
@@ -60,11 +50,11 @@ public class AddSlucaj extends AppCompatActivity implements OnAddCaseButtonClick
         ButterKnife.bind(AddSlucaj.this);
         strankaDynamicViews = new StrankaDynamicViews(this);
 
-        if(findViewById(R.id.upper_fragment_container) != null && findViewById(R.id.dymanic_fragment_container) != null){
+        if (findViewById(R.id.upper_fragment_container) != null && findViewById(R.id.dymanic_fragment_container) != null) {
 
-            if(savedInstanceState != null){
+            if (savedInstanceState != null) {
                 return;
-            }else {
+            } else {
                 postupak = getIntent().getParcelableExtra("myDataKey");
                 broj_stranaka = getIntent().getExtras().getInt("numberOfParties");
             }
@@ -80,14 +70,14 @@ public class AddSlucaj extends AppCompatActivity implements OnAddCaseButtonClick
 //        }
 
 
-        switch (postupak.getNazivpostupka()){
+        switch (postupak.getNazivpostupka()) {
             case "Krivicni postupak":
                 UpperFragmentForKrivica upperFragmentForKrivica = new UpperFragmentForKrivica();
                 createUpperFragment(new UpperFragmentForKrivica(), postupak, broj_stranaka);
                 break;
             case "Prekrsajni postupak i postupak privrednih prestupa":
                 UpperFragmentPrekrsaj upperFragmentPrekrsaj = new UpperFragmentPrekrsaj();
-                createUpperFragment(new UpperFragmentPrekrsaj(),postupak, broj_stranaka);
+                createUpperFragment(new UpperFragmentPrekrsaj(), postupak, broj_stranaka);
                 break;
             case "Postupak pred ustavnim sudom":
                 UpperFragmentUstavniSud upperFragmentUstavniSud = new UpperFragmentUstavniSud();
@@ -96,7 +86,7 @@ public class AddSlucaj extends AppCompatActivity implements OnAddCaseButtonClick
             default:
                 Log.d(TAG, "onCreate: default vrednost");
                 UpperFragmentForParnica upperFragmentForParnica = new UpperFragmentForParnica();
-                createUpperFragment(new UpperFragmentForParnica(), postupak,  broj_stranaka);
+                createUpperFragment(new UpperFragmentForParnica(), postupak, broj_stranaka);
                 break;
         }
 
@@ -120,7 +110,7 @@ public class AddSlucaj extends AppCompatActivity implements OnAddCaseButtonClick
                 .setMessage("Pritiskom na ok izlazite na glavni meni")
                 .setNegativeButton(android.R.string.no, null)
                 .setPositiveButton(android.R.string.yes, (arg0, arg1) -> {
-                    Intent i=new Intent(AddSlucaj.this,MainActivity.class);
+                    Intent i = new Intent(AddSlucaj.this, MainActivity.class);
                     i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(i);
                 }).create().show();
@@ -147,14 +137,14 @@ public class AddSlucaj extends AppCompatActivity implements OnAddCaseButtonClick
 
         FragmentForDynamicEditText bottomfrag = (FragmentForDynamicEditText) getSupportFragmentManager().findFragmentById(R.id.dymanic_fragment_container);
 
-        if(bottomfrag != null){
+        if (bottomfrag != null) {
 
             bottomfrag.updateFromMain("usao sam u setcase u aktivitija");
             Log.d(TAG, "setCase: " + slucaj.equals(null));
             Bundle bn = new Bundle();
             bn.putParcelable("slucaj_objekat", slucaj);
             bottomfrag.getCase(bn);
-        }else {
+        } else {
             FragmentForDynamicEditText fragment = new FragmentForDynamicEditText();
             Bundle bundle = new Bundle();
             bundle.putParcelable("slucaj_objekat", slucaj);
@@ -181,99 +171,4 @@ public class AddSlucaj extends AppCompatActivity implements OnAddCaseButtonClick
 //        FragmentForDynamicEditText fragmentForDynamicEditText = new FragmentForDynamicEditText();
 //        fragmentForDynamicEditText.getCase(bundle);
     }
-
-
-    //    @Override
-//    public void addRedniBrojStranke(int redni_broj){
-//        gridLayout.addView(strankaDynamicViews.strankaNumTextView(getApplicationContext(), String.valueOf(redni_broj + 1)));
-//    }
-//
-//    @Override
-//    public void addEditTextZaImeStraneke(){
-//        gridLayout.addView(strankaDynamicViews.recivedImeEditText(getApplicationContext()));
-//    }
-//
-//    @Override
-//    public void addEditTextZaAdresu(){
-//        gridLayout.addView(strankaDynamicViews.recivedAdersaEditText(getApplicationContext()));
-//    }
-//
-//    @Override
-//    public void addEditTextZaMesto(){
-//        gridLayout.addView(strankaDynamicViews.recivedMestoEditText(getApplicationContext()));
-//    }
-//
-//    @Override
-//    public String getClientName(int redni_broj_edit_texta_u_grid_layout) {
-//
-//        EditText imeiprezime = (EditText) gridLayout.getChildAt(redni_broj_edit_texta_u_grid_layout);
-//        return imeiprezime.getText().toString();
-//    }
-//
-//    @Override
-//    public String getClientAddress(int i) {
-//
-//        EditText adresa = (EditText) gridLayout.getChildAt(i);
-//        return adresa.getText().toString();
-//    }
-//
-//    @Override
-//    public String getClientPlace(int i) {
-//
-//        EditText mesto = (EditText) gridLayout.getChildAt(i);
-//        return mesto.getText().toString();
-//    }
-
-//    @Override
-//    public void warrningMessage() {
-//        Toast.makeText(AddSlucaj.this, "slucaj nije dodat jer je doslo do greske", Toast.LENGTH_LONG).show();
-//    }
-//
-//
-////    @Override
-////    public void loadSpinner(List<TabelaBodova> tabelaBodova){
-////            ArrayAdapter adapter = new ArrayAdapter(AddSlucaj.this, android.R.layout.simple_spinner_dropdown_item, tabelaBodova);
-////            spinner.setAdapter(adapter);
-////    }
-////
-////    public int okrivljenOstecenValue() {
-////
-//        String radiovalue =  ((RadioButton)this.findViewById(radioGroup.getCheckedRadioButtonId())).getText().toString();
-//        return presenter.radioButtonCurrentValue(radiovalue);
-    }
-////
-////    @OnClick(R.id.btn_dodaj_krivicu)
-////    public void addSlucaj(){
-////        presenter.saveCaseButtonClicked(et_sifra_slucaja.getText().toString(), postupak, (TabelaBodova)spinner.getSelectedItem(), okrivljenOstecenValue(), broj_stranaka);
-////    }
-//
-////    @Override
-////    public void goToPronadjeniSlucajAcitivty(Slucaj slucaj) {
-////
-////        Intent intent = new Intent(AddSlucaj.this, PronadjeniSlucajActivity1.class);
-////        intent.putExtra(FROM, "myDataKey");
-////        intent.putExtra("myDataKey", slucaj);
-////        startActivity(intent);
-////    }
-
-//    @Override
-//    public void emptyCasePasswordWarning() {
-//
-//        Toast.makeText(AddSlucaj.this, "Morate uneti sifru slucaja", Toast.LENGTH_LONG).show();
-//    }
-//
-//    @Override
-//    public void numbersOnlyTestingWarning() {
-//        Toast.makeText(this, "Za testiranje dozvoljen unos samo brojeva", Toast.LENGTH_LONG).show();
-//    }
-//
-//    @Override
-//    public void caseWithThisCaseAlreadyExists() {
-//        Toast.makeText(this, "Verovatno vec postoji slucaj sa ovom sifrom", Toast.LENGTH_LONG).show();
-//    }
-//
-//    @Override
-//    public void caseAddedMessage() {
-//        Toast.makeText(AddSlucaj.this, "Novi je dodat", Toast.LENGTH_LONG).show();
-//   }
-
+}

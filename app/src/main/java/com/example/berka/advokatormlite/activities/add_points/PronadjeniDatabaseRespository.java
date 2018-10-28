@@ -133,7 +133,7 @@ public class PronadjeniDatabaseRespository implements PronadjeniRepository {
     public void updateStranka(StrankaDetail strankaDetail) {
 
         try {
-            databaseHelper.getmStrankaDetail().update(strankaDetail);
+            databaseHelper.getmStrankaDetail().createOrUpdate(strankaDetail);
         } catch (SQLException e) {
             e.printStackTrace();
         }

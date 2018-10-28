@@ -143,7 +143,7 @@ public class KonacniTrosakSvihRadnjiActivity extends BaseActivity {
         final ActionBar ab = getActionBarToolbar();
         ab.setHomeAsUpIndicator(R.drawable.ic_menu);
         ab.setDisplayHomeAsUpEnabled(true);
-        ab.setTitle(R.string.app_name);
+        ab.setTitle(slucaj.getPostupak().getNazivpostupka());
     }
 
     @Override

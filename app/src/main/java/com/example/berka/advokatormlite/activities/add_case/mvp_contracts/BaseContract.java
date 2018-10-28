@@ -1,7 +1,5 @@
 package com.example.berka.advokatormlite.activities.add_case.mvp_contracts;
 
-import android.arch.lifecycle.Lifecycle;
-
 import com.example.berka.advokatormlite.model.Postupak;
 import com.example.berka.advokatormlite.model.Slucaj;
 import com.example.berka.advokatormlite.model.TabelaBodova;
@@ -36,6 +34,8 @@ public interface BaseContract {
         void detachView();
 
         Slucaj saveCaseButtonClicked(int broj_slucaja, Postupak postupak, TabelaBodova selectedItem, int valueOkrivljenOstecen, int broj_stranaka);
+
+        Slucaj saveCaseButtonClicked(int broj_slucaja, Postupak postupak, TabelaBodova selectedItem, int broj_stranaka);
 
         //ovaj verovatno nije potreban ovde, on treba da ide u prekrsaj i krivica contract, jer u parnica contract imam dva spinera pa ce tu ici druge metode
     }
