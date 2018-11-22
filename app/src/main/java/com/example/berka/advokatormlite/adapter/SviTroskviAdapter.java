@@ -11,7 +11,6 @@ import com.example.berka.advokatormlite.R;
 import com.example.berka.advokatormlite.model.IzracunatTrosakRadnje;
 
 import java.util.ArrayList;
-import java.util.StringTokenizer;
 
 /**
  * Created by berka on 11-Oct-17.
@@ -57,8 +56,8 @@ public class SviTroskviAdapter extends BaseAdapter {
             convertView = inflater.inflate(R.layout.my_adapter_ukupan_trosak, null);
         }
 
-        TextView nazivFilma = convertView.findViewById(R.id.adapter_tv_izvrsena_radnja);
-        nazivFilma.setText(String.valueOf(listaRadnji.get(i).getNaziv_radnje()));
+        TextView nazivRadnje = convertView.findViewById(R.id.adapter_tv_izvrsena_radnja);
+        nazivRadnje.setText(String.valueOf(listaRadnji.get(i).getNaziv_radnje()));
 
         TextView cena = convertView.findViewById(R.id.adapter_tv_izvrsena_cena);
         cena.setText(String.valueOf(listaRadnji.get(i).getCena_izracunate_jedinstvene_radnje()));

@@ -1,6 +1,7 @@
 package com.example.berka.advokatormlite.activities.add_points;
 
 import android.app.AlertDialog;
+import android.app.SearchManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -8,10 +9,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.util.AttributeSet;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -19,15 +16,15 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ExpandableListView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.SearchView;
 import android.widget.Toast;
 
 import com.example.berka.advokatormlite.R;
 import com.example.berka.advokatormlite.activities.BaseActivity;
 import com.example.berka.advokatormlite.activities.konacni.KonacniTrosakSvihRadnjiActivity;
 import com.example.berka.advokatormlite.activities.main.MainActivity;
-import com.example.berka.advokatormlite.adapter.ExpandableAdapterRadnja;
+import com.example.berka.advokatormlite.adapter.ExpandableAdapterRadnja1;
 import com.example.berka.advokatormlite.adapter.MyAdapteAddEditStranke;
 import com.example.berka.advokatormlite.adapter.MyAdapterSveStranke;
 import com.example.berka.advokatormlite.dependencyinjection.App;
@@ -50,13 +47,17 @@ import butterknife.OnClick;
  * Created by berka on 12-Mar-18.
  */
 
-public class PronadjeniSlucajActivity1 extends BaseActivity implements PronadjeniContractMVP.View {
+public class PronadjeniSlucajActivity1 extends BaseActivity implements PronadjeniContractMVP.View, SearchView.OnQueryTextListener, SearchView.OnCloseListener {
 
 
     private static final String SLUCAJ_OBJ_STATE = "slucaj_obj_state";
     private static final String TAG = "Pronadjeni";
     private double vrednostJednogBodaUDinarima = 30;
     Toolbar toolbar;
+
+    private SearchView search;
+    private ExpandableAdapterRadnja1 noviAdapter;
+
 
 
     @Inject
@@ -65,14 +66,19 @@ public class PronadjeniSlucajActivity1 extends BaseActivity implements Pronadjen
     @BindView(R.id.izracunaj_vrednost)
     Button button;
 
-    @BindView(R.id.lvExpendable)
+    @BindView(R.id.expandable_listview)
     ExpandableListView expandableListView;
 
     @BindView(R.id.et_search)
-    EditText search_edit_text;
+    SearchView search_edit_text;
 
-    ExpandableAdapterRadnja expandableListAdapter;
     private Slucaj slucaj;
+    private int lastExpandedPosition = -1;
+
+    /**Napomena!
+     *
+     *  ExpandableListView is loaded in onResume metod over presenter!
+     */
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -90,6 +96,7 @@ public class PronadjeniSlucajActivity1 extends BaseActivity implements Pronadjen
         }
         //presenter.loadExpandableListViewData(slucaj);
         //todo OVDE MORA DA SE ODKOMETARISE
+        initSearchManager();
         setUpToolbar();
     }
 
@@ -115,7 +122,6 @@ public class PronadjeniSlucajActivity1 extends BaseActivity implements Pronadjen
         return super.onOptionsItemSelected(item);
     }
 
-    //todo ovo isto odkomentarisati obavjezno
     public void setUpToolbar(){
 
         final ActionBar ab = getActionBarToolbar();
@@ -139,36 +145,20 @@ public class PronadjeniSlucajActivity1 extends BaseActivity implements Pronadjen
         outState.putParcelable(SLUCAJ_OBJ_STATE, slucaj);
     }
 
+    // Todo u drugoj metodi displayList() dobijam sve radnje svih postupaka za tu tarifu. Tj kad recimo imam -postupak Parnica = tarifa Podnesak = izlasta mi sve radnje za sve PODNESKE, umesto samo za Podnesak od Parnice
     @Override
     public void populateExpandableListView(List<Tarifa> listViewHeaders, HashMap<Tarifa, List<Radnja>> listHashMap) {
 
-        expandableListAdapter = new ExpandableAdapterRadnja(this, listViewHeaders, listHashMap);
-        expandableListView.setAdapter(expandableListAdapter);
+        //todo dodajem novi adapter koji ima filter metodu da isprobam
+        noviAdapter = new ExpandableAdapterRadnja1(this, listViewHeaders, listHashMap);
+        expandableListView.setAdapter(noviAdapter);
         expandableListView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
             @Override
             public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
-                //Radnja radnja = (Radnja) expandableListView.getItemAtPosition(childPosition);
-                Radnja radnja = listHashMap.get(listViewHeaders.get(groupPosition)).get(childPosition);
+                Radnja radnja = (Radnja) noviAdapter.getChild(groupPosition, childPosition);
+                parent.getExpandableListAdapter().getChild(groupPosition, childPosition);
                 presenter.radnjaItemHasBeenClicked(radnja, slucaj);
                 return true;
-            }
-        });
-
-        //todo ovde pokusavam do ubacim search opicju u aplikaciju
-        search_edit_text.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
             }
         });
     }
@@ -340,18 +330,68 @@ public class PronadjeniSlucajActivity1 extends BaseActivity implements Pronadjen
                     startActivity(i);
                 }).create().show();
     }
-
     @Override
     protected void onResume() {
         super.onResume();
 
          presenter.setView(this);
-        Log.d(TAG, "onResume: " + presenter.toString());
          presenter.loadExpandableListViewData(slucaj);
+    }
+
+    public void initSearchManager(){
+
+        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        search = (SearchView) findViewById(R.id.et_search);
+        search.setSearchableInfo(searchManager
+                .getSearchableInfo(getComponentName()));
+        search.setIconifiedByDefault(false);
+        search.setOnQueryTextListener(this);
+        search.setOnCloseListener(this);
+    }
+
+    private void expandAll(){
+
+        int count = noviAdapter.getGroupCount();
+        for (int i = 0; i < count; i++) {
+            
+            expandableListView.expandGroup(i);
+        }
+    }
+    private void collapseAll(){
+        int count = noviAdapter.getGroupCount();
+        for (int i = 0; i < count; i++) {
+            expandableListView.collapseGroup(i);
+        }
     }
 
     @Override
     public boolean providesActivityToolbar() {
+        return false;
+    }
+
+    @Override
+    public boolean onClose() {
+
+        noviAdapter.filterData("");
+        expandAll();
+        return false;
+    }
+
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        noviAdapter.filterData(query);
+        expandAll();
+        return false;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        noviAdapter.filterData(newText);
+        if(!newText.equals("")){
+            expandAll();
+        }else  if (newText.equals("")){
+            collapseAll();
+        }
         return false;
     }
 }

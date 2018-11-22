@@ -43,7 +43,10 @@ public class UpperFragmentForKrivica extends BaseFragment implements KrivicaCont
     EditText et_sifra_slucaja;
 
     @BindView(R.id.upper_fragment_krivica__radio_group_id)
-    RadioGroup radioGroup;
+    RadioGroup radioGroupOkrivljenOstecen;
+
+    @BindView(R.id.upper_fragment_krivica__radio_group_vrsta_odbrana_id)
+    RadioGroup radioGroupVrsteOdbrana;
 
     @BindView(R.id.upper_fragment_krivica_spinnerKrivicaKazne)
     Spinner spinner;
@@ -56,7 +59,9 @@ public class UpperFragmentForKrivica extends BaseFragment implements KrivicaCont
 
     private Postupak postupak;
     private int broj_stranaka;
+    //vrednosti radio grupa
     private int okrivljen_ostecen;
+    private Integer vrsta_odbrane;
     private OnAddCaseButtonClicked onAddCaseButtonClicked;
 
 
@@ -105,7 +110,8 @@ public class UpperFragmentForKrivica extends BaseFragment implements KrivicaCont
         View rootView = inflater.inflate(R.layout.uper_fragment_krivica, container, false);
         ButterKnife.bind(UpperFragmentForKrivica.this, rootView);
 
-        radioGroup.setOnCheckedChangeListener(this);
+        radioGroupOkrivljenOstecen.setOnCheckedChangeListener(this);
+        radioGroupVrsteOdbrana.setOnCheckedChangeListener(this);
         //navigationPresenter.addFragment(new UpperFragmentForKrivica());
 
         return rootView;
@@ -117,12 +123,22 @@ public class UpperFragmentForKrivica extends BaseFragment implements KrivicaCont
         if(et_sifra_slucaja.getText().toString().trim().equals("")){
             Toast.makeText(getContext(), "Morate uneti sifru slucaja", Toast.LENGTH_SHORT).show();
         }else {
-            onAddCaseButtonClicked.setCase(presenter.saveCaseButtonClicked(
-                    Integer.parseInt(et_sifra_slucaja.getText().toString()),
-                    postupak,
-                    (TabelaBodova) spinner.getSelectedItem(),
-                    okrivljen_ostecen,
-                    broj_stranaka));
+            if(vrsta_odbrane == null) {
+                onAddCaseButtonClicked.setCase(presenter.saveCaseButtonClicked(
+                        Integer.parseInt(et_sifra_slucaja.getText().toString()),
+                        postupak,
+                        (TabelaBodova) spinner.getSelectedItem(),
+                        okrivljen_ostecen,
+                        broj_stranaka));
+            }else {
+                onAddCaseButtonClicked.setCase(presenter.saveCaseButtonClicked(
+                        Integer.parseInt(et_sifra_slucaja.getText().toString()),
+                        postupak,
+                        (TabelaBodova) spinner.getSelectedItem(),
+                        okrivljen_ostecen,
+                        vrsta_odbrane,
+                        broj_stranaka));
+            }
         }
     }
 
@@ -168,18 +184,46 @@ public class UpperFragmentForKrivica extends BaseFragment implements KrivicaCont
         spinner.setAdapter(adapter);
     }
 
+    /**
+     *
+     * @param group
+     * @param checkedId
+     * ako je okrivljen vrednost je 0, ostecen vrednost = 1
+     * ako je odbrana po punomocju vrednost 0, ako je sluzbena duznost vrednost 1
+     */
     @Override
     public void onCheckedChanged(RadioGroup group, int checkedId) {
 
-        switch (checkedId) {
-            case R.id.upper_fragment_krivica_rbOkrivljen:
-                okrivljen_ostecen = 0;
-                Log.d(TAG, "onCheckedChanged: okrivljen ili ostecen vrednst: 0" + okrivljen_ostecen);
-                break;
-            case R.id.upper_fragment_krivica_rbOstecen:
-                okrivljen_ostecen = 1;
-                Log.d(TAG, "onCheckedChanged: okrivljen ili ostecen vrednost: 1" + okrivljen_ostecen);
-                break;
+        switch (group.getId()) {
+            case R.id.upper_fragment_krivica__radio_group_id:
+                switch (checkedId) {
+                    case R.id.upper_fragment_krivica_rbOkrivljen:
+                        okrivljen_ostecen = 0;
+                        for (int i = 0; i < radioGroupVrsteOdbrana.getChildCount(); i++) {
+                            radioGroupVrsteOdbrana.getChildAt(i).setEnabled(true);
+                            }
+                        Log.d(TAG, "onCheckedChanged: okrivljen ili ostecen vrednst: " + okrivljen_ostecen);
+                        break;
+                    case R.id.upper_fragment_krivica_rbOstecen:
+                        okrivljen_ostecen = 1;
+                        vrsta_odbrane = null;
+                        for (int i = 0; i < radioGroupVrsteOdbrana.getChildCount(); i++) {
+                            radioGroupVrsteOdbrana.getChildAt(i).setEnabled(false);
+                        }
+                        Log.d(TAG, "onCheckedChanged: okrivljen ili ostecen vrednost: " + okrivljen_ostecen);
+                        break;
+                }
+            case R.id.upper_fragment_krivica__radio_group_vrsta_odbrana_id:
+                switch (checkedId) {
+                    case R.id.upper_fragment_krivica_odbrana_po_punomocju_id:
+                        vrsta_odbrane = 0;
+                        Log.d(TAG, "onCheckedChanged: vrsta odbrane: " + vrsta_odbrane);
+                        break;
+                    case R.id.upper_fragment_krivica_odbrana_sluzbena_duznost_id:
+                        vrsta_odbrane = 1;
+                        Log.d(TAG, "onCheckedChanged: vrsta odbrane: " + vrsta_odbrane);
+                        break;
+                }
         }
     }
 

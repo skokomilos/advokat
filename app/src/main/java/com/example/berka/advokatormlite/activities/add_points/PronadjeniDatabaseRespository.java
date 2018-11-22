@@ -25,6 +25,10 @@ import javax.inject.Inject;
 
 /**
  * Created by berka on 12-Mar-18.
+ * Vazno!
+ * Menjao sam metode tj ubacio sam nove koje od sad koristim
+ * queryForKrivicaHeaders i queryForNonKrivicaHeaders ove metode vracaju List<Tarifa>
+ *
  */
 
 public class PronadjeniDatabaseRespository implements PronadjeniRepository {
@@ -70,7 +74,10 @@ public class PronadjeniDatabaseRespository implements PronadjeniRepository {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        
+
+        for (int i = 0; i < headers.size(); i++) {
+            Log.d(TAG, "queryForKrivicaHeaders: " + headers.get(i));
+        }
         return headers;
     }
 

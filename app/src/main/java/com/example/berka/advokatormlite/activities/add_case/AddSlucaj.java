@@ -71,11 +71,11 @@ public class AddSlucaj extends AppCompatActivity implements OnAddCaseButtonClick
 
 
         switch (postupak.getNazivpostupka()) {
-            case "Krivicni postupak":
+            case "Krivični postupak":
                 UpperFragmentForKrivica upperFragmentForKrivica = new UpperFragmentForKrivica();
                 createUpperFragment(new UpperFragmentForKrivica(), postupak, broj_stranaka);
                 break;
-            case "Prekrsajni postupak i postupak privrednih prestupa":
+            case "Prekršajni postupak i postupak privrednih prestupa":
                 UpperFragmentPrekrsaj upperFragmentPrekrsaj = new UpperFragmentPrekrsaj();
                 createUpperFragment(new UpperFragmentPrekrsaj(), postupak, broj_stranaka);
                 break;

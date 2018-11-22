@@ -36,6 +36,34 @@
             android:text="Ostecen" />
 
     </RadioGroup>
+    <RadioGroup
+        android:id="@+id/upper_fragment_krivica__radio_group_vrsta_odbrana_id"
+        android:enabled="false"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:checkedButton="@+id/upper_fragment_krivica_odbrana_po_punomocju_id"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:text="odbrana po?" />
+
+        <RadioButton
+            android:id="@+id/upper_fragment_krivica_odbrana_po_punomocju_id"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:tag="1"
+            android:text="Po punomocju" />
+
+        <RadioButton
+            android:id="@+id/upper_fragment_krivica_odbrana_sluzbena_duznost_id"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:tag="0"
+            android:text="Sluzbenoj duznosti" />
+    </RadioGroup>
 
     <TextView
         android:layout_width="wrap_content"

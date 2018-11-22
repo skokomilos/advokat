@@ -3,12 +3,9 @@ package com.example.berka.advokatormlite.activities.add_case.presenters;
 import android.util.Log;
 
 import com.example.berka.advokatormlite.activities.add_case.mvp_contracts.UstavniSudContract;
-import com.example.berka.advokatormlite.activities.add_case.views_fragments.UpperFragmentUstavniSud;
 import com.example.berka.advokatormlite.model.Postupak;
 import com.example.berka.advokatormlite.model.Slucaj;
 import com.example.berka.advokatormlite.model.TabelaBodova;
-
-import java.util.List;
 
 /**
  * Created by berka on 18-Apr-18.
@@ -37,7 +34,7 @@ public class UstavniSudPresenter implements UstavniSudContract.Presenter{
     }
 
     @Override
-    public Slucaj saveCaseButtonClicked(int broj_slucaja, Postupak postupak, TabelaBodova selectedItem, int valueOkrivljenOstecen, int broj_stranaka) {
+    public Slucaj saveCaseButtonClicked(int broj_slucaja, Postupak postupak, TabelaBodova selectedItem, int valueOkrivljenOstecen, int vrsta_odbrane, int broj_stranaka) {
 
         Slucaj slucaj = new Slucaj();
         slucaj.setBroj_slucaja(broj_slucaja);
@@ -46,6 +43,11 @@ public class UstavniSudPresenter implements UstavniSudContract.Presenter{
         slucaj.setBroj_stranaka(broj_stranaka);
         Log.d(TAG, "saveCaseButtonClicked: " + slucaj.getBroj_slucaja() + " slucaj je u presenteru");
         return slucaj;
+    }
+
+    @Override
+    public Slucaj saveCaseButtonClicked(int broj_slucaja, Postupak postupak, TabelaBodova selectedItem, int valueOkrivljenOstecen, int broj_stranaka) {
+        return null;
     }
 
     @Override

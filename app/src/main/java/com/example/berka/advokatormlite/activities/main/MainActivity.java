@@ -381,14 +381,14 @@ public class MainActivity extends BaseActivity implements MainActivityContractMV
         spinner_sapostupcima.setAdapter(adapter);
 
 
-        mBuilder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+        mBuilder.setPositiveButton("Dalje", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 presenter.addCaseButtonClicked((Postupak)spinner_sapostupcima.getSelectedItem(), number_ofclients.getText().toString());
                 Log.d(TAG, "broj stranaka: " + number_ofclients.getText().toString());
             }
         });
-        mBuilder.setNegativeButton("Otkazi", new DialogInterface.OnClickListener() {
+        mBuilder.setNegativeButton("Otkaži", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 dialogInterface.dismiss();

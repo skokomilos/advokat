@@ -5,6 +5,7 @@ import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.field.ForeignCollectionField;
 import com.j256.ormlite.table.DatabaseTable;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -38,11 +39,31 @@ public class Tarifa {
     @DatabaseField(columnName = FIELD_VRSTA_PARNICA_ID, foreign = true, foreignAutoCreate = true, foreignAutoRefresh = true)
     private VrsteParnica vrsteParnica;
 
+    private List<Radnja> listaRadnja;
+
     public Tarifa(String naslov_tarife){
         this.naslov_tarife = naslov_tarife;
+
+    }
+
+    public Tarifa(String naslov_tarife, List<Radnja> radnje){
+        this.naslov_tarife = naslov_tarife;
+        this.listaRadnja = new ArrayList<Radnja>(radnje);
     }
 
     public Tarifa() {
+    }
+
+    public List<Radnja> getListRadnja()
+    {
+        if (listaRadnja == null) {
+            listaRadnja = new ArrayList<Radnja>();
+            for (Radnja order : radnje) {
+                listaRadnja.add(order);
+            }
+        }
+        return listaRadnja;
+       // return new ArrayList<Radnja>(radnje);
     }
 
     public int getId() {

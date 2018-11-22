@@ -36,16 +36,29 @@ public class KrivicaPresenter implements KrivicaContract.Presenter{
     }
 
     @Override
-    public Slucaj saveCaseButtonClicked(int broj_slucaja, Postupak postupak, TabelaBodova selectedItem, int valueOkrivljenOstecen, int broj_stranaka) {
-
+    public Slucaj saveCaseButtonClicked(int broj_slucaja, Postupak postupak, TabelaBodova selectedItem, int valueOkrivljenOstecen, int vrsta_odbrane, int broj_stranaka) {
                 Slucaj slucaj = new Slucaj();
                 slucaj.setBroj_slucaja(broj_slucaja);
                 slucaj.setPostupak(postupak);
                 slucaj.setTabelaBodova(selectedItem);
                 slucaj.setOkrivljen(valueOkrivljenOstecen);
+                slucaj.setVrsta_odbrane(vrsta_odbrane);
                 slucaj.setBroj_stranaka(broj_stranaka);
                 Log.d(TAG, "saveCaseButtonClicked: " + slucaj.getBroj_slucaja() + " slucaj je u presenteru");
+                Log.d(TAG, "saveCaseButtonClicked: " + slucaj.getVrsta_odbrane() + " proveravam vrstu odbrane nullable");
                 return slucaj;
+    }
+
+    @Override
+    public Slucaj saveCaseButtonClicked(int broj_slucaja, Postupak postupak, TabelaBodova selectedItem, int valueOkrivljenOstecen, int broj_stranaka) {
+        Slucaj slucaj = new Slucaj();
+        slucaj.setBroj_slucaja(broj_slucaja);
+        slucaj.setPostupak(postupak);
+        slucaj.setTabelaBodova(selectedItem);
+        slucaj.setOkrivljen(valueOkrivljenOstecen);
+        slucaj.setBroj_stranaka(broj_stranaka);
+        Log.d(TAG, "saveCaseButtonClicked: " + slucaj.getBroj_slucaja() + " slucaj je u presenteru");
+        return slucaj;
     }
 
     @Override

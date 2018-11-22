@@ -27,7 +27,6 @@ import android.widget.Toast;
 
 import com.example.berka.advokatormlite.R;
 import com.example.berka.advokatormlite.activities.BaseActivity;
-import com.example.berka.advokatormlite.activities.add_points.PronadjeniSlucajActivity;
 import com.example.berka.advokatormlite.adapter.SviTroskviAdapter;
 import com.example.berka.advokatormlite.data.db.DatabaseHelper;
 import com.example.berka.advokatormlite.model.IzracunatTrosakRadnje;
@@ -97,12 +96,12 @@ public class KonacniTrosakSvihRadnjiActivity extends BaseActivity {
     }
 
     private void loadSlucaj(){
-        key = getIntent().getExtras().getInt(PronadjeniSlucajActivity.SLUCAJ_KEY);
-        try {
-            slucaj = getDatabaseHelper().getSlucajDao().queryForId(key);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+//        key = getIntent().getExtras().getInt(PronadjeniSlucajActivity.SLUCAJ_KEY);
+//        try {
+//            slucaj = getDatabaseHelper().getSlucajDao().queryForId(key);
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//        }
     }
 
     private void loadSpinner(){

@@ -1,7 +1,5 @@
 package com.example.berka.advokatormlite.activities.add_points;
 
-import android.util.Log;
-
 import com.example.berka.advokatormlite.model.Postupak;
 import com.example.berka.advokatormlite.model.Radnja;
 import com.example.berka.advokatormlite.model.Slucaj;

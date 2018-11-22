@@ -36,7 +36,6 @@ public interface PronadjeniContractMVP {
         void radnjaAddedMessage();
 
         void showPartiesInDialog(List<StrankaDetail> sveStrankeSlucaja);
-
     }
 
     interface Presenter{

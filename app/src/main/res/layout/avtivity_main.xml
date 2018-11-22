@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:card_view="http://schemas.android.com/tools"
     android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -29,6 +30,7 @@
                 android:id="@+id/cv_find"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                app:cardElevation="12dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginBottom="8dp"
                 android:layout_marginLeft="16dp"
@@ -55,7 +57,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
-                        android:text="Trazi"
+                        android:text="Traži"
                         android:textStyle="bold" />
 
                     <View
@@ -70,7 +72,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:gravity="center"
-                        android:text="Pronadji slucaj po broju" />
+                        android:text="Pronadji slučaj po broju" />
                 </LinearLayout>
 
             </android.support.v7.widget.CardView>
@@ -79,6 +81,7 @@
                 android:id="@+id/cv_all"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                app:cardElevation="12dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginBottom="8dp"
                 android:layout_marginLeft="8dp"
@@ -103,7 +106,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
-                        android:text="Slucajevi"
+                        android:text="Slučajevi"
                         android:textStyle="bold"/>
 
                     <View
@@ -117,7 +120,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:gravity="center"
-                        android:text="Prikazi sve slucajeve"/>
+                        android:text="Prikaži sve slučajeve"/>
                 </LinearLayout>
 
             </android.support.v7.widget.CardView>
@@ -137,6 +140,7 @@
                 android:id="@+id/cv_my_profile"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                app:cardElevation="12dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="8dp"
                 android:layout_marginLeft="16dp"
@@ -177,7 +181,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:gravity="center"
-                        android:text="Unesite vase osnovne podatke" />
+                        android:text="Unesite vaše osnovne podatke" />
 
                 </LinearLayout>
 
@@ -187,6 +191,7 @@
                 android:id="@+id/cv_add"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                app:cardElevation="12dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="8dp"
                 android:layout_marginLeft="8dp"
@@ -213,7 +218,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
-                        android:text="Dodaj Slucaj"
+                        android:text="Dodaj Slučaj"
                         android:textStyle="bold" />
 
                     <View
@@ -227,7 +232,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:gravity="center"
-                        android:text="Dodaj slucaj u bazu" />
+                        android:text="Dodaj slučaj u bazu" />
 
                 </LinearLayout>
 
@@ -254,7 +259,7 @@
                 android:clickable="true"
                 app:cardBackgroundColor="@android:color/white"
                 app:cardCornerRadius="1dp"
-                app:cardElevation="2dp"
+                app:cardElevation="12dp"
                 android:foreground="?android:attr/selectableItemBackground">
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -273,7 +278,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
-                        android:text="Izracunaj Ispravu"
+                        android:text="Izračunaj Ispravu"
                         android:textStyle="bold" />
                     <View
                         android:layout_width="match_parent"

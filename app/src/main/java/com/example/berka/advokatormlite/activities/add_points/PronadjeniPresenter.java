@@ -41,7 +41,7 @@ public class PronadjeniPresenter implements PronadjeniContractMVP.Presenter {
         HashMap<Tarifa, List<Radnja>> listHashMap = null;
         List<Tarifa> listViewHeaders;
         if (!slucaj.equals(null)) {
-            if (slucaj.getPostupak().getNazivpostupka().equals("Krivicni postupak")) {
+            if (slucaj.getPostupak().getNazivpostupka().equals("Krivični postupak")) {
                 listViewHeaders = model.getHeadersKrivica(slucaj.getPostupak());
                 if (!listViewHeaders.isEmpty()) {
                     listHashMap = model.getHashMapKrivica(listViewHeaders);
@@ -78,11 +78,17 @@ public class PronadjeniPresenter implements PronadjeniContractMVP.Presenter {
                 case 1:
                     //metoda koja racuna pravu vrednost i ima sifru 1
                     privremenaCena = wholeValue(slucaj);
+//                    if(slucaj.getVrsta_odbrane()==1){
+//                        privremenaCena = privremenaCena/2;
+//                    }
                     view.openDialog(privremenaCena, radnja.getNaziv_radnje());
                     break;
                 case 2:
                     //metoda koja racuna polovinu vrednosti ima sifru 2
                     privremenaCena = halfValue(slucaj);
+                    if(slucaj.getVrsta_odbrane()==1){
+                        privremenaCena = privremenaCena/2;
+                    }
                     view.openDialog(privremenaCena, radnja.getNaziv_radnje());
                     break;
                 case 3:
@@ -93,20 +99,48 @@ public class PronadjeniPresenter implements PronadjeniContractMVP.Presenter {
                 case 4:
                     //metoda koja racuna pravu vrednost plus broj sati i koja moze biti otkazana ima sifru 4
                     privremenaCena = wholePlusHours(slucaj);
+                    if(slucaj.getVrsta_odbrane()==1){
+                        privremenaCena = privremenaCena/2;
+                    }
                     view.openCancelableCaseDialogWithHours(privremenaCena, radnja.getNaziv_radnje());
                     break;
                 case 5:
                     //metoda koja racuna celu vrednost plus broj sati i koja nema opciju otkazano ima sifru 5
                     privremenaCena = wholePlusHours(slucaj);
+                    if(slucaj.getVrsta_odbrane()==1){
+                        privremenaCena = privremenaCena/2;
+                    }
                     view.openDialogWithHours(privremenaCena, radnja.getNaziv_radnje());
                     break;
                 case 6:
                     //metoda koja racuna pola vrednosti plus sati i nema opciju otkazano
                     privremenaCena = halfValue(slucaj);
+                    if(slucaj.getVrsta_odbrane()==1){
+                        privremenaCena = privremenaCena/2;
+                    }
                     view.openDialogWithHours(privremenaCena, radnja.getNaziv_radnje());
                 default:
             }
         }
+    }
+
+    /**
+     *
+     * @param slucaj
+     * @param cena
+     * @return
+     *
+     *kad je okrivljenI(sifra 0) odbrana moze biti po punomocju(puna vrednost) i po s. duznosti(pola vrednosti), kad je ostecen(sifra 1) onda je isto pola vrednosti
+     */
+    private double proveri_vrstu_odbrane(Slucaj slucaj, double cena){
+        if(slucaj.getOkrivljen()==0){
+            if(slucaj.getVrsta_odbrane()==1){
+                cena = cena/2;
+            }
+        }else {
+            cena = cena/2;
+        }
+        return cena;
     }
 
     @Override
@@ -162,8 +196,10 @@ public class PronadjeniPresenter implements PronadjeniContractMVP.Presenter {
 
     private double wholeValue(Slucaj slucaj) {
         double cena = Double.valueOf(slucaj.getTabelaBodova().getBodovi());
+        double izracunataCena;
         double izrecunataVrednostUBodovima = cena + ((cena / 2) * (slucaj.getBroj_stranaka() - 1));
-        return izrecunataVrednostUBodovima * vrednostJednogBodaUDinarima;
+        izracunataCena =  izrecunataVrednostUBodovima * vrednostJednogBodaUDinarima;
+        return proveri_vrstu_odbrane(slucaj, izracunataCena);
     }
 
     private double halfValue(Slucaj slucaj) {

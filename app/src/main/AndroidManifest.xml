@@ -21,9 +21,6 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".activities.add_points.PronadjeniSlucajActivity"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan"/>
         <activity android:name=".activities.add_points.PronadjeniSlucajActivity1"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan"/>

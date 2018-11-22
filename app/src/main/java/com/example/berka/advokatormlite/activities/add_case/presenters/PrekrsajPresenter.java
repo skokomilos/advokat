@@ -44,6 +44,11 @@ public class PrekrsajPresenter implements PrekrsajContract.Presenter{
     }
 
     @Override
+    public Slucaj saveCaseButtonClicked(int broj_slucaja, Postupak postupak, TabelaBodova selectedItem, int valueOkrivljenOstecen, int vrsta_odbrane, int broj_stranaka) {
+        return null;
+    }
+
+    @Override
     public Slucaj saveCaseButtonClicked(int broj_slucaja, Postupak postupak, TabelaBodova selectedItem, int valueOkrivljenOstecen, int broj_stranaka) {
         return null;
     }

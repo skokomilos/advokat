@@ -2,14 +2,12 @@ package com.example.berka.advokatormlite.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.support.design.widget.TabLayout;
+import android.support.annotation.Nullable;
 
 import com.j256.ormlite.dao.ForeignCollection;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.field.ForeignCollectionField;
 import com.j256.ormlite.table.DatabaseTable;
-
-import java.util.List;
 
 /**
  * Created by berka on 22-Sep-17.
@@ -22,6 +20,7 @@ public class Slucaj implements Parcelable{
     public static final String BROJ_SLUCAJA = "broj_slucaja";
     public static final String BROJ_STRANAKA = "broj_stranaka";
     public static final String OKRIVLJEN = "okrivljen";
+    public static final String VRSTA_ODBRANE = "vrsta_odbrane";
     public static final String ID_POSTUPKA = "id_postupak";
     public static final String ID_TABELE_BODOVA = "id_tabela_bodova";
     public static final String IZRACUNAT_TROSAK_RADNJE = "lista_izracunatih_radnji";
@@ -37,8 +36,13 @@ public class Slucaj implements Parcelable{
     @DatabaseField(columnName = BROJ_STRANAKA)
     private int broj_stranaka;
 
+    @Nullable
     @DatabaseField(columnName = OKRIVLJEN)
     private int okrivljen;
+
+    @Nullable
+    @DatabaseField(columnName = VRSTA_ODBRANE)
+    private int vrsta_odbrane;
 
     @DatabaseField(columnName = ID_POSTUPKA, foreign = true, foreignAutoCreate = true, foreignAutoRefresh = true)
     private Postupak postupak;
@@ -58,6 +62,7 @@ public class Slucaj implements Parcelable{
         broj_slucaja = input.readInt();
         broj_stranaka = input.readInt();
         okrivljen = input.readInt();
+        vrsta_odbrane = input.readInt();
         postupak = input.readParcelable(Postupak.class.getClassLoader());
         tabelaBodova = input.readParcelable(TabelaBodova.class.getClassLoader());
     }
@@ -72,6 +77,7 @@ public class Slucaj implements Parcelable{
         destination.writeInt(broj_slucaja);
         destination.writeInt(broj_stranaka);
         destination.writeInt(okrivljen);
+        destination.writeInt(vrsta_odbrane);
         destination.writeParcelable(postupak, 0);
         destination.writeParcelable(tabelaBodova, 1);
     }
@@ -113,6 +119,14 @@ public class Slucaj implements Parcelable{
 
     public void setOkrivljen(int okrivljen) {
         this.okrivljen = okrivljen;
+    }
+
+    public int getVrsta_odbrane() {
+        return vrsta_odbrane;
+    }
+
+    public void setVrsta_odbrane(int vrsta_odbrane) {
+        this.vrsta_odbrane = vrsta_odbrane;
     }
 
     public Postupak getPostupak() {

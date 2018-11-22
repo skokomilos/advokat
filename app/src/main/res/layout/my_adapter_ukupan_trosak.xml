@@ -1,38 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="horizontal" android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="3"
-        android:orientation="horizontal">
-
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
 
         <TextView
             android:id="@+id/adapter_tv_izvrsena_radnja"
             android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:textSize="18sp"
-            android:gravity="center_vertical"
+            android:layout_height="44dp"
             android:layout_marginBottom="2dp"
             android:layout_weight="1"
+            android:gravity="center_vertical"
             android:hint="test"
-            android:paddingLeft="5dp" />
+            android:paddingLeft="5dp"
+            android:textSize="16sp" />
 
         <TextView
             android:id="@+id/adapter_tv_izvrsena_cena"
             android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:layout_marginBottom="2dp"
+            android:layout_height="match_parent"
             android:layout_weight="2"
             android:gravity="right"
             android:paddingLeft="50dp"
             android:paddingRight="8dp"
-            android:textSize="18sp" />
-
-    </LinearLayout>
+            android:textSize="14sp" />
 
 </LinearLayout>

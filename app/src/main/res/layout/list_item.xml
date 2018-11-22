@@ -7,6 +7,7 @@
         android:id="@+id/lblListItem"
         android:layout_width="match_parent"
         android:layout_height="48dp"
+        android:minHeight="?android:attr/listPreferredItemHeight"
         android:textSize="16sp"
         android:focusable="false"
         android:text="sample text"
